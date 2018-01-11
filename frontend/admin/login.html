@@ -1,6 +1,7 @@
 <html>
     <head>
         <style>
+            /*
             #login-container {
                 max-width:500px;
                 margin: 0 auto;
@@ -21,6 +22,7 @@
                 color:white;
                 padding:5px 10px;
             }
+            */
         </style>
     </head>
     <body>
@@ -29,27 +31,28 @@
             <form>
                 <input id="email" type="text">
                 <input id="password" type="password">
-                <button id="login">Login</button>
+                <input id="login" type="submit">
             </form>
         </section>
     </body>
-    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="../js/jquery-3.2.1.min.js"></script>
     <script>
-        $("#login").on('click', function(e) {
-            var email = $("#email").val;
-            var pwd = $("#password").val;
+        $("#login").on('click',function(e) {
+            e.preventDefault();
+            var email = $("#email").val();
+            var pwd = $("#password").val();
             console.log(email + pwd);
-            $.ajax({
-                url: "php/testy.php",
-                type: "post",
-                data: {
-                    "email": email,
-                    "password":pwd
-                },
-                success: function(data) {
-                    console.log(data);
-                }
-            })
+            // $.ajax({
+            //     url: "php/testy.php",
+            //     type: "post",
+            //     data: {
+            //         "email": email,
+            //         "password":pwd
+            //     },
+            //     success: function(data) {
+            //         console.log(data);
+            //     }
+            // })
         })
     </script>
 </html>
