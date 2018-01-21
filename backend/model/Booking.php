@@ -8,6 +8,7 @@ class Booking extends Entity {
     private $booking_date;
 
     function __construct(Account $acc, $booking_date) {
+        parent::__construct();
         $this->account=$acc;
         $this->booking_date=$booking_date;
     }

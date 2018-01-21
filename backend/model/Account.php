@@ -11,6 +11,7 @@ class Account extends Entity {
     private $cookie;
     private $salt;
     function __construct($email,$password,$cookie) {
+        parent::__construct();
         $this->email=$email;
         $this->password=$password;
         $this->cookie=$cookie;
