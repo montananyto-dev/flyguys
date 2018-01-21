@@ -22,24 +22,16 @@ class Passenger {
         $this->lname = $lname;
         $this-> mname = $mname;
         $this-> dob = $dob;
+    }
 
-        function __get($attribute){
-          return  $this->$attribute;
-        }
+    function __get($attribute){
+        return  $this->$attribute;
+    }
 
-        function __set($attribute, $value){
-            $this->$attribute = $value;
+    function __set($attribute, $value){
+        $this->$attribute = $value;
 
-        }
-
-
-
-
-}
-
-
-
-
+    }
 
 
 }
