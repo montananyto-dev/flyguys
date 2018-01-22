@@ -1,10 +1,7 @@
 <?php
-/* 
- * Database Connection Settings
- */
 
 //live
-$dbconfig   = array(
+$config   = array(
 	'driver' => 'mysql',
 	'host' => '108.179.213.60',
 	'dbname' => 'kingsub3_flyguys',

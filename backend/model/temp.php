@@ -8,4 +8,3 @@ $acc->setEmail("new@email.com");
 $book = new Booking($acc, "2018-02-11");
 $book->save();
 
-?>
