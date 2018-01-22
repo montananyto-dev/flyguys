@@ -25,15 +25,16 @@ class Passenger
         $this->dob = $dob;
     }
 
-    function __get($attribute)
-    {
-        return $this->$attribute;
-    }
-
     function __set($attribute, $value)
     {
         $this->$attribute = $value;
 
     }
+    function __get($attribute)
+    {
+        return $this->$attribute;
+    }
+
+
 
 }

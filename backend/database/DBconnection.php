@@ -4,7 +4,7 @@ Class DBConnection
 {
 
     protected $_config;
-    public $connection;
+    private $connection;
 
     public function __construct(array $config)
     {
