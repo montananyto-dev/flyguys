@@ -1,26 +1,35 @@
 <?php
 
-class Location
+class Location extends Entity
 {
     private $id;
-    private $region_id;
+    private $region;
     private $name;
     private $code;
     private $timezone;
     private $offset;
     private $creation_date;
 
-    function __construct($id, $region_id, $name, $code, $timezone, $offset, $creation_date)
+    function __construct(Region $region, $name, $code, $timezone, $offset, $creation_date)
     {
-
-        $this->id = $id;
-        $this->region_id = $region_id;
+        $this->region = $region;
         $this->name = $name;
         $this->code = $code;
         $this->timezone = $timezone;
         $this->offset = $offset;
         $this->creation_date = $creation_date;
     }
+
+    function save() {
+        if(isset($this->id)) {
+            echo "Updating existing Location\n";
+        } else {
+            $this->region->save();
+            echo "Inserting new Location\n";
+        }
+    }
+
+
 
     function __set($attribute, $value)
     {

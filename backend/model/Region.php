@@ -1,22 +1,23 @@
 <?php
 
-class State extends Entity
+class Region extends Entity
 {
 
     private $id;
-    private $status;
+    private $name;
 
-    function __construct($status)
+    function __construct($name)
     {
-        $this->status = $status;
+
+        $this->name->$name;
+
     }
 
     function save() {
         if(isset($this->id)) {
-            echo "Updating existing state\n";
+            echo "Updating existing Region\n";
         } else {
-            $this->account->save();
-            echo "Inserting new booking\n";
+            echo "Inserting new Region\n";
         }
     }
 

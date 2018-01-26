@@ -6,18 +6,17 @@
  * Time: 22:37
  */
 
-class Flight
+class Flight extends Entity
 {
     private $id;
-    private $connection_id;
+    private $connection;
     private $departure_date_time;
     private $capacity;
 
 
-    function __construct($id,$connection_id,$departure_date_time,$capacity)
+    function __construct(Connection $connection,$departure_date_time,$capacity)
     {
-        $this->id = $id;
-        $this->connection_id = $connection_id;
+        $this->connection = $connection;
         $this->departure_date_time = $departure_date_time;
         $this->capacity = $capacity;
     }

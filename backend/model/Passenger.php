@@ -1,10 +1,10 @@
 <?php
 
-class Passenger
+class Passenger extends Entity
 {
 
     private $id;
-    private $passportId;
+    private $passportNum;
     private $identityCard;
     private $countryCode;
     private $fname;
@@ -12,11 +12,9 @@ class Passenger
     private $mname;
     private $dob;
 
-    function __construct($id, $passportId, $identityCard, $countryCode, $fname, $lname, $mname, $dob)
+    function __construct($passportNum, $identityCard, $countryCode, $fname, $lname, $mname, $dob)
     {
-
-        $this->id = $id;
-        $this->passportId = $passportId;
+        $this->passportNum = $passportNum;
         $this->identityCard = $identityCard;
         $this->countryCode = $countryCode;
         $this->fname = $fname;
@@ -25,16 +23,24 @@ class Passenger
         $this->dob = $dob;
     }
 
+    function save() {
+        if(isset($this->id)) {
+            echo "Updating existing Passenger\n";
+        } else {
+            echo "Inserting new Passenger\n";
+        }
+    }
+
     function __set($attribute, $value)
     {
         $this->$attribute = $value;
 
     }
+
     function __get($attribute)
     {
         return $this->$attribute;
     }
-
 
 
 }
