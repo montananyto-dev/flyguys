@@ -30,5 +30,3 @@ class Account extends Entity
     }
 
 }
-
-?>
