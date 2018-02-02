@@ -1,5 +1,6 @@
 <?php
 require_once("Entity.php");
+require_once('../database/Test.php');
 
 class Account extends Entity
 {
@@ -13,26 +14,10 @@ class Account extends Entity
 
     function __construct($email, $password, $cookie)
     {
+        parent::__construct();
         $this->email = $email;
         $this->password = $password;
         $this->cookie = $cookie;
-    }
-
-    public static function get($number)
-    {
-        $toReturn = new Account("something", "yay", "boo");
-        $toReturn->setId($number);
-        return $toReturn;
-    }
-
-    private function setId($number)
-    {
-        $this->acc_id = $number;
-    }
-
-    function setEmail($email)
-    {
-        $this->email = $email;
     }
 
     function save()
@@ -40,7 +25,7 @@ class Account extends Entity
         if (isset($this->acc_id)) {
             echo "Updating existing account\n";
         } else {
-            echo "Inserting new account\n";
+            Test::insert("Select * from state");
         }
     }
 
