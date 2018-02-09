@@ -1,0 +1,95 @@
+main, #basket {
+    font-family: sans-serif;
+}
+
+main {
+    margin:40px auto;
+    max-width:1000px;
+    color: #444;
+}
+
+#basket {
+    position:fixed;
+    top:10;
+    right:100;
+    list-style-type: none;
+    border: 4px dashed rgb(197, 190, 190);
+    padding: 10px 10px;
+    font-size:25px
+}
+
+#basket li {
+    margin-left:10px;
+}
+
+h1 {
+    padding-bottom: 20px;
+    text-decoration: underline;
+}
+
+button {
+    margin: 20px 0px;
+    padding:5px;
+    font-size:20px;
+    background-color:#00B5AD;
+    color:#fff;
+    
+}
+
+div.row {
+    display:block;
+}
+
+input, select, #basket,button {
+    border-radius: 5px; 
+}
+
+input[type=search] {
+    border: 1px solid #400;
+    margin: 0px auto;
+    margin-right:10px;
+    width:400px;
+    height:50px;
+    font-size: 30px;
+    display: inline;
+}
+
+input[type=date] {
+    margin: 19px auto;
+    border:1px solid #400;
+    height:50px;
+    font-size:25px;
+}
+
+input[type=submit] {
+    margin: 0px 100px;
+    font-size: 30px;
+    border-radius: 10px;
+    color: #fff;
+    height:50px;
+    background-color:#00B5AD
+}
+
+select {
+    width:155px;
+    height:50px;
+    font-size:25px;
+    padding-top:3px;
+    background-color:#fff;
+}
+
+.squeeze {
+    margin:0px 50px;
+}
+span.seperator {
+    font-size: 30px;
+}
+
+.underline {
+    font-weight:bold;
+    margin: 5px 0px;
+    text-decoration-color: rgb(197, 190, 190);
+    text-decoration-line: underline;
+    text-decoration-style: dashed;
+}
+
