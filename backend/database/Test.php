@@ -17,7 +17,6 @@ class Test
         $statement = $connection->query($sql);
         $statement->execute();
 
-
         $results = $statement->fetchAll();
 
         var_dump($results);

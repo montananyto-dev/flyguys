@@ -1,63 +1,48 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <style>
-            /*
-            #login-container {
-                max-width:500px;
-                margin: 0 auto;
-            }
-            body {
-                font-family:arial;
-            }
-            input, button {
-                display:block;
-                margin:20px 20px;
-                font-size: 40px;
-            }
-            input {
+<head>
 
-            }
-            button {
-                background-color: darkslateblue;
-                color:white;
-                padding:5px 10px;
-            }
-            */
-        </style>
-    </head>
-    <body>
-        <section id="login-container">
-            <h2>Login</h2>
-            <form>
-                <input id="email" type="text">
-                <input id="password" type="password">
-                <input id="login" type="submit">
-            </form>
-        </section>
-
-    
-    </body>
-    <script src="../js/jquery-3.2.1.min.js"></script>
-    <script>
-        $("#login").on('click',function(e) {
-            e.preventDefault();
-            var email = $("#email").val();
-            var pwd = $("#password").val();
-            console.log(email + pwd);
-            // $.ajax({
-            //     url: "php/testy.php",
-            //     type: "post",
-            //     data: {
-            //         "email": email,
-            //         "password":pwd
-            //     },
-            //     success: function(data) {
-            //         console.log(data);
-            //     }
-            // })
-        })
-    </script>
+    <meta charset=utf-8/>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <title>Admin login page</title>
+    <link rel="icon" href="../images/admin/icon.png">
 
 
-    
+</head>
+<body>
+
+<header>
+
+    <div id="login-header">
+
+        <p class="title">Welcome to Flyguys</p>
+
+    </div>
+
+</header>
+
+
+<main>
+
+    <div id="login-container">
+
+        <form id="login-form">
+
+            <p class="text"> Email </p><input id="email" type="text">
+            <p class="text">Password </p><input id="password" type="password">
+            <button id="login" type="submit">Submit</button>
+
+        </form>
+
+    </div>
+
+</main>
+
+
+<footer>
+
+
+</footer>
+</body>
+
 </html>
