@@ -4,9 +4,6 @@ require_once('../database/DBWrapper.php');
 
 class Account extends Entity
 {
-
-    private static $count;
-
     private $acc_id;
     private $email;
     private $password;
@@ -19,6 +16,9 @@ class Account extends Entity
         $this->cookie = $cookie;
         $this->modified=false;
     }
+
+    function getId() { return $this->acc_id; }
+    function getEmail() { return $this->email; }
 
     function setId($newId) {
         $this->acc_id=$newId;
@@ -38,18 +38,20 @@ class Account extends Entity
 
     function save()
     {
-        if (isset($this->acc_id) && $this->modified) {
-            $updateSQL = "UPDATE account "
-                        . "SET email = '$this->email', password='$this->password' "
-                        . "WHERE id=$this->acc_id";
-            DBWrapper::insert($updateSQL);
-        } else {
+        if(!isset($this->acc_id)) {
             $insetSQL = "INSERT INTO "
-                        . "account(email, password, cookie, salt)"
-                        . "VALUES('$this->email', '$this->password', '$this->cookie', 'dsfsdf');";
+                . "account(email, password, cookie, salt)"
+                . "VALUES('$this->email', '$this->password', '$this->cookie', 'dsfsdf');";
 
             $this->acc_id = DBWrapper::insert($insetSQL);
         }
+        if($this->modified) {
+            $updateSQL = "UPDATE account "
+                . "SET email = '$this->email', password='$this->password' "
+                . "WHERE id=$this->acc_id";
+            DBWrapper::insert($updateSQL);
+        }
+
     }
 
     public static function getByCookie($cookie) {

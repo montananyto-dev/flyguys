@@ -1,33 +1,54 @@
 <?php
+require_once("Entity.php");
+require_once('../database/DBWrapper.php');
 
 class Region extends Entity
 {
 
-    private $id;
+    private $region_id;
     private $name;
+
 
     function __construct($name)
     {
+        $this->name=$name;
+        $this->modified=false;
+    }
 
-        $this->name->$name;
+    function setId($newId) {
+        $this->region_id=$newId;
+    }
 
+    function setName($newName) {
+        $this->modified=true;
+        $this->name=$newName;
     }
 
     function save() {
-        if(isset($this->id)) {
-            echo "Updating existing Region\n";
+        if (isset($this->region_id) && $this->modified) {
+            $updateSQL = "UPDATE region "
+                . "SET name = '$this->name' "
+                . "WHERE id=$this->region_id";
+            DBWrapper::insert($updateSQL);
         } else {
-            echo "Inserting new Region\n";
+            $insetSQL = "INSERT INTO "
+                . "region(name)"
+                . "VALUES('$this->name');";
+
+            $this->region_id = DBWrapper::insert($insetSQL);
         }
     }
 
-    function __set($attribute, $value)
-    {
-        $this->$attribute = $value;
-    }
+    function getByName($searchName) {
+        $selectSQL = "SELECT * FROM region"
+            . " WHERE name='$searchName'";
+        $results = DBWrapper::select($selectSQL);
 
-    function __get($attribute)
-    {
-        return $this->$attribute;
+        $result =  $results[0];
+
+        $toReturn = new Region($result['name']);
+        $toReturn->setId((int)$result['id']);
+
+        return $toReturn;
     }
 }
