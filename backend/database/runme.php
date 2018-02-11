@@ -1,9 +1,9 @@
 <?php
 
 require_once('DBconnection.php');
-require_once ('Test.php');
+require_once('DBWrapper.php');
 
-$test = new Test();
+$test = new DBWrapper();
 
 $result = $test->getAllFlight();
 

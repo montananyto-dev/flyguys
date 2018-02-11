@@ -17,10 +17,11 @@ class Booking extends Entity
 
     function save()
     {
+        $this->account->save();
         if (isset($this->book_id)) {
             echo "Updating existing booking\n";
         } else {
-            $this->account->save();
+
             echo "Inserting new booking\n";
         }
     }
