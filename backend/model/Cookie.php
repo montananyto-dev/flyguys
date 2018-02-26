@@ -109,4 +109,9 @@ class Cookie
     }
 
 
+    function returnCookie(){
+
+        return $this->cookie;
+    }
+
 }

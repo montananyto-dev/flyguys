@@ -1,9 +1,9 @@
 <?php
 
-require_once("login.php");
 
 require_once("Account.php");
 require_once("Booking.php");
+require_once("Cookie.php");
 //$acc = new Account('dsfsdf','myPass','rtgfggdf');
 //$acc->save();
 
@@ -28,5 +28,23 @@ $password = "tony";
 
 //var_dump($account);
 
+
+$temp = new Cookie();
+$cookie = $temp->returnCookie();
+
+
+
 $account = new Account($email,$password,$cookie);
 $account->save();
+
+$cookie_name = $temp->__getCookieName();
+
+
+if(count($_COOKIE) > 0) {
+    echo "Cookies are enabled.";
+} else {
+    echo "Cookies are disabled.";
+}
+
+echo $cookie_name;
+var_dump($cookie);
