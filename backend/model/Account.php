@@ -30,10 +30,10 @@ class Account extends Entity
     }
 
     function setPassword($newPassword) {
-        $options = [
-            'cost' => 12,
-        ];
-        $this->password= password_hash($newPassword, PASSWORD_BCRYPT, $options);
+
+        $salt ="123456789";
+        $this->password = crypt($newPassword,$salt);
+
     }
 
     function save()
@@ -41,7 +41,7 @@ class Account extends Entity
         if(!isset($this->acc_id)) {
             $insetSQL = "INSERT INTO "
                 . "account(email, password, cookie, salt)"
-                . "VALUES('$this->email', '$this->password', '$this->cookie', 'dsfsdf');";
+                . "VALUES('$this->email', '$this->password', '$this->cookie', '123456789');";
 
             $this->acc_id = DBWrapper::insert($insetSQL);
         }
