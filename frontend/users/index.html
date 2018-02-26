@@ -1,6 +1,17 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="../css/userindex.css">
+
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+
+        <script>
+            $.ajax({url: "http://localhost:8000/controller/SessionManager.php", success: function(result){
+                console.log(JSON.parse(result).item);
+            }});
+        </script>
     </head>
     <body>
         <nav>
