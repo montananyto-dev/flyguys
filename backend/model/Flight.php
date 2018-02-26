@@ -27,4 +27,9 @@ class Flight extends Entity
     function __get($attribute){
         return $this->$attribute;
     }
+
+    function save()
+    {
+        // TODO: Implement save() method.
+    }
 }
