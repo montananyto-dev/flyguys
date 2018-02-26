@@ -8,8 +8,16 @@
 
 require_once('../database/DBWrapper.php');
 
-class Cookie
+class Cookie implements \JsonSerializable
 {
+    
+    public function jsonSerialize()
+    {
+        $vars = get_object_vars($this);
+
+        return $vars;
+    }
+
 
     private $cookie_name;
     private $cookie_value;
@@ -109,9 +117,5 @@ class Cookie
     }
 
 
-    function returnCookie(){
-
-        return $this->cookie;
-    }
 
 }
