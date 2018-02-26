@@ -16,9 +16,8 @@ class Cookie
     private $cookie_time;
     private $cookie;
 
-    function __setCookie()
+    function __construct()
     {
-
         $this->setCookieName();
         $this->setCookieValue();
         $this->setCookieTime();
@@ -46,7 +45,7 @@ class Cookie
     function setCookie()
     {
 
-        setcookie($this->cookie_name, $this->cookie_value, $this->cookie_time);
+        $this->cookie = setcookie($this->cookie_name, $this->cookie_value, $this->cookie_time);
     }
 
     function __getCookie()
