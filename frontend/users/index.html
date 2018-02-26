@@ -22,8 +22,15 @@
                 <h2>Search</h2>
                 <form>
                     <div class="row">
-                        <input type="search" placeholder="To">
-                        <input type="search" placeholder="From">
+                        <input list="locations" type="search" placeholder="To">
+                        <input list="locations"  type="search" placeholder="From">
+                        <datalist id="locations">
+                            <option value="Stansted">
+                            <option value="Moscow">
+                            <option value="Paris">
+                            <option value="Rome">
+                            <option value="Glasgow">
+                          </datalist>
                     </div>
                     <div class="row">
                         <select>
@@ -46,7 +53,8 @@
             <section id="results">
                 <h2>Results</h2>
                 <section class="flight">
-
+                    <p></p>
+                    
                     
                 </section>
 
