@@ -1,4 +1,6 @@
 <?php
+require_once(__DIR__ . "/Entity.php");
+require_once(__DIR__ . '/../database/DBWrapper.php');
 
 class Location extends Entity
 {

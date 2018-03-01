@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: montananyto
- * Date: 22/01/2018
- * Time: 22:37
- */
+require_once( __DIR__ . "/Entity.php");
+require_once(__DIR__ . '/../database/DBWrapper.php');
 
 class Flight extends Entity
 {

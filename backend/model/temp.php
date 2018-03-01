@@ -29,22 +29,22 @@ $password = "tony";
 //var_dump($account);
 
 
-$temp = new Cookie();
-$cookie = $temp->returnCookie();
-
-
-
-$account = new Account($email,$password,$cookie);
-$account->save();
-
-$cookie_name = $temp->__getCookieName();
-
-
-if(count($_COOKIE) > 0) {
-    echo "Cookies are enabled.";
-} else {
-    echo "Cookies are disabled.";
-}
-
-echo $cookie_name;
-var_dump($cookie);
+//$temp = new Cookie();
+//$cookie = $temp->returnCookie();
+//
+//
+//
+//$account = new Account($email,$password,$cookie);
+//$account->save();
+//
+//$cookie_name = $temp->__getCookieName();
+//
+//
+//if(count($_COOKIE) > 0) {
+//    echo "Cookies are enabled.";
+//} else {
+//    echo "Cookies are disabled.";
+//}
+//
+//echo $cookie_name;
+//var_dump($cookie);

@@ -1,4 +1,6 @@
 <?php
+require_once( __DIR__ . "/Entity.php");
+require_once(__DIR__ . '/../database/DBWrapper.php');
 
 class Passenger extends Entity
 {
@@ -30,6 +32,8 @@ class Passenger extends Entity
             echo "Inserting new Passenger\n";
         }
     }
+
+    
 
     function __set($attribute, $value)
     {

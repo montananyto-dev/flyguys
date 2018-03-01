@@ -1,6 +1,8 @@
 <?php
-require_once("Entity.php");
-require_once('../database/DBWrapper.php');
+require_once( __DIR__ . "/Entity.php");
+require_once(__DIR__ . '/../database/DBWrapper.php');
+require_once( __DIR__ . "/Location.php");
+
 
 class Region extends Entity
 {

@@ -1,12 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: tony
- * Date: 18/02/2018
- * Time: 21:43
- */
-
-require_once('../database/DBWrapper.php');
+require_once(__DIR__ . '/../database/DBWrapper.php');
 
 class Cookie implements \JsonSerializable
 {
