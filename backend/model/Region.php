@@ -41,6 +41,39 @@ class Region extends Entity
         }
     }
 
+
+    public static function getAll() {
+
+        $selectSQL = "SELECT * FROM region";
+        $results = DBWrapper::select($selectSQL);
+
+        $allRegions = array();
+
+        foreach($results as $result) {
+            $region = new Region($result['name']);
+            $region->setId($result['id']);
+            array_push($allRegions, $region);
+        }
+
+        return $allRegions;
+    }
+
+    function getLocations() {
+        $selectSQL = "SELECT * FROM location"
+            . " WHERE region_id='$this->region_id'";
+        $results = DBWrapper::select($selectSQL);
+
+        $locations = array();
+
+        foreach($results as $row) {
+            $location = new Location($this, $row['name'], $row['code'], $row['timezone'], $row['offset'], $row['creation_date']);
+            $location->setId($row['id']);
+            array_push($locations, $location);
+        }
+
+        return $locations;
+    }
+
     function getByName($searchName) {
         $selectSQL = "SELECT * FROM region"
             . " WHERE name='$searchName'";

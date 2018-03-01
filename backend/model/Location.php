@@ -2,8 +2,16 @@
 require_once(__DIR__ . "/Entity.php");
 require_once(__DIR__ . '/../database/DBWrapper.php');
 
-class Location extends Entity
+class Location extends Entity implements \JsonSerializable
 {
+
+    public function jsonSerialize()
+    {
+        $vars = get_object_vars($this);
+
+        return $vars;
+    }
+
     private $id;
     private $region;
     private $name;
@@ -29,6 +37,14 @@ class Location extends Entity
             $this->region->save();
             echo "Inserting new Location\n";
         }
+    }
+
+    function setId($id) {
+        $this->id=$id;
+    }
+
+    function getName() {
+        return $this->name;
     }
 
 
