@@ -8,8 +8,12 @@
             crossorigin="anonymous"></script>
 
         <script>
+            
             $.ajax({url: "http://localhost:8000/controller/SessionManager.php", success: function(result){
-                console.log(JSON.parse(result).item);
+                var json = JSON.parse(result);
+
+                document.cookie = `cookie_name=${json.cookie_name} cookie_value=${json.cookie_value} cookie_time=${json.cookie_time}`;
+                console.log(document.cookie);
             }});
         </script>
     </head>
@@ -36,12 +40,7 @@
                         <input list="locations" type="search" placeholder="To">
                         <input list="locations"  type="search" placeholder="From">
                         <datalist id="locations">
-                            <option value="Stansted">
-                            <option value="Moscow">
-                            <option value="Paris">
-                            <option value="Rome">
-                            <option value="Glasgow">
-                          </datalist>
+                        </datalist>
                     </div>
                     <div class="row">
                         <select>
@@ -74,7 +73,20 @@
     </body>
 
     <script>
-        dayInput = document.querySelector("#search select");
+        var datalist = document.querySelector("#locations");
+
+        $.ajax({url: "http://localhost:8000/controller/locations/names.php", success: function(result){
+            var json = JSON.parse(result);
+            
+            console.log(json);
+            for(var i=0; i< json.length; i++) {
+                var elem = document.createElement("option");
+                elem.setAttribute("value", json[i]);
+                datalist.appendChild(elem);
+            }
+        }});
+
+        //<option value="Glasgow">
 
     </script>
 </html>
