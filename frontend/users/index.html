@@ -45,10 +45,13 @@
                 <h2>Search</h2>
                 <form>
                     <div class="row">
-                        <input list="locations" type="search" placeholder="To">
-                        <input list="locations"  type="search" placeholder="From">
-                        <datalist id="locations">
+                        <input id="from" list="fromlist" type="search" placeholder="To" class="unanswered">
+                        <input list="to"  type="search" placeholder="From" class="unanswered">
+                        <datalist id="fromlist">
                         </datalist>
+                        <datalist id="to">
+                        </datalist>
+    
                     </div>
                     <div class="row">
                         <select>
@@ -81,18 +84,45 @@
     </body>
 
     <script>
-        var datalist = document.querySelector("#locations");
+        var datalist = document.querySelector("#fromlist");
+        var toLocations;
 
-        $.ajax({url: "http://localhost:8000/controller/locations/names.php", success: function(result){
-            var json = JSON.parse(result);
+        $.ajax({async:false, url: "http://localhost:8000/controller/locations/names.php", success: function(result){
+            var toLocations = JSON.parse(result);
             
-            console.log(json);
-            for(var i=0; i< json.length; i++) {
+            console.log(toLocations);
+
+            setDataList(toLocations);
+            setValidInputs(document.querySelector("#from"), toLocations);
+        }});
+
+        function setDataList(locations) {
+            for(var i=0; i< locations.length; i++) {
                 var elem = document.createElement("option");
-                elem.setAttribute("value", json[i]);
+                elem.setAttribute("value", locations[i]);
                 datalist.appendChild(elem);
             }
-        }});
+        }
+
+        function setValidInputs(elem, arr) {
+            elem.addEventListener("change", function() {
+                if(arr.indexOf(elem.value) < 0) {
+                    elem.removeAttribute("class");
+                    elem.setAttribute("class", "wrong");
+                } else {
+                    elem.removeAttribute("class");
+                    elem.setAttribute("class","right");
+                }
+            });
+            
+        }
+        
+        
+
+        $("input[type=submit").click(function() {
+            alert("cool");
+            return false;
+        })
 
 
 

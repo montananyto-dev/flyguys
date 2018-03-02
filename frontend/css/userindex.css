@@ -44,6 +44,18 @@ input, select, #basket,button {
     border-radius: 5px; 
 }
 
+.wrong {
+    color:red;
+}
+
+.right {
+    color:black;   
+}
+
+.unanswered {
+    color: grey;
+}
+
 input[type=search] {
     border: 1px solid #400;
     margin: 0px auto;
