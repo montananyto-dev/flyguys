@@ -5,13 +5,13 @@ header("Access-Control-Allow-Origin: *");
 
 $regions = Region::getAll();
 
-$locations = array();
+$locationNames = array();
 foreach($regions as $region) {
     foreach($region->getLocations() as $location) {
-        array_push($locations, $location->getName());
+        array_push($locationNames, $location->getName()); // Fill the $locations array with JUST the name per location
     }
 }
 
-echo json_encode($locations);
+echo json_encode($locationNames);
 
 ?>

@@ -74,16 +74,15 @@ class Region extends Entity
         return $locations;
     }
 
-    function getByName($searchName) {
-        $selectSQL = "SELECT * FROM region"
-            . " WHERE name='$searchName'";
+    public static function getById($id) {
+        $selectSQL = "SELECT name FROM region"
+            . " WHERE id=$id";
         $results = DBWrapper::select($selectSQL);
-
         $result =  $results[0];
 
-        $toReturn = new Region($result['name']);
-        $toReturn->setId((int)$result['id']);
+        $region = new Region($result['name']);
+        $region->setId($id);
 
-        return $toReturn;
+        return $region;
     }
 }

@@ -2,23 +2,38 @@
 require_once( __DIR__ . "/Entity.php");
 require_once(__DIR__ . '/../database/DBWrapper.php');
 
-class Connection extends Entity
+class Connection extends Entity implements \JsonSerializable
 {
 
+    public function jsonSerialize()
+    {
+        $vars = get_object_vars($this);
+
+        return $vars;
+    }
+
     private $id;
-    private $location1;
-    private $location2;
+    private $fromLocation;
+    private $toLocation;
     private $flight_duration;
     private $cost;
 
-    function __construct(Location $location1, Location $location2, $flight_duration, $cost)
+    function __construct(Location $fromLocation, Location $toLocation, $flight_duration, $cost)
     {
 
-        $this->location1 = $location1;
-        $this->location2 = $location2;
+        $this->fromLocation = $fromLocation;
+        $this->toLocation = $toLocation;
         $this->flight_duration = $flight_duration;
         $this->cost = cost;
 
+    }
+
+    function getToLocation() {
+        return $this->toLocation;
+    }
+
+    function getFromLocation() {
+        return $this->fromLocation;
     }
 
     function save() {
