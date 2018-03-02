@@ -20,15 +20,11 @@ class DBWrapper
 
     public static function select($sql)
     {
-
         global $connection;
 
-        $statement = $connection->query($sql);
-
-        $results = $statement->fetchAll();
+        $results = $connection->query($sql)->fetchAll();
 
         return $results;
-
     }
 
 }
