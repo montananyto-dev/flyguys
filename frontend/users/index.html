@@ -46,10 +46,10 @@
                 <form>
                     <div class="row">
                         <input id="from" list="fromlist" type="search" placeholder="To" class="unanswered">
-                        <input list="to"  type="search" placeholder="From" class="unanswered">
+                        <input id="to" list="tolist"  type="search" placeholder="From" class="unanswered">
                         <datalist id="fromlist">
                         </datalist>
-                        <datalist id="to">
+                        <datalist id="tolist">
                         </datalist>
     
                     </div>
@@ -84,23 +84,33 @@
     </body>
 
     <script>
-        var datalist = document.querySelector("#fromlist");
-        var toLocations;
-
-        $.ajax({async:false, url: "http://localhost:8000/controller/locations/names.php", success: function(result){
-            var toLocations = JSON.parse(result);
+        
+        $.ajax({url: "http://localhost:8000/controller/locations/names.php", success: function(result){
+            var fromLocations = JSON.parse(result);
             
-            console.log(toLocations);
+            console.log(fromLocations);
 
-            setDataList(toLocations);
-            setValidInputs(document.querySelector("#from"), toLocations);
+            // For From Locations - Generate DataList and set valid inputs
+            setDataList(document.querySelector("#fromlist"), fromLocations);
+            setValidInputs(document.querySelector("#from"), fromLocations);
+
+            $("#from").focusout(function() {
+                var selectedFromLocation = document.getElementById("from").value;
+                $.ajax({url: `http://localhost:8000/controller/locations/getConnectedLocations.php?name=${selectedFromLocation}`, success: function(result) {
+                    console.log(result);
+                    var toLocations = JSON.parse(result);
+                    setDataList(document.querySelector("#tolist"), toLocations);
+                    setValidInputs(document.querySelector("#to"), fromLocations);
+                }});
+
+            })
         }});
 
-        function setDataList(locations) {
+        function setDataList(dataListElem, locations) {
             for(var i=0; i< locations.length; i++) {
                 var elem = document.createElement("option");
                 elem.setAttribute("value", locations[i]);
-                datalist.appendChild(elem);
+                dataListElem.appendChild(elem);
             }
         }
 
@@ -113,8 +123,7 @@
                     elem.removeAttribute("class");
                     elem.setAttribute("class","right");
                 }
-            });
-            
+            });  
         }
         
         
