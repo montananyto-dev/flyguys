@@ -36,6 +36,10 @@ class Flight extends Entity implements \JsonSerializable
     //     return $this->$attribute;
     // }
 
+    function getConnection() {
+        return $this->connection;
+    }
+
     function save()
     {
         // TODO: Implement save() method.

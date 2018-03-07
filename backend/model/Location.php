@@ -49,6 +49,10 @@ class Location extends Entity implements \JsonSerializable
         return $this->name;
     }
 
+    function getRegion() {
+        return $this->region;
+    }
+
     function getConnections() {
         $selectSQL = "SELECT * FROM connection WHERE location_id1=$this->id;";
 
@@ -79,13 +83,7 @@ class Location extends Entity implements \JsonSerializable
         $location->setId($id);
 
         return $location;
-        // foreach($results as $result) {
-        //     $region = new Region($result['name']);
-        //     $region->setId($result['id']);
-        //     array_push($allRegions, $region);
-        // }
 
-        // return $allRegions;
     }
 
     public static function getByName($name) {
@@ -100,26 +98,9 @@ class Location extends Entity implements \JsonSerializable
 
         return $location;
 
-        // foreach($results as $result) {
-        //     $region = new Region($result['name']);
-        //     $region->setId($result['id']);
-        //     array_push($allRegions, $region);
-        // }
-
-        // return $allRegions;
     }
 
     function getId() {
         return $this->id;
     }
-
-    // function __set($attribute, $value)
-    // {
-    //     $this->$attribute = $value;
-    // }
-
-    // function __get($attribute)
-    // {
-    //     return $this->$attribute;
-    // }
 }

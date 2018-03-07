@@ -17,8 +17,10 @@ require_once("Cookie.php");
 //
 //var_dump($response);
 
-$email = "tony@gmail.com";
-$password = "tony";
+// $email = "tony@gmail.com";
+// $password = "tony";
+
+$region = Region::getRegions();
 
 // need to decrypt password
 

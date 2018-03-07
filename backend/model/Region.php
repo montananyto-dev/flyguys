@@ -4,8 +4,15 @@ require_once(__DIR__ . '/../database/DBWrapper.php');
 require_once( __DIR__ . "/Location.php");
 
 
-class Region extends Entity
+class Region extends Entity implements \JsonSerializable
 {
+
+    public function jsonSerialize()
+    {
+        $vars = get_object_vars($this);
+
+        return $vars;
+    }
 
     private $region_id;
     private $name;
