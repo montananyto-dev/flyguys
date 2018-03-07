@@ -56,10 +56,12 @@ class Location extends Entity implements \JsonSerializable
 
         $connections = array();
         foreach($results as $row) {
-            array_push($connections, new Connection($this,
-                                                    Location::getById($row['location_id2']),
-                                                    $row['flight_duration'],
-                                                    $row['cost']));
+            $tempConnection = new Connection($this,
+                                            Location::getById($row['location_id2']),
+                                            $row['flight_duration'],
+                                            $row['cost']);
+            $tempConnection->setId($row['id']);
+            array_push($connections, $tempConnection);
         }
 
         return $connections;
