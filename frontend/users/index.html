@@ -8,7 +8,8 @@
         <link rel="shortcut icon" type="image/png" href="../images/favicon.png"/>
 
 
-        <link rel="stylesheet" type="text/css" href="../css/userindex.css">
+        <link rel="stylesheet" type="text/css" href="../css/index_user.css">
+        <link rel="stylesheet" type="text/css" href="../css/results.css">
 
         <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -72,13 +73,20 @@
             </section>
 
             <section id="results">
-                <h2>Results</h2>
+            
                 <section class="flight">
-                    <p></p>
-                    
-                    
+                    <h3>Stansted (Domestic) - Paris (Europe)</h3>
+                    <button>Add flight (£50.00)</button>
+                    <em>Saturday 26th March</em>
+                    <h4>Departing at 13:00:00, Arriving at 14:00:00</h4>
                 </section>
-
+                <section class="flight">
+                    <h3>Stansted (Domestic) - Paris (Europe)</h3>
+                    <button>Add flight (£50.00)</button>
+                    <em>Saturday 26th March</em>
+                    <h4>Departing at 13:00:00, Arriving at 14:00:00</h4>
+                </section>
+            
             </section>
         </main>
     </body>
@@ -101,6 +109,10 @@
                 success: function(result) {
                     var flights = JSON.parse(result);
                     console.log(flights);
+
+                    removeChildren(document.getElementById("results")   );
+
+                    generateResults(flights);
                     
                     return false;
                 }
@@ -108,9 +120,60 @@
             });
         }
 
+        function removeChildren(root) {
+            while(root.firstChild)
+                root.removeChild(root.firstChild);
+        }
 
+        function generateResults(flights) {
+            var root = document.getElementById("results");
 
-        //<option value="Glasgow">
+            var title = document.createElement("h2");
+            title.innerHTML = "Results";
+
+            root.appendChild(title);
+
+            for(var i=0;i<flights.length;i++) {
+                generateResult(root, flights[i]);
+            }
+        }
+
+        function generateResult(root, flight) {
+            var locations = document.createElement("h3");
+            var addBtn = document.createElement("button");
+            var date = document.createElement("em");
+            var times = document.createElement("h4");
+            var section = document.createElement("section");
+
+            // Set location text
+            var floc = flight.connection.fromLocation;
+            var tloc = flight.connection.toLocation;
+            locations.innerHTML = `${floc.name} (${floc.region.name}) - ${tloc.name} (${tloc.region.name})`;
+
+            // Set button text
+            addBtn.innerHTML = `Add flight (£${flight.connection.cost})`;
+
+            // Set date text
+            //var date = Date(flight.departure_date_time);
+            var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            var d = new Date(flight.departure_date_time);
+            date.innerHTML = days[d.getDay()] + " " + d.getDate() + " " + months[d.getMonth()];
+
+            // Set departure and arrival time text
+            times.innerHTML = "Departure time... and Arrival time...";
+
+            // Set class for styling
+            section.setAttribute("class","flight");
+
+            section.appendChild(locations);
+            section.appendChild(addBtn);
+            section.appendChild(date);
+            section.appendChild(times)
+
+            root.appendChild(section);
+        }
+
 
     </script>
 </html>
