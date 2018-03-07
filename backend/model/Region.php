@@ -26,6 +26,10 @@ class Region extends Entity
         $this->name=$newName;
     }
 
+    function getName() {
+        return $this->name;
+    }
+
     function save() {
         if (isset($this->region_id) && $this->modified) {
             $updateSQL = "UPDATE region "
@@ -85,4 +89,5 @@ class Region extends Entity
 
         return $region;
     }
+
 }
