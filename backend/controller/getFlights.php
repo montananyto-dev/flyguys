@@ -19,8 +19,8 @@ if(isset($desiredRegionName)) {
 }
 
 if(count($desiredRegions)==0) {
-    echo '"response":"failure","reason":"region does not exist"';
-    return;
+    header('HTTP/1.1 500 Internal Server Error');
+    die(json_encode(array('message' => 'ERROR', 'code' => 1337)));
 }
 
 $flights = array();
