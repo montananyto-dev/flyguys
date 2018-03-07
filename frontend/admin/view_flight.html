@@ -1,0 +1,73 @@
+<html>
+
+<head>
+
+    <link rel="stylesheet" type="text/css" href="../css/view_flight.css">
+
+    <title>Admin</title>
+
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+    <div class="dropdown">
+
+        <button class="dropbtn">View Destination
+
+            <i class="fa fa-caret-down"></i>
+
+        </button>
+
+        <div class="dropdown-content">
+
+            <a href="#" class="viewAllFlight">View all flights</a>
+            <a href="#" class ="viewDomesticFlight">View domestic flights</a>
+            <a href="#" class="viewEuropeanFlight">View european flights</a>
+
+        </div>
+
+    </div>
+
+    <a href="add_destination.html">Add Destination</a>
+    <a href="#">Edit Destination</a>
+    <a href="#">Delete Destination</a>
+
+    <a class="logout" href="#">Logout</a>
+
+</div>
+
+</body>
+
+<script>
+
+    $('.viewAllFlight').click(function(){
+
+        alert('click me again ');
+
+    })
+
+
+    function retrieveAllFlights(){
+
+        $.ajax({
+
+            url:'http://localhost:8000/controller/'
+
+
+        })
+
+
+    }
+
+</script>
+
+</html>
+

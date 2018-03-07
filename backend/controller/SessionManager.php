@@ -5,8 +5,4 @@ header("Access-Control-Allow-Origin: *");
 
 $cookie = new Cookie();
 
-//var_dump($cookie)
-echo json_encode($cookie);
 
-
-?>
