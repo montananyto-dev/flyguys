@@ -107,15 +107,17 @@ class Location extends Entity implements \JsonSerializable
         // return $allRegions;
     }
 
-
-
-    function __set($attribute, $value)
-    {
-        $this->$attribute = $value;
+    function getId() {
+        return $this->id;
     }
 
-    function __get($attribute)
-    {
-        return $this->$attribute;
-    }
+    // function __set($attribute, $value)
+    // {
+    //     $this->$attribute = $value;
+    // }
+
+    // function __get($attribute)
+    // {
+    //     return $this->$attribute;
+    // }
 }

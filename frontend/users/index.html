@@ -45,8 +45,8 @@
                 <h2>Search</h2>
                 <form>
                     <div class="row">
-                        <input id="from" list="fromlist" type="search" placeholder="To" class="unanswered">
-                        <input id="to" list="tolist"  type="search" placeholder="From" class="unanswered">
+                        <input id="from" list="fromlist" type="search" placeholder="From" class="unanswered">
+                        <input id="to" list="tolist"  type="search" placeholder="To" class="unanswered">
                         <datalist id="fromlist">
                         </datalist>
                         <datalist id="tolist">
@@ -83,55 +83,33 @@
         </main>
     </body>
 
+    <script src="../js/search.js"></script>
+
     <script>
-        
-        $.ajax({url: "http://localhost:8000/controller/locations/names.php", success: function(result){
-            var fromLocations = JSON.parse(result);
-            
-            console.log(fromLocations);
-
-            // For From Locations - Generate DataList and set valid inputs
-            setDataList(document.querySelector("#fromlist"), fromLocations);
-            setValidInputs(document.querySelector("#from"), fromLocations);
-
-            $("#from").focusout(function() {
-                var selectedFromLocation = document.getElementById("from").value;
-                $.ajax({url: `http://localhost:8000/controller/locations/getConnectedLocations.php?name=${selectedFromLocation}`, success: function(result) {
-                    console.log(result);
-                    var toLocations = JSON.parse(result);
-                    setDataList(document.querySelector("#tolist"), toLocations);
-                    setValidInputs(document.querySelector("#to"), fromLocations);
-                }});
-
-            })
-        }});
-
-        function setDataList(dataListElem, locations) {
-            for(var i=0; i< locations.length; i++) {
-                var elem = document.createElement("option");
-                elem.setAttribute("value", locations[i]);
-                dataListElem.appendChild(elem);
-            }
-        }
-
-        function setValidInputs(elem, arr) {
-            elem.addEventListener("change", function() {
-                if(arr.indexOf(elem.value) < 0) {
-                    elem.removeAttribute("class");
-                    elem.setAttribute("class", "wrong");
-                } else {
-                    elem.removeAttribute("class");
-                    elem.setAttribute("class","right");
-                }
-            });  
-        }
-        
-        
-
-        $("input[type=submit").click(function() {
-            alert("cool");
+        $("input[type=submit]").hover(function() {
+            retriveData();
             return false;
         })
+
+        function retriveData() {
+            var fromValue = document.getElementById("from").value;
+            var toValue = document.getElementById("to").value;
+            
+            $.ajax({
+                url: `http://localhost:8000/controller/locations/search.php?fromName=${fromValue}&toName=${toValue}`, 
+                success: function(result) {
+                    var flights = JSON.parse(result);
+                    console.log(flights);
+                    
+                    onSuccess();
+                }
+                
+            });
+        }
+
+        function onSuccess() {
+            return false;
+        }
 
 
 
