@@ -1,6 +1,5 @@
 <?php
 
-require_once('DBconnection.php');
 
 class DBWrapper
 {

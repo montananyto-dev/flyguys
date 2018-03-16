@@ -34,9 +34,12 @@
         <aside>
             <ul id="basket">
                 <p class="underline">My Basket</p>
-                <li>Rome to Paris</li>
-                <li>New York to Boston</li>
+                <div>
+                    <li>Rome to Paris</li>
+                    <li>New York to Boston</li>
+                </div>
                 <button>Checkout</button>
+                
             </ul>
         </aside>
 
@@ -108,11 +111,12 @@
                 url: `http://localhost:8000/controller/locations/search.php?fromName=${fromValue}&toName=${toValue}`, 
                 success: function(result) {
                     var flights = JSON.parse(result);
-                    console.log(flights);
 
-                    removeChildren(document.getElementById("results")   );
+                    var root = document.getElementById("results")
 
-                    generateResults(flights);
+                    removeChildren(root);
+
+                    generateResults(root,flights);
                     
                     return false;
                 }
@@ -125,8 +129,7 @@
                 root.removeChild(root.firstChild);
         }
 
-        function generateResults(flights) {
-            var root = document.getElementById("results");
+        function generateResults(root, flights) {
 
             var title = document.createElement("h2");
             title.innerHTML = "Results";
@@ -152,6 +155,9 @@
 
             // Set button text
             addBtn.innerHTML = `Add flight (£${flight.connection.cost})`;
+            addBtn.addEventListener('click', function() {
+                addToBasket(flight);
+            })
 
             // Set date text
             //var date = Date(flight.departure_date_time);
@@ -161,7 +167,7 @@
             date.innerHTML = days[d.getDay()] + " " + d.getDate() + " " + months[d.getMonth()];
 
             // Set departure and arrival time text
-            times.innerHTML = "Departure time... and Arrival time...";
+            times.innerHTML = "Departing at {temp} , Arriving at {temp}";
 
             // Set class for styling
             section.setAttribute("class","flight");
@@ -173,6 +179,25 @@
 
             root.appendChild(section);
         }
+
+        function addToBasket(flight) {
+
+            //if(alreadyAdded(flight.id));
+
+            var basketItems = document.querySelector('#basket div');
+
+            
+            
+            var listItem = document.createElement('li');
+            listItem.innerHTML = flight.connection.fromLocation.name + " to " + flight.connection.toLocation.name;
+            
+
+            basketItems.appendChild(newItem);
+        }
+
+        // function alreadyAdded(id) {
+        //     console.log(id);
+        // }
 
 
     </script>

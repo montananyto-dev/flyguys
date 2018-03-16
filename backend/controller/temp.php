@@ -1,6 +1,6 @@
 <?php
-require_once("../../model/Location.php");
-require_once("../../database/dao.php");
+require_once("../model/Location.php");
+require_once("../database/dao.php");
 header("Access-Control-Allow-Origin: *");
 
 $allLocations = getAllLocations();
