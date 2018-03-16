@@ -1,5 +1,5 @@
 <?php
-require_once( __DIR__ . "/Entity.php");
+require_once(__DIR__ . "/Entity.php");
 require_once(__DIR__ . '/../database/DBWrapper.php');
 
 class Booking extends Entity
@@ -36,10 +36,14 @@ class Booking extends Entity
         }
     }
 
-    //TODO
-    function getPassengers()
+    function __set($name, $value)
     {
+        $this->$name = $value;
+    }
 
+    function __get($name)
+    {
+        return $this->$name;
     }
 }
 

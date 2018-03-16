@@ -1,5 +1,5 @@
 <?php
-require_once( __DIR__ . "/Entity.php");
+require_once(__DIR__ . "/Entity.php");
 require_once(__DIR__ . '/../database/DBWrapper.php');
 
 class Account implements \JsonSerializable
@@ -12,21 +12,23 @@ class Account implements \JsonSerializable
         return $vars;
     }
 
-    private $acc_id;
+    private $id;
     private $email;
     private $password;
     private $cookie;
 
-    function __set($attribute, $value) {
-        if($property = 'password') {
+    function __set($name, $value)
+    {
+        if ($name = 'password') {
             $salt = "123456789";
             $value = crypt($value, $salt);
         }
-        $this->$attribute = $value;
+        $this->$name = $value;
     }
 
-    function __get($attribute) {
-        return $this->$attribute;
+    function __get($name)
+    {
+        return $this->$name;
     }
 
 }

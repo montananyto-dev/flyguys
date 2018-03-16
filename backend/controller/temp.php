@@ -10,5 +10,11 @@ foreach($allLocations as $location) {
     array_push($names, $location->__get("name"));
 }
 
-echo json_encode($names);
+//echo json_encode($names);
+
+$locations = getAllLocationByRegion(6);
+//var_dump($locations);
+
+$location = getAllLocationByRegionName("Europe");
+var_dump($location);
 
