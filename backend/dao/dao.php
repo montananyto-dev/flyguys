@@ -1,5 +1,5 @@
 <?php
-require_once('DBconnection.php');
+require_once('../database/DBconnection.php');
 require_once(__DIR__ . '/../model/Location.php');
 
 function getAllAccounts()
