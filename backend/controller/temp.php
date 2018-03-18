@@ -12,7 +12,7 @@ foreach($allLocations as $location) {
 
 //echo json_encode($names);
 
-$locations = getAllLocationByRegion(6);
+$locations = getAllLocationByRegionId(6);
 //var_dump($locations);
 
 $location = getAllLocationByRegionName("Europe");

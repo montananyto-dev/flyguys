@@ -1,6 +1,10 @@
 <?php
 require_once('../database/DBconnection.php');
 require_once(__DIR__ . '/../model/Location.php');
+require_once(__DIR__ . '/../model/Flight.php');
+
+function setPropertyIterator($array, $identifier, $property, $)
+
 
 function getAllAccounts()
 {
@@ -20,6 +24,8 @@ function getAllRegions()
     $statement->execute();
     $result = $statement->fetchAll(PDO::FETCH_CLASS, 'Region');
 
+    setPropertyIterator($result, 'id', '')
+
     return $result;
 }
 
@@ -33,21 +39,21 @@ function getAllLocations()
     return $result;
 }
 
-function getAllLocationByRegion($region){
+function getAllLocationByRegionId($regionID){
 
     global $connection;
     $statement = $connection->prepare('SELECT * FROM location WHERE region_id = ?');
-    $statement->execute([$region]);
+    $statement->execute([$regionID]);
     $result = $statement->fetchAll(PDO::FETCH_CLASS,'Location');
 
     return $result;
 }
 
-function getAllLocationByRegionName($region){
+function getAllLocationByRegionName($regionName){
 
     global $connection;
     $statement = $connection->prepare('SELECT id FROM region WHERE name = ?');
-    $statement->execute([$region]);
+    $statement->execute([$regionName]);
     $result= $statement->fetchAll(PDO::FETCH_COLUMN,'region');
 
     $statement = $connection->prepare('SELECT * FROM location WHERE region_id = ?');
@@ -55,5 +61,15 @@ function getAllLocationByRegionName($region){
     $results = $statement->fetchAll(PDO::FETCH_CLASS,'Location');
 
     return $results;
+}
+
+function getAllFlights() {
+    global $connection;
+
+    $statement = $connection->prepare('SELECT * FROM flight');
+    $statement->execute();
+    $result= $statement->fetchAll(PDO::FETCH_CLASS,'flight');
+
+    return $result;
 }
 
