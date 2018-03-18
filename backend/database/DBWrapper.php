@@ -7,11 +7,11 @@ class DBWrapper
     public static function insert($sql)
     {
 
-        global $connection;
+        global $conn;
 
-        $connection->query($sql);
+        $conn->query($sql);
 
-        $last_id = $connection->lastInsertId();
+        $last_id = $conn->lastInsertId();
 
         return (int)$last_id;
 
@@ -19,9 +19,9 @@ class DBWrapper
 
     public static function select($sql)
     {
-        global $connection;
+        global $conn;
 
-        $results = $connection->query($sql)->fetchAll();
+        $results = $conn->query($sql)->fetchAll();
 
         return $results;
     }

@@ -1,15 +1,14 @@
 <?php
-require_once('../database/DBconnection.php');
+require_once(__DIR__ . '/../database/DBconnection.php');
 require_once(__DIR__ . '/../model/Location.php');
 require_once(__DIR__ . '/../model/Flight.php');
-
-function setPropertyIterator($array, $identifier, $property, $)
-
+require_once(__DIR__ . '/../model/Connection.php');
+require_once(__DIR__ . '/../model/Region.php');
 
 function getAllAccounts()
 {
-    global $connection;
-    $statement = $connection->prepare('SELECT id, email, password, cookie, salt FROM account');
+    global $conn;
+    $statement = $conn->prepare('SELECT id, email, password, cookie, salt FROM account');
     $statement->execute();
 
     $result = $statement->fetchAll(PDO::FETCH_CLASS, 'Account');
@@ -17,59 +16,107 @@ function getAllAccounts()
 
 }
 
-function getAllRegions()
+function getRegions($property = 1, $value = 1)
 {
-    global $connection;
-    $statement = $connection->prepare('SELECT id, name FROM region');
+    global $conn;
+    $sql = "SELECT id, name FROM region WHERE $property = '$value'";
+
+    $statement = $conn->prepare($sql);
     $statement->execute();
     $result = $statement->fetchAll(PDO::FETCH_CLASS, 'Region');
 
-    setPropertyIterator($result, 'id', '')
 
     return $result;
 }
 
-function getAllLocations()
+function getLocations($property = 1, $value = 1)
 {
-    global $connection;
-    $statement = $connection->prepare('SELECT * FROM location');
+    global $conn;
+
+    $sql = "SELECT * FROM location where $property = '$value'";
+
+    $statement = $conn->prepare($sql);
     $statement->execute();
     $result = $statement->fetchAll(PDO::FETCH_CLASS, 'Location');
 
+    foreach($result as $row) {
+        $region = getRegions('id', $row->__get('region_id'));
+        $row->__set('region',$region);
+    }
+
     return $result;
 }
 
-function getAllLocationByRegionId($regionID){
 
-    global $connection;
-    $statement = $connection->prepare('SELECT * FROM location WHERE region_id = ?');
-    $statement->execute([$regionID]);
-    $result = $statement->fetchAll(PDO::FETCH_CLASS,'Location');
+function getConnections($property = 1, $value = 1)
+{
+    global $conn;
+
+    $sql = "SELECT * FROM connection where $property = '$value'";
+
+    $statement = $conn->prepare($sql);
+    $statement->execute();
+    $result = $statement->fetchAll(PDO::FETCH_CLASS, 'Connection');
+
+    foreach($result as $row) {
+        $fromLocation = getLocations('id', $row->location_id1);
+        $toLocation = getLocations('id', $row->location_id2);
+
+        $row->__set('fromLocation', $fromLocation);
+        $row->__set('toLocation', $toLocation);
+    }
 
     return $result;
+}
+
+function getConnectionById($id) {
+    return getConnections('id', $id)[0];
+}
+
+function getAllConnections() {
+    return getConnections();
 }
 
 function getAllLocationByRegionName($regionName){
 
-    global $connection;
-    $statement = $connection->prepare('SELECT id FROM region WHERE name = ?');
-    $statement->execute([$regionName]);
-    $result= $statement->fetchAll(PDO::FETCH_COLUMN,'region');
+    $region = getRegions('name', $regionName)[0];
 
-    $statement = $connection->prepare('SELECT * FROM location WHERE region_id = ?');
-    $statement->execute([$result[0]]);
-    $results = $statement->fetchAll(PDO::FETCH_CLASS,'Location');
+    $locations = getLocations('region_id', $region->__get('id'));
 
-    return $results;
+    return $locations;
 }
 
 function getAllFlights() {
-    global $connection;
+    global $conn;
 
-    $statement = $connection->prepare('SELECT * FROM flight');
+    $statement = $conn->prepare('SELECT * FROM flight');
     $statement->execute();
     $result= $statement->fetchAll(PDO::FETCH_CLASS,'flight');
 
+    foreach($result as $row) {
+        $row->__set('connection',getConnections('connection_id',$row->__get('connection_id')));
+    }
+
     return $result;
 }
+
+function getConnectedLocations($location) {
+    $connections = getConnections('location_id1', $location->__get('id'));
+
+    $toLocations = array();
+    foreach($connections as $connection) {
+        array_push($toLocations, $connection->__get('toLocation'));
+    }
+
+    return $toLocations;
+}
+
+
+
+
+//function setPerItem($array, $identifier, $property, $anonFunction) {
+//    foreach($array as $item) {
+//        $item->$property = $anonFunction($identifier);
+//    }
+//}
 
