@@ -1,8 +1,6 @@
 <?php
-require_once( __DIR__ . "/Entity.php");
-require_once(__DIR__ . '/../database/DBWrapper.php');
 
-class Flight extends Entity implements \JsonSerializable
+class Flight implements \JsonSerializable
 {
 
     public function jsonSerialize()
@@ -18,30 +16,13 @@ class Flight extends Entity implements \JsonSerializable
     private $capacity;
 
 
-    function __construct(Connection $connection,$departure_date_time,$capacity)
+    function __set($name, $value)
     {
-        $this->connection = $connection;
-        $this->departure_date_time = $departure_date_time;
-        $this->capacity = $capacity;
+        $this->$name = $value;
     }
 
-    function setId($newId) {
-        $this->id = $newId;
-    }
-
-    // function __set($attribute,$value){
-    //     $this->$attribute = $value;
-    // }
-    // function __get($attribute){
-    //     return $this->$attribute;
-    // }
-
-    function getConnection() {
-        return $this->connection;
-    }
-
-    function save()
+    function __get($name)
     {
-        // TODO: Implement save() method.
+        return $this->$name;
     }
 }

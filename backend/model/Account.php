@@ -1,10 +1,7 @@
 <?php
-require_once(__DIR__ . "/Entity.php");
-require_once(__DIR__ . '/../database/DBWrapper.php');
 
 class Account implements \JsonSerializable
 {
-
     public function jsonSerialize()
     {
         $vars = get_object_vars($this);
@@ -16,6 +13,7 @@ class Account implements \JsonSerializable
     private $email;
     private $password;
     private $cookie;
+    private $salt;
 
     function __set($name, $value)
     {

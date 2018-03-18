@@ -1,7 +1,4 @@
 <?php
-require_once(__DIR__ . "/Entity.php");
-require_once(__DIR__ . '/../database/DBWrapper.php');
-require_once(__DIR__ . "/Region.php");
 
 class Location implements \JsonSerializable
 {
@@ -14,7 +11,7 @@ class Location implements \JsonSerializable
     }
 
     private $id;
-    private $region_id;
+    private $region;
     private $name;
     private $code;
     private $timezone;

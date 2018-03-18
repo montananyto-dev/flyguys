@@ -1,7 +1,4 @@
 <?php
-require_once( __DIR__ . "/Entity.php");
-require_once(__DIR__ . '/../database/DBWrapper.php');
-
 
 class Region implements \JsonSerializable
 {
@@ -16,15 +13,15 @@ class Region implements \JsonSerializable
     private $id;
     private $name;
 
-    
-
-    function __set($attribute, $value) {
+    function __set($attribute, $value)
+    {
         $this->$attribute = $value;
     }
 
-    function __get($attribute) {
+    function __get($attribute)
+    {
         return $this->$attribute;
     }
-    
+
 
 }

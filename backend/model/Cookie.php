@@ -1,9 +1,8 @@
 <?php
-require_once(__DIR__ . '/../database/DBWrapper.php');
 
 class Cookie implements \JsonSerializable
 {
-    
+
     public function jsonSerialize()
     {
         $vars = get_object_vars($this);
@@ -108,7 +107,5 @@ class Cookie implements \JsonSerializable
     {
         return time() + (10 * 365 * 24 * 60 * 60);
     }
-
-
 
 }
