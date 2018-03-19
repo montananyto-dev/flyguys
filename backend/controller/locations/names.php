@@ -1,9 +1,9 @@
 <?php
 require_once("../../model/Location.php");
-require_once("../../dao/dao.php");
+require_once("../../database/DAO.php");
 header("Access-Control-Allow-Origin: *");
 
-$allLocations = getLocations();
+$allLocations = DAO::getInstance()->getLocations();
 
 $names = array();
 foreach($allLocations as $location) {

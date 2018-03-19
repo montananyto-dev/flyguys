@@ -1,20 +1,26 @@
 <?php
 require_once __DIR__ . "/../../model/Location.php";
 require_once __DIR__ . "/../../model/Connection.php";
-require_once "../../dao/dao.php";
+require_once "../../database/DAO.php";
 
 header("Access-Control-Allow-Origin: *");
 
-//$fromLocationName = $_GET['name'];
-$fromLocationName = "Stansted";
+$toEncode = array();
 
-$fromLocation = getLocations('name', $fromLocationName);
+$l = "Stansted";
 
-$allToLocations = getConnectedLocations($fromLocation[0]);
+//if(isset($_GET["name"])) {
+if(isset($l)) {
+    //$location = DAO::getInstance()->getLocations("name", $_GET["name"], true);
+    $location = DAO::getInstance()->getLocations("name", $l, true);
 
-$names = array();
-foreach($allToLocations as $location) {
-    array_push($names, $location->__get("name"));
+    if(isset($location)) {
+        $toLocations = DAO::getInstance()->getConnectedLocations($location);
+
+        foreach($toLocations as $location) {
+            array_push($toEncode, $location->name);
+        }
+    }
 }
 
-echo json_encode($names);
+echo json_encode($toEncode);

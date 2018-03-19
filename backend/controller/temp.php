@@ -1,7 +1,9 @@
 <?php
 require_once("../model/Location.php");
-require_once("../dao/dao.php");
+require_once("../database/DAO.php");
 header("Access-Control-Allow-Origin: *");
 
-echo json_encode( getAllLocationByRegionName('Domestic') );
+$all =  DAO::getInstance()->getFlights();
+
+echo json_encode($all);
 
