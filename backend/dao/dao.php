@@ -5,76 +5,91 @@ require_once(__DIR__ . '/../model/Flight.php');
 require_once(__DIR__ . '/../model/Connection.php');
 require_once(__DIR__ . '/../model/Region.php');
 
-function getAllAccounts()
-{
-    global $conn;
-    $statement = $conn->prepare('SELECT id, email, password, cookie, salt FROM account');
-    $statement->execute();
+function query($sql, $class) {
 
-    $result = $statement->fetchAll(PDO::FETCH_CLASS, 'Account');
+    global $conn;
+
+    $statement = $conn->prepare($sql);
+    $statement->execute();
+    $results = $statement->fetchAll(PDO::FETCH_CLASS, $class);
+
+    return $results;
+}
+
+function getAccounts($property = 1, $value = 1, $singleReturn = false)
+{
+    $result = query("SELECT id, email, password, cookie, salt FROM account WHERE $property = '$value'", "Account");
+
+    if($singleReturn) {
+        return $result[0];
+    }
+
     return $result;
 
 }
 
-function getRegions($property = 1, $value = 1)
+function getRegions($property = 1, $value = 1, $singleReturn = false)
 {
-    global $conn;
-    $sql = "SELECT id, name FROM region WHERE $property = '$value'";
 
-    $statement = $conn->prepare($sql);
-    $statement->execute();
-    $result = $statement->fetchAll(PDO::FETCH_CLASS, 'Region');
+    $result = query("SELECT id, name FROM region WHERE $property = '$value'", "Region");
 
+    if($singleReturn) {
+        return result[0];
+    }
 
     return $result;
 }
 
-function getLocations($property = 1, $value = 1)
+function getLocations($property = 1, $value = 1, $singleReturn = false)
 {
-    global $conn;
-
-    $sql = "SELECT * FROM location where $property = '$value'";
-
-    $statement = $conn->prepare($sql);
-    $statement->execute();
-    $result = $statement->fetchAll(PDO::FETCH_CLASS, 'Location');
+    $result = query("SELECT * FROM location where $property = '$value'", "Location");
 
     foreach($result as $row) {
-        $region = getRegions('id', $row->__get('region_id'));
+        $region = getRegions('id', $row->__get('region_id'), true);
         $row->__set('region',$region);
+    }
+
+    if($singleReturn) {
+        return $result[0];
     }
 
     return $result;
 }
 
 
-function getConnections($property = 1, $value = 1)
+function getConnections($property = 1, $value = 1, $singleReturn = false)
 {
-    global $conn;
-
-    $sql = "SELECT * FROM connection where $property = '$value'";
-
-    $statement = $conn->prepare($sql);
-    $statement->execute();
-    $result = $statement->fetchAll(PDO::FETCH_CLASS, 'Connection');
+    $result = query("SELECT * FROM connection WHERE $property = '$value'", "Connection");
 
     foreach($result as $row) {
-        $fromLocation = getLocations('id', $row->location_id1);
-        $toLocation = getLocations('id', $row->location_id2);
+        $fromLocation = getLocations('id', $row->location_id1, true);
+        $toLocation = getLocations('id', $row->location_id2, true);
 
         $row->__set('fromLocation', $fromLocation);
         $row->__set('toLocation', $toLocation);
     }
 
+    if($singleReturn) {
+        return $result[0];
+    }
+
     return $result;
 }
 
-function getConnectionById($id) {
-    return getConnections('id', $id)[0];
-}
+function getFlights($property = 1, $value = 1, $singleReturn = false) {
 
-function getAllConnections() {
-    return getConnections();
+    $result = query("SELECT * FROM flight WHERE $property = '$value'", "Flight");
+
+    foreach($result as $row) {
+        $connection = getConnections('id',$row->__get('connection_id'), true);
+        $row->__set('connection', $connection);
+    }
+
+    if($singleReturn) {
+        return $result[0];
+    }
+
+    return $result;
 }
 
 function getAllLocationByRegionName($regionName){
@@ -86,19 +101,7 @@ function getAllLocationByRegionName($regionName){
     return $locations;
 }
 
-function getAllFlights() {
-    global $conn;
 
-    $statement = $conn->prepare('SELECT * FROM flight');
-    $statement->execute();
-    $result= $statement->fetchAll(PDO::FETCH_CLASS,'flight');
-
-    foreach($result as $row) {
-        $row->__set('connection',getConnections('connection_id',$row->__get('connection_id')));
-    }
-
-    return $result;
-}
 
 function getConnectedLocations($location) {
     $connections = getConnections('location_id1', $location->__get('id'));
