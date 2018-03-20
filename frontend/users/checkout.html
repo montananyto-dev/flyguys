@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FlyGuys Checkout</title>
+</head>
+<body>
+
+    <script>
+        // if(use DOES NOT have cookie / isn't value)
+        //    Alert() them, then re-direct back to index.html
+        // else
+        //    obtain booking information
+        //    continue to generate page...
+    </script>
+
+    <h1>Checkout</h1>
+
+    <ul id="checkoutFlights">
+    </ul>
+
+    <section>
+        <form id="passengerInfo">
+            <section class="passengerDetails">
+                <input type="text" placeholder="name">
+                <input type="text" placeholder="passport number">
+            </section>
+
+
+        </form>
+        <a href="#" id="addPassenger">+ add passenger</a>
+    </section>
+
+    <script>
+
+        // below is dummy data
+        var jsonstuff = '[{"flightId":1, "from":"Stansted","to":"Paris"},{"flightId":5,"from":"Stansted","to":"Berlin"}]';
+
+        var flights = JSON.parse(jsonstuff);
+
+        console.log(flights);
+
+        var list = document.querySelector("#checkoutFlights");
+        flights.forEach(function(flight) {
+            console.log(flight);
+            var item = document.createElement("li");
+            item.innerHTML = flight.from + " to " + flight.to;
+
+            item.addEventListener("click", function() {
+                switchContext(flight.flightId)
+            });
+
+            list.appendChild(item);
+        });
+
+        function switchContext(id) {
+            console.log("Clickky" + id);
+        }
+
+
+
+
+        document.querySelector("#addPassenger").addEventListener("click", function() {
+            createPassengerDetailsSection()
+        });
+
+        function createPassengerDetailsSection() {
+            var passengerName = document.createElement("input");
+            passengerName.setAttribute("type", "text");
+            passengerName.setAttribute("placeholder", "name");
+
+            var passportNum = document.createElement("input");
+            passportNum.setAttribute("type", "text");
+            passportNum.setAttribute("placeholder", "passport number");
+
+            var section = document.createElement("section");
+            section.setAttribute("class", "passengerDetails");
+
+            section.appendChild(passengerName);
+            section.appendChild(passportNum);
+
+            document.querySelector("#passengerInfo").appendChild(section);
+        }
+    </script>
+
+
+
+
+
+
+</body>
+</html>

@@ -18,12 +18,12 @@
 
         <script>
             
-            $.ajax({url: "http://localhost:8000/controller/SessionManager.php", success: function(result){
-                var json = JSON.parse(result);
-
-                document.cookie = `cookie_name=${json.cookie_name} cookie_value=${json.cookie_value} cookie_time=${json.cookie_time}`;
-                console.log(document.cookie);
-            }});
+            // $.ajax({url: "http://localhost:8000/controller/SessionManager.php", success: function(result){
+            //     var json = JSON.parse(result);
+            //
+            //     document.cookie = `cookie_name=${json.cookie_name} cookie_value=${json.cookie_value} cookie_time=${json.cookie_time}`;
+            //     console.log(document.cookie);
+            // }});
         </script>
     </head>
     <body>
