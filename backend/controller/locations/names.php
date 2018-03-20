@@ -7,7 +7,7 @@ $allLocations = DAO::getInstance()->getLocations();
 
 $names = array();
 foreach($allLocations as $location) {
-    array_push($names, $location->__get("name"));
+    array_push($names, $location->name);
 }
 
 echo json_encode($names);

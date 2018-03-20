@@ -5,9 +5,9 @@ require_once __DIR__ . "/../database/DAO.php";
 
 header("Access-Control-Allow-Origin: *");
 
-
-
 $toEncode;
+
+//$_GET['region'] = "Europe";
 
 if(isset($_GET['region'])) {
     $region = DAO::getInstance()->getRegions("name", $_GET['region'], true);
@@ -15,9 +15,7 @@ if(isset($_GET['region'])) {
     if(!isset($region)) { // if no region has been set...
         $toEncode = array(); // ... return empty array
     } else {
-        $locations = DAO::getInstance()->getLocations("id", $region->__get("id"));
-
-        //todo get flights related to $region
+        $locations = DAO::getInstance()->getLocations("region_id", $region->id);
 
 
     }

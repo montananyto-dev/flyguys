@@ -130,7 +130,12 @@ class DAO {
         return $toLocations;
     }
 
-    public function getUpcomingFlights($fromLocation, $toLocation) {
+    public function getUpcomingFlights($fromLocation, $toLocation = null) {
+        if($toLocation == null) {
+            $toLocation = $this->getLocations();
+        }
+
+
         $allFlights = $this->getFlights();
 
         $filteredFlights = array();
