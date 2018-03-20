@@ -22,8 +22,7 @@ class DAO {
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         }
-        catch(PDOException $e)
-        {
+        catch(PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
         }
     }
@@ -35,7 +34,15 @@ class DAO {
         return static::$instance;
     }
 
-    private function query($sql, $class) {
+    private function plainQuery($sql) {
+        $statement = $this->conn->prepare($sql);
+        $statement->execute();
+        $results = $statement->fetchAll();
+
+        return $results;
+    }
+
+    private function classQuery($sql, $class) {
         $statement = $this->conn->prepare($sql);
         $statement->execute();
         $results = $statement->fetchAll(PDO::FETCH_CLASS, $class);
@@ -43,22 +50,8 @@ class DAO {
         return $results;
     }
 
-    public function getAccounts($property = 1, $value = 1, $singleReturn = false)
-    {
-        $result = $this->query("SELECT id, email, password, cookie, salt FROM account WHERE $property = '$value'", "Account");
-
-        if($singleReturn) {
-            return $result[0];
-        }
-
-        return $result;
-
-    }
-
-    public function getRegions($property = 1, $value = 1, $singleReturn = false)
-    {
-
-        $result = $this->query("SELECT id, name FROM region WHERE $property = '$value'", "Region");
+    public function getAccounts($property = 1, $value = 1, $singleReturn = false) {
+        $result = $this->classQuery("SELECT id, email, password, cookie, salt FROM account WHERE $property = '$value'", "Account");
 
         if($singleReturn) {
             return $result[0];
@@ -67,9 +60,18 @@ class DAO {
         return $result;
     }
 
-    public function getLocations($property = 1, $value = 1, $singleReturn = false)
-    {
-        $result = $this->query("SELECT * FROM location where $property = '$value'", "Location");
+    public function getRegions($property = 1, $value = 1, $singleReturn = false) {
+        $result = $this->classQuery("SELECT id, name FROM region WHERE $property = '$value'", "Region");
+
+        if($singleReturn) {
+            return $result[0];
+        }
+
+        return $result;
+    }
+
+    public function getLocations($property = 1, $value = 1, $singleReturn = false) {
+        $result = $this->classQuery("SELECT * FROM location where $property = '$value'", "Location");
 
         foreach($result as $row) {
             $region = $this->getRegions('id', $row->__get('region_id'), true);
@@ -83,9 +85,8 @@ class DAO {
         return $result;
     }
 
-    public function getConnections($property = 1, $value = 1, $singleReturn = false)
-    {
-        $result = $this->query("SELECT * FROM connection WHERE $property = '$value'", "Connection");
+    public function getConnections($property = 1, $value = 1, $singleReturn = false) {
+        $result = $this->classQuery("SELECT * FROM connection WHERE $property = '$value'", "Connection");
 
         foreach($result as $row) {
             $fromLocation = $this->getLocations('id', $row->location_id1, true);
@@ -104,7 +105,7 @@ class DAO {
 
     public function getFlights($property = 1, $value = 1, $singleReturn = false) {
 
-        $result = $this->query("SELECT * FROM flight WHERE $property = '$value'", "Flight");
+        $result = $this->classQuery("SELECT * FROM flight WHERE $property = '$value'", "Flight");
 
         foreach($result as $row) {
             $connection = $this->getConnections('id',$row->connection_id, true);
@@ -127,6 +128,20 @@ class DAO {
         }
 
         return $toLocations;
+    }
+
+    public function getUpcomingFlights($fromLocation, $toLocation) {
+        $allFlights = $this->getFlights();
+
+        $filteredFlights = array();
+        foreach($allFlights as $flight) {
+            if($flight->connection->fromLocation == $fromLocation
+                && $flight->connection->toLocation == $toLocation) {
+                array_push($filteredFlights, $flight);
+            }
+        }
+
+        return $filteredFlights;
     }
 
 }
