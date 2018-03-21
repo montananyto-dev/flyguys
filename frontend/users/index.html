@@ -17,13 +17,34 @@
             crossorigin="anonymous"></script>
 
         <script>
-            
-            // $.ajax({url: "http://localhost:8000/controller/SessionManager.php", success: function(result){
-            //     var json = JSON.parse(result);
-            //
-            //     document.cookie = `cookie_name=${json.cookie_name} cookie_value=${json.cookie_value} cookie_time=${json.cookie_time}`;
-            //     console.log(document.cookie);
-            // }});
+            function getCookieValue(cname) {
+                var name = cname + "=";
+                var decodedCookie = decodeURIComponent(document.cookie);
+                var ca = decodedCookie.split(';');
+                for(var i = 0; i <ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                        return c.substring(name.length, c.length);
+                    }
+                }
+                return null;
+            }
+
+            if(getCookieValue("idCode")) {
+                console.log("Already have idCode:" + getCookieValue("idCode"));
+            } else {
+                $.ajax({url: "http://localhost:8000/controller/SessionManager.php", success: function(result){
+                    var json = JSON.parse(result);
+
+                    document.cookie = `idCode=${json.idCode}`;
+                    console.log("Got myself an idCode:" + getCookieValue("idCode"));
+                }});
+            }
+
+
         </script>
     </head>
     <body>
@@ -93,9 +114,15 @@
             </section>
         </main>
     </body>
+    <script>
+        //form validation
 
+    </script>
+
+    // obtaining dropdown details
     <script src="../js/search.js"></script>
 
+    // retrieving every flight that meets criteria
     <script>
         $("#search").click(function() {
             
@@ -182,22 +209,42 @@
 
         function addToBasket(flight) {
 
-            //if(alreadyAdded(flight.id));
+            if(alreadyAdded(flight.id)) {
+                console.log("Item already added");
+                return;
+            }
+
+            $.ajax({
+                url: ``, success: function(result) {
+
+                }
+
+            });
+
 
             var basketItems = document.querySelector('#basket div');
-
-            
             
             var listItem = document.createElement('li');
-            listItem.innerHTML = flight.connection.fromLocation.name + " to " + flight.connection.toLocation.name;
-            
+            listItem.innerHTML = flight.connection.fromLocation.code + " to " + flight.connection.toLocation.code;
 
-            basketItems.appendChild(newItem);
+            var hiddenId = document.createElement("input");
+            hiddenId.setAttribute("type","hidden");
+            hiddenId.setAttribute("value", flight.id);
+
+            basketItems.appendChild(listItem);
+            basketItems.appendChild(hiddenId);
         }
 
-        // function alreadyAdded(id) {
-        //     console.log(id);
-        // }
+        function alreadyAdded(id) {
+            var toReturn = false;
+            var hiddenElems = document.querySelectorAll("#basket div input");
+            hiddenElems.forEach(function(elem) {
+                if(elem.getAttribute("value") == id) {
+                    toReturn = true;
+                }
+            });
+            return toReturn;
+        }
 
 
     </script>

@@ -42,6 +42,12 @@ class DAO {
         return $results;
     }
 
+    private function insertQuery($sql) {
+        $statement = $this->conn->prepare($sql);
+        $statement->execute();
+        return $this->conn->lastInsertId();
+    }
+
     private function classQuery($sql, $class) {
         $statement = $this->conn->prepare($sql);
         $statement->execute();
@@ -52,6 +58,16 @@ class DAO {
 
     public function getAccounts($property = 1, $value = 1, $singleReturn = false) {
         $result = $this->classQuery("SELECT id, email, password, cookie, salt FROM account WHERE $property = '$value'", "Account");
+
+        if($singleReturn) {
+            return $result[0];
+        }
+
+        return $result;
+    }
+
+    public function getPendingBookings($accId, $singleReturn = false) {
+        $result = $this->classQuery("SELECT * FROM booking WHERE account_id=$accId AND state_id=1", "Booking");
 
         if($singleReturn) {
             return $result[0];
@@ -149,6 +165,17 @@ class DAO {
         return $filteredFlights;
     }
 
+
+    //ADDING
+    public function addAccount($cookieName) {
+        $newId = $this->insertQuery("INSERT INTO account(cookie) VALUES('$cookieName')");
+        return $newId;
+    }
+
+    public function addBooking($accountId) {
+        $newId = $this->insertQuery("INSERT INTO booking(account_id) VALUES($accountId)");
+        return $newId;
+    }
 }
 
 
