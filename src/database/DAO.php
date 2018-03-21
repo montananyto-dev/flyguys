@@ -45,8 +45,13 @@ class DAO
         return $results;
     }
 
-    private function classQuery($sql, $class)
-    {
+    private function insertQuery($sql) {
+        $statement = $this->conn->prepare($sql);
+        $statement->execute();
+        return $this->conn->lastInsertId();
+    }
+
+    private function classQuery($sql, $class) {
         $statement = $this->conn->prepare($sql);
         $statement->execute();
         $results = $statement->fetchAll(PDO::FETCH_CLASS, $class);
@@ -67,6 +72,17 @@ class DAO
 
     public function getRegions($property = 1, $value = 1, $singleReturn = false)
     {
+    public function getPendingBookings($accId, $singleReturn = false) {
+        $result = $this->classQuery("SELECT * FROM booking WHERE account_id=$accId AND state_id=1", "Booking");
+
+        if($singleReturn) {
+            return $result[0];
+        }
+
+        return $result;
+    }
+
+    public function getRegions($property = 1, $value = 1, $singleReturn = false) {
         $result = $this->classQuery("SELECT id, name FROM region WHERE $property = '$value'", "Region");
 
         if ($singleReturn) {
@@ -188,6 +204,17 @@ class DAO
         return $flights;
     }
 
+
+    //ADDING
+    public function addAccount($cookieName) {
+        $newId = $this->insertQuery("INSERT INTO account(cookie) VALUES('$cookieName')");
+        return $newId;
+    }
+
+    public function addBooking($accountId) {
+        $newId = $this->insertQuery("INSERT INTO booking(account_id) VALUES($accountId)");
+        return $newId;
+    }
 }
 
 

@@ -11,7 +11,7 @@ main {
 #basket {
     position:fixed;
     top:10;
-    right:100;
+    right:120;
     list-style-type: none;
     border: 4px dashed rgb(197, 190, 190);
     padding: 10px 10px;
