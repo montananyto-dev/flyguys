@@ -148,7 +148,7 @@ class DAO {
         return $toLocations;
     }
 
-    public function getUpcomingFlights($fromLocationObj, $toLocationObj = null) {
+    public function getFlightsBetween($fromLocationObj, $toLocationObj = null) {
         if($toLocationObj == null) {
             $toLocationObj = $this->getLocations();
         }
