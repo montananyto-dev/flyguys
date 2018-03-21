@@ -45,13 +45,15 @@ class DAO
         return $results;
     }
 
-    private function insertQuery($sql) {
+    private function insertQuery($sql)
+    {
         $statement = $this->conn->prepare($sql);
         $statement->execute();
         return $this->conn->lastInsertId();
     }
 
-    private function classQuery($sql, $class) {
+    private function classQuery($sql, $class)
+    {
         $statement = $this->conn->prepare($sql);
         $statement->execute();
         $results = $statement->fetchAll(PDO::FETCH_CLASS, $class);
@@ -59,7 +61,8 @@ class DAO
         return $results;
     }
 
-    private function getAccounts($property = 1, $value = 1, $singleReturn = false) {
+    private function getAccounts($property = 1, $value = 1, $singleReturn = false)
+    {
         $result = $this->classQuery("SELECT id, email, password, cookie, salt FROM account WHERE $property = '$value'", "Account");
 
         if ($singleReturn) {
@@ -69,7 +72,8 @@ class DAO
         return $result;
     }
 
-    public function getRegions($property = 1, $value = 1, $singleReturn = false) {
+    public function getRegions($property = 1, $value = 1, $singleReturn = false)
+    {
         $result = $this->classQuery("SELECT id, name FROM region WHERE $property = '$value'", "Region");
 
         if ($singleReturn) {
@@ -80,7 +84,8 @@ class DAO
     }
 
 
-    private function getLocations($property = 1, $value = 1, $singleReturn = false) {
+    private function getLocations($property = 1, $value = 1, $singleReturn = false)
+    {
         $result = $this->classQuery("SELECT * FROM location where $property = '$value'", "Location");
 
         foreach ($result as $row) {
@@ -114,7 +119,8 @@ class DAO
         return $result;
     }
 
-    private function getFlights($property = 1, $value = 1, $singleReturn = false) {
+    private function getFlights($property = 1, $value = 1, $singleReturn = false)
+    {
 
         $result = $this->classQuery("SELECT * FROM flight WHERE $property = '$value'", "Flight");
 
@@ -132,15 +138,18 @@ class DAO
 
     //Public Methods
 
-    public function getAllLocations() {
+    public function getAllLocations()
+    {
         return $this->getLocations();
     }
 
-    public function getLocationByName($nameStr) {
+    public function getLocationByName($nameStr)
+    {
         return $this->getLocations('name', $nameStr, true);
     }
 
-    public function getLocationsConnectedTo($locationObj) {
+    public function getLocationsConnectedTo($locationObj)
+    {
         $connections = $this->getConnections('location_id1', $locationObj->id);
 
         $toLocations = array();
@@ -151,8 +160,9 @@ class DAO
         return $toLocations;
     }
 
-    public function getFlightsBetween($fromLocationObj, $toLocationObj = null) {
-        if($toLocationObj == null) {
+    public function getFlightsBetween($fromLocationObj, $toLocationObj = null)
+    {
+        if ($toLocationObj == null) {
             $toLocationObj = $this->getLocations();
         }
 
@@ -200,20 +210,23 @@ class DAO
 
     //ADDING
 
-    public function addAccount($cookieStr) {
+    public function addAccount($cookieStr)
+    {
         $newId = $this->insertQuery("INSERT INTO account(cookie) VALUES('$cookieStr')");
         return $newId;
     }
 
-    public function addBooking($accountId) {
+    public function addBooking($accountId)
+    {
         $newId = $this->insertQuery("INSERT INTO booking(account_id) VALUES($accountId)");
         return $newId;
     }
 
-    public function getPendingBookings($accId, $singleReturn = false) {
+    public function getPendingBookings($accId, $singleReturn = false)
+    {
         $result = $this->classQuery("SELECT * FROM booking WHERE account_id=$accId AND state_id=1", "Booking");
 
-        if($singleReturn) {
+        if ($singleReturn) {
             return $result[0];
         }
 
