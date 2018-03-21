@@ -11,19 +11,19 @@ $toEncode;
 
 if (isset($_GET['region'])) {
 
-    $region = DAO::getInstance()->getRegions("name", $_GET['region'], true);
+    $region = DAO::getInstance()->getRegionByName($_GET['region']);
 
     if (!isset($region)) { // if no region has been set...
 
         $toEncode = array(); // ... return empty array
 
     } else {
-        $toEncode = DAO::getInstance()->getAllFlightsByRegion($region->name);
+        $toEncode = DAO::getInstance()->getAllFlightsByRegion($region);
 
     }
 } else {
 
-    $toEncode = DAO::getInstance()->getFlights();
+    $toEncode = DAO::getInstance()->getAllFlights();
 
 }
 

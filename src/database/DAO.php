@@ -138,6 +138,14 @@ class DAO
 
     //Public Methods
 
+    public function getRegionByName($nameStr) {
+        return $this->getRegions('name', $nameStr, true);
+    }
+
+    public function getAllFlights() {
+        return $this->getFlights();
+    }
+
     public function getAllLocations()
     {
         return $this->getLocations();
@@ -179,9 +187,9 @@ class DAO
         return $filteredFlights;
     }
 
-    public function getAllFlightsByRegion($region)
+    public function getAllFlightsByRegion($regionObj)
     {
-        if ($region == "Europe") {
+        if ($regionObj->name == "Europe") {
             $sql = "SELECT flight.*,r.name FROM flight INNER JOIN connection c ON flight.connection_id = c.id
                                            INNER JOIN location l ON c.location_id1 = l.id
                                            INNER JOIN location l1 ON c.location_id2 = l1.id
