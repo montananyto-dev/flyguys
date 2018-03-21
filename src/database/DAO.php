@@ -73,23 +73,23 @@ class DAO
 
         $sql = "SELECT * from location where id=$fromLocationId";
         $fromLocation = $this->classQuery($sql, "Location");
-        $this->setRegionFor($fromLocation);
+        $this->setRegionFor($fromLocation[0]);
 
         $sql = "SELECT * from location where id=$toLocationId";
         $toLocation = $this->classQuery($sql, "Location");
-        $this->setRegionFor($toLocation);
+        $this->setRegionFor($toLocation[0]);
 
-        $connectionObj->fromLocation = $fromLocation;
-        $connectionObj->toLocation = $toLocation;
+        $connectionObj->fromLocation = $fromLocation[0];
+        $connectionObj->toLocation = $toLocation[0];
     }
 
     private function setConnectionFor($flightObj) {
         $connectionId = $flightObj->connection_id;
         $sql = "SELECT * from connection where id=$connectionId";
         $connection = $this->classQuery($sql, "Connection");
-        $this->setLocationsFor($connection);
+        $this->setLocationsFor($connection[0]);
 
-        $flightObj->connection = $connection;
+        $flightObj->connection = $connection[0];
     }
 
     private function getAccounts($property = 1, $value = 1, $singleReturn = false)
@@ -117,7 +117,7 @@ class DAO
         $sql = "SELECT * FROM flight";
         $results = $this->classQuery($sql, "Flight");
         foreach($results as $result) {
-            $this->setConnectionFor(results);
+            $this->setConnectionFor($result);
         }
         return $results;
         //return $this->getFlights();

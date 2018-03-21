@@ -7,7 +7,6 @@ header("Access-Control-Allow-Origin: *");
 
 $toEncode;
 
-//$_GET['region'] = "Europe";
 
 if (isset($_GET['region'])) {
 
