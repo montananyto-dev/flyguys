@@ -56,7 +56,9 @@ class DAO {
         return $results;
     }
 
-    public function getAccounts($property = 1, $value = 1, $singleReturn = false) {
+    //Mega Methods
+
+    private function getAccounts($property = 1, $value = 1, $singleReturn = false) {
         $result = $this->classQuery("SELECT id, email, password, cookie, salt FROM account WHERE $property = '$value'", "Account");
 
         if($singleReturn) {
@@ -66,17 +68,7 @@ class DAO {
         return $result;
     }
 
-    public function getPendingBookings($accId, $singleReturn = false) {
-        $result = $this->classQuery("SELECT * FROM booking WHERE account_id=$accId AND state_id=1", "Booking");
-
-        if($singleReturn) {
-            return $result[0];
-        }
-
-        return $result;
-    }
-
-    public function getRegions($property = 1, $value = 1, $singleReturn = false) {
+    private function getRegions($property = 1, $value = 1, $singleReturn = false) {
         $result = $this->classQuery("SELECT id, name FROM region WHERE $property = '$value'", "Region");
 
         if($singleReturn) {
@@ -86,7 +78,7 @@ class DAO {
         return $result;
     }
 
-    public function getLocations($property = 1, $value = 1, $singleReturn = false) {
+    private function getLocations($property = 1, $value = 1, $singleReturn = false) {
         $result = $this->classQuery("SELECT * FROM location where $property = '$value'", "Location");
 
         foreach($result as $row) {
@@ -101,7 +93,7 @@ class DAO {
         return $result;
     }
 
-    public function getConnections($property = 1, $value = 1, $singleReturn = false) {
+    private function getConnections($property = 1, $value = 1, $singleReturn = false) {
         $result = $this->classQuery("SELECT * FROM connection WHERE $property = '$value'", "Connection");
 
         foreach($result as $row) {
@@ -119,7 +111,7 @@ class DAO {
         return $result;
     }
 
-    public function getFlights($property = 1, $value = 1, $singleReturn = false) {
+    private function getFlights($property = 1, $value = 1, $singleReturn = false) {
 
         $result = $this->classQuery("SELECT * FROM flight WHERE $property = '$value'", "Flight");
 
@@ -135,8 +127,18 @@ class DAO {
         return $result;
     }
 
-    public function getConnectedLocations($location) {
-        $connections = $this->getConnections('location_id1', $location->id);
+    //Public Methods
+
+    public function getAllLocations() {
+        return $this->getLocations();
+    }
+
+    public function getLocationByName($nameStr) {
+        return $this->getLocations('name', $nameStr, true);
+    }
+
+    public function getLocationsConnectedTo($locationObj) {
+        $connections = $this->getConnections('location_id1', $locationObj->id);
 
         $toLocations = array();
         foreach($connections as $connection) {
@@ -146,9 +148,9 @@ class DAO {
         return $toLocations;
     }
 
-    public function getUpcomingFlights($fromLocation, $toLocation = null) {
-        if($toLocation == null) {
-            $toLocation = $this->getLocations();
+    public function getUpcomingFlights($fromLocationObj, $toLocationObj = null) {
+        if($toLocationObj == null) {
+            $toLocationObj = $this->getLocations();
         }
 
 
@@ -156,8 +158,8 @@ class DAO {
 
         $filteredFlights = array();
         foreach($allFlights as $flight) {
-            if($flight->connection->fromLocation == $fromLocation
-                && $flight->connection->toLocation == $toLocation) {
+            if($flight->connection->fromLocation == $fromLocationObj
+                && $flight->connection->toLocation == $toLocationObj) {
                 array_push($filteredFlights, $flight);
             }
         }
@@ -167,14 +169,24 @@ class DAO {
 
 
     //ADDING
-    public function addAccount($cookieName) {
-        $newId = $this->insertQuery("INSERT INTO account(cookie) VALUES('$cookieName')");
+    public function addAccount($cookieStr) {
+        $newId = $this->insertQuery("INSERT INTO account(cookie) VALUES('$cookieStr')");
         return $newId;
     }
 
     public function addBooking($accountId) {
         $newId = $this->insertQuery("INSERT INTO booking(account_id) VALUES($accountId)");
         return $newId;
+    }
+
+    public function getPendingBookings($accId, $singleReturn = false) {
+        $result = $this->classQuery("SELECT * FROM booking WHERE account_id=$accId AND state_id=1", "Booking");
+
+        if($singleReturn) {
+            return $result[0];
+        }
+
+        return $result;
     }
 }
 

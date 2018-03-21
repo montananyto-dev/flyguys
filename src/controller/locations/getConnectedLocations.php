@@ -9,10 +9,10 @@ $toEncode = array();
 
 
 if(isset($_GET["name"])) {
-    $location = DAO::getInstance()->getLocations("name", $_GET["name"], true);
+    $location = DAO::getInstance()->getLocationByName($_GET["name"]);
 
     if(isset($location)) {
-        $toLocations = DAO::getInstance()->getConnectedLocations($location);
+        $toLocations = DAO::getInstance()->getLocationsConnectedTo($location);
 
         foreach($toLocations as $location) {
             array_push($toEncode, $location->name);

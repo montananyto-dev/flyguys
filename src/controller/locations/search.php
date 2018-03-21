@@ -12,8 +12,8 @@ if( !(isset($_GET['fromName']) || isset($_GET['toName'])) ) {
 }
 
 
-$fromLocation = DAO::getInstance()->getLocations("name", $_GET['fromName'], true);
-$toLocation = DAO::getInstance()->getLocations("name", $_GET['toName'], true);
+$fromLocation = DAO::getInstance()->getLocationByName($_GET['fromName']);
+$toLocation = DAO::getInstance()->getLocationByName($_GET['toName']);
 
 $relevantFlights = DAO::getInstance()->getUpcomingFlights($fromLocation, $toLocation);
 
