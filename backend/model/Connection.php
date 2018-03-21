@@ -16,12 +16,12 @@ class Connection implements \JsonSerializable
     private $flight_duration;
     private $cost;
 
-    function __set($attribute, $value)
+    public function __set($attribute, $value)
     {
         $this->$attribute = $value;
     }
 
-    function __get($attribute)
+    public function __get($attribute)
     {
         return $this->$attribute;
     }

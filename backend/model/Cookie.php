@@ -25,66 +25,35 @@ class Cookie implements \JsonSerializable
     }
 
 
-    function setCookieName()
+    private function setCookieName()
     {
         $this->cookie_name = $this->generateRandomString();
     }
 
-    function setCookieValue()
+    private function setCookieValue()
     {
 
         $this->cookie_value = $this->generateRandomNumber();
     }
 
-    function setCookieTime()
+    private function setCookieTime()
     {
 
         $this->cookie_time = $this->generateCookieTime();
     }
 
-    function setCookie()
+    private function setCookie()
     {
 
         $this->cookie = setcookie($this->cookie_name, $this->cookie_value, $this->cookie_time);
     }
 
-    function __getCookie()
-    {
-
-        return $this->cookie;
-
-    }
-
-    function __getCookieName()
-    {
-        return $this->cookie_name;
-    }
-
-    function __getCookieValue()
-    {
-
-        return $this->cookie_value;
+    public function __get($property) {
+        return $this->$property;
     }
 
 
-    function checkIfCookieExist($cookie)
-    {
-
-        $statement = "SELECT cookie FROM account";
-        $results[] = DBWrapper::select($statement);
-
-        foreach ($results as $row => $innerArray) {
-            foreach ($innerArray as $innerRow => $value) {
-                if (in_array($cookie, $value)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }
-    }
-
-    function generateRandomString()
+    private function generateRandomString()
     {
         $length = 5;
         $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -96,14 +65,14 @@ class Cookie implements \JsonSerializable
         return $randomString;
     }
 
-    function generateRandomNumber()
+    private function generateRandomNumber()
     {
         $randomNumber = rand(100000, 999999);
         return $randomNumber;
     }
 
     //10 years cookie
-    function generateCookieTime()
+    private function generateCookieTime()
     {
         return time() + (10 * 365 * 24 * 60 * 60);
     }

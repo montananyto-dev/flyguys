@@ -18,12 +18,12 @@ class Location implements \JsonSerializable
     private $offset;
     private $creation_date;
 
-    function __set($name, $value)
+    public function __set($name, $value)
     {
         $this->$name = $value;
     }
 
-    function __get($name)
+    public function __get($name)
     {
         return $this->$name;
     }
