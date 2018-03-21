@@ -29,7 +29,8 @@
         <div class="dropdown-content">
 
             <a href="#" id="viewAllFlight" onclick="retrieveAllFlights('')">View all flights</a>
-            <a href="#" id="viewDomesticFlight" onclick="retrieveAllFlights('?region=Domestic')">View domestic flights</a>
+            <a href="#" id="viewDomesticFlight" onclick="retrieveAllFlights('?region=Domestic')">View domestic
+                flights</a>
             <a href="#" id="viewEuropeanFlight" onclick="retrieveAllFlights('?region=Europe')">View european flights</a>
 
         </div>
@@ -43,7 +44,7 @@
     <a class="logout" href="#">Logout</a>
 
 </div>
-<table id="flight-table" >
+<table id="flight-table">
     <tr>
         <th>Departure</th>
         <th>Arrival</th>
@@ -62,29 +63,33 @@
     function retrieveAllFlights(regionName) {
         $.ajax({
 
-
-            url: 'http://localhost:8000/controller/getFlights.php'+regionName,
+            url: 'http://localhost:8000/controller/getFlights.php' + regionName,
             success: function (result) {
+
+                console.log(result);
+
                 var allFlights = JSON.parse(result);
-                var root = document.getElementById('flight-table');
+                var root = document.getElementById('flight-table');git
                 clearTable();
-                populateTable(allFlights,root);
+                populateTable(allFlights, root);
             },
             error: function () {
             }
         })
     }
 
-    function clearTable(){
+    function clearTable() {
 
         $('#flight-table tr').slice(1).remove();
         $(document.getElementsByClassName('edit')).remove();
         $(document.getElementsByClassName('delete')).remove();
     }
 
-    function populateTable(data,root){
+    function populateTable(data, root) {
 
-        for(var i = 0; i< data.length; i++) {
+        var td6 = "";
+
+        for (var i = 0; i < data.length; i++) {
 
             var tr = document.createElement('tr');
             var td1 = document.createElement('td');
@@ -98,13 +103,23 @@
             var td5 = document.createElement('td');
             td5.innerHTML = data[i].connection.flight_duration;
             var td6 = document.createElement('td');
-            td6.innerHTML = data[i].connection.toLocation.region.name;
+
+            var connection = data[i].connection;
+
+            if (connection.toLocation.region.name == "Europe" || connection.fromLocation.region.name == "Europe") {
+                td6.innerHTML = "Europe";
+            } else {
+                td6.innerHTML = "Domestic"
+            }
+
             var editButton = document.createElement('button');
             editButton.innerHTML = 'edit';
-            editButton.setAttribute('class','edit');
+            editButton.setAttribute('class', 'edit' + 'Id' + i);
+            editButton.setAttribute('onclick', 'editFlights(event);');
+
             var deleteButton = document.createElement('button');
             deleteButton.innerHTML = 'delete';
-            deleteButton.setAttribute('class','delete');
+            deleteButton.setAttribute('class', 'delete');
 
             tr.appendChild(td1);
             tr.appendChild(td2);
@@ -112,14 +127,19 @@
             tr.appendChild(td4);
             tr.appendChild(td5);
             tr.appendChild(td6);
-
-            root.appendChild(tr);
             root.appendChild(editButton);
             root.appendChild(deleteButton);
+            root.appendChild(tr);
 
-            console.log(data[i]);
         }
     }
+
+    function editFlights(event) {
+
+        console.log(event.target.className);
+
+    }
+
 
 </script>
 
