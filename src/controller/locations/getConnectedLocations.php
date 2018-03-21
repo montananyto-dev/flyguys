@@ -7,6 +7,8 @@ header("Access-Control-Allow-Origin: *");
 
 $toEncode = array();
 
+$_GET["name"] = "Stansted";
+
 
 if(isset($_GET["name"])) {
     $location = DAO::getInstance()->getLocationByName($_GET["name"]);

@@ -36,14 +36,10 @@ class DAO
         return static::$instance;
     }
 
-    private function plainQuery($sql)
-    {
-        $statement = $this->conn->prepare($sql);
-        $statement->execute();
-        $results = $statement->fetchAll();
 
-        return $results;
-    }
+
+
+
 
     private function insertQuery($sql)
     {
@@ -52,13 +48,48 @@ class DAO
         return $this->conn->lastInsertId();
     }
 
-    private function classQuery($sql, $class)
+    private function classQuery($sql, $class, $paramArray = [])
     {
         $statement = $this->conn->prepare($sql);
-        $statement->execute();
+        $statement->execute($paramArray);
         $results = $statement->fetchAll(PDO::FETCH_CLASS, $class);
 
         return $results;
+    }
+
+    // SET ATTRIBUTE OBJECTS
+
+    private function setRegionFor($locationObj) {
+        $regionId = $locationObj->region_id;
+        $sql = "SELECT * from region where id=$regionId";
+        $region = $this->classQuery($sql, "Region");
+
+        $locationObj->region = $region;
+    }
+
+    private function setLocationsFor($connectionObj) {
+        $fromLocationId = $connectionObj->location_id1;
+        $toLocationId = $connectionObj->location_id2;
+
+        $sql = "SELECT * from location where id=$fromLocationId";
+        $fromLocation = $this->classQuery($sql, "Location");
+        $this->setRegionFor($fromLocation);
+
+        $sql = "SELECT * from location where id=$toLocationId";
+        $toLocation = $this->classQuery($sql, "Location");
+        $this->setRegionFor($toLocation);
+
+        $connectionObj->fromLocation = $fromLocation;
+        $connectionObj->toLocation = $toLocation;
+    }
+
+    private function setConnectionFor($flightObj) {
+        $connectionId = $flightObj->connection_id;
+        $sql = "SELECT * from connection where id=$connectionId";
+        $connection = $this->classQuery($sql, "Connection");
+        $this->setLocationsFor($connection);
+
+        $flightObj->connection = $connection;
     }
 
     private function getAccounts($property = 1, $value = 1, $singleReturn = false)
@@ -72,110 +103,66 @@ class DAO
         return $result;
     }
 
-    public function getRegions($property = 1, $value = 1, $singleReturn = false)
-    {
-        $result = $this->classQuery("SELECT id, name FROM region WHERE $property = '$value'", "Region");
-
-        if ($singleReturn) {
-            return $result[0];
-        }
-
-        return $result;
-    }
-
-
-    private function getLocations($property = 1, $value = 1, $singleReturn = false)
-    {
-        $result = $this->classQuery("SELECT * FROM location where $property = '$value'", "Location");
-
-        foreach ($result as $row) {
-            $region = $this->getRegions('id', $row->__get('region_id'), true);
-            $row->region = $region;
-        }
-
-        if ($singleReturn) {
-            return $result[0];
-        }
-
-        return $result;
-    }
-
-    private function getConnections($property = 1, $value = 1, $singleReturn = false)
-    {
-        $result = $this->classQuery("SELECT * FROM connection WHERE $property = '$value'", "Connection");
-
-        foreach ($result as $row) {
-            $fromLocation = $this->getLocations('id', $row->location_id1, true);
-            $toLocation = $this->getLocations('id', $row->location_id2, true);
-
-            $row->fromLocation = $fromLocation;
-            $row->toLocation = $toLocation;
-        }
-
-        if ($singleReturn) {
-            return $result[0];
-        }
-
-        return $result;
-    }
-
-    private function getFlights($property = 1, $value = 1, $singleReturn = false)
-    {
-
-        $result = $this->classQuery("SELECT * FROM flight WHERE $property = '$value'", "Flight");
-
-        foreach ($result as $row) {
-            $connection = $this->getConnections('id', $row->connection_id, true);
-            $row->connection = $connection;
-        }
-
-        if ($singleReturn) {
-            return $result[0];
-        }
-
-        return $result;
-    }
 
     //Public Methods
 
     public function getRegionByName($nameStr) {
-        return $this->getRegions('name', $nameStr, true);
+        $sql = "SELECT id, name from Region where name=:name";
+        $result = $this->classQuery($sql, "Region", array('name' => $nameStr));
+        return $result[0];
+//        return $this->getRegions('name', $nameStr, true);
     }
 
     public function getAllFlights() {
-        return $this->getFlights();
+        $sql = "SELECT * FROM flight";
+        $results = $this->classQuery($sql, "Flight");
+        foreach($results as $result) {
+            $this->setConnectionFor(results);
+        }
+        return $results;
+        //return $this->getFlights();
     }
 
     public function getAllLocations()
     {
-        return $this->getLocations();
+        $sql = "SELECT * FROM location";
+        $results = $this->classQuery($sql, "Location");
+        foreach($results as $result) {
+            $this->setRegionFor($result);
+        }
+        return $results;
+        //return $this->getLocations();
     }
 
     public function getLocationByName($nameStr)
     {
-        return $this->getLocations('name', $nameStr, true);
+        $sql = "select * from location where name='$nameStr'";
+        $result = $this->classQuery($sql, "Location");
+        return $result[0];
+        //return $this->getLocations('name', $nameStr, true);
     }
 
     public function getLocationsConnectedTo($locationObj)
     {
-        $connections = $this->getConnections('location_id1', $locationObj->id);
+        $locationId = $locationObj->id;
+        $sql = 'SELECT l2.* FROM connection '
+                . 'INNER JOIN location l ON connection.location_id1 = l.id '
+                . 'INNER JOIN location l2 ON connection.location_id2 = l2.id '
+                . 'where connection.location_id1=' . $locationId;
+        $results = $this->classQuery($sql, "Location");
 
-        $toLocations = array();
-        foreach ($connections as $connection) {
-            array_push($toLocations, $connection->toLocation);
+        foreach ($results as $result) {
+            $this->setRegionFor($result);
         }
 
-        return $toLocations;
+        return $results;
     }
 
-    public function getFlightsBetween($fromLocationObj, $toLocationObj = null)
+    public function getFlightsBetween($fromLocationObj, $toLocationObj)
     {
-        if ($toLocationObj == null) {
-            $toLocationObj = $this->getLocations();
-        }
-
         $allFlights = $this->getFlights();
 
+        // Below can be improved by using SQL instead
         $filteredFlights = array();
         foreach ($allFlights as $flight) {
             if ($flight->connection->fromLocation == $fromLocationObj
@@ -185,6 +172,14 @@ class DAO
         }
 
         return $filteredFlights;
+    }
+
+    public function getFlightsBetweenByDay($fromLocationObj, $toLocationObj) {
+
+    }
+
+    public function getFlightsBetweenByDate($fromLocationObj, $toLocationObj) {
+
     }
 
     public function getAllFlightsByRegion($regionObj)
