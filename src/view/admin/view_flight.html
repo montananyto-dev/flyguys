@@ -52,6 +52,8 @@
         <th>Cost</th>
         <th>Duration</th>
         <th>Region</th>
+        <th></th>
+        <th></th>
     </tr>
 </table>
 
@@ -59,6 +61,9 @@
 
 <script>
 
+    $(function() {
+        retrieveAllFlights('');
+    });
 
     function retrieveAllFlights(regionName) {
         $.ajax({
@@ -71,7 +76,8 @@
                 var allFlights = JSON.parse(result);
                 var root = document.getElementById('flight-table');
                 clearTable();
-                populateTable(allFlights, root);
+                populateTable(allFlights,root);
+
             },
             error: function () {
             }
@@ -92,34 +98,48 @@
         for (var i = 0; i < data.length; i++) {
 
             var tr = document.createElement('tr');
+            tr.setAttribute('id','tr'+ data[i].id);
+
             var td1 = document.createElement('td');
             td1.innerHTML = data[i].connection.fromLocation.name;
+
             var td2 = document.createElement('td');
             td2.innerHTML = data[i].connection.toLocation.name;
+
             var td3 = document.createElement('td');
             td3.innerHTML = data[i].capacity;
+
             var td4 = document.createElement('td');
             td4.innerHTML = data[i].connection.cost;
+
             var td5 = document.createElement('td');
             td5.innerHTML = data[i].connection.flight_duration;
+
             var td6 = document.createElement('td');
 
-            var connection = data[i].connection;
+            if (data[i].connection.toLocation.region.name == "Europe" || data[i].connection.fromLocation.region.name == "Europe") {
 
-            if (connection.toLocation.region.name == "Europe" || connection.fromLocation.region.name == "Europe") {
                 td6.innerHTML = "Europe";
+
             } else {
                 td6.innerHTML = "Domestic"
             }
 
+
             var editButton = document.createElement('button');
             editButton.innerHTML = 'edit';
-            editButton.setAttribute('class', 'edit' + 'Id' + i);
-            editButton.setAttribute('onclick', 'editFlights(event);');
+            editButton.setAttribute('class','edit');
+            editButton.setAttribute('id','edit'+'Id' + i );
+            editButton.setAttribute('onclick', 'editFlights(this.id);');
+
+            var td7 = document.createElement('td');
+            var td8 = document.createElement('td');
 
             var deleteButton = document.createElement('button');
             deleteButton.innerHTML = 'delete';
             deleteButton.setAttribute('class', 'delete');
+            deleteButton.setAttribute('id',data[i].id);
+            deleteButton.setAttribute('onclick','deleteFlight(this.id);');
 
             tr.appendChild(td1);
             tr.appendChild(td2);
@@ -127,17 +147,41 @@
             tr.appendChild(td4);
             tr.appendChild(td5);
             tr.appendChild(td6);
-            root.appendChild(editButton);
-            root.appendChild(deleteButton);
+            tr.appendChild(td7);
+            tr.appendChild(td8);
+            tr.appendChild(editButton);
+            tr.appendChild(deleteButton);
             root.appendChild(tr);
 
         }
     }
 
-    function editFlights(event) {
+    function editFlights(id) {
 
-        console.log(event.target.className);
+        console.log(id);
 
+    }
+
+    function deleteFlight(id){
+
+        document.getElementById(id).parentElement.remove()
+        deleteFlightFromDatabase(id);
+
+
+    }
+
+
+    function deleteFlightFromDatabase(flightNumber) {
+        $.ajax({
+
+            url: 'http://localhost:8000/controller/deleteFlights.php' +'?flight_id='+ flightNumber,
+            success: function (result) {
+
+                console.log(result);
+            },
+            error: function () {
+            }
+        })
     }
 
 

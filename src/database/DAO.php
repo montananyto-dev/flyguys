@@ -30,14 +30,20 @@ class DAO
 
     public static function getInstance()
     {
-        if (!isset(static::$instance)) {
+        if (!isset($instance)) {
             static::$instance = new DAO;
         }
         return static::$instance;
     }
 
 
+    private function deleteQuery($sql){
 
+        $statement = $this->conn->prepare($sql);
+
+        $statement->execute();
+
+    }
 
 
 
@@ -64,7 +70,7 @@ class DAO
         $sql = "SELECT * from region where id=$regionId";
         $region = $this->classQuery($sql, "Region");
 
-        $locationObj->region = $region;
+        $locationObj->region = $region[0];
     }
 
     private function setLocationsFor($connectionObj) {
@@ -90,6 +96,7 @@ class DAO
         $this->setLocationsFor($connection[0]);
 
         $flightObj->connection = $connection[0];
+
     }
 
     private function getAccounts($property = 1, $value = 1, $singleReturn = false)
@@ -182,9 +189,9 @@ class DAO
 
     }
 
-    public function getAllFlightsByRegion($regionObj)
+    public function getAllFlightsByRegion($region)
     {
-        if ($regionObj->name == "Europe") {
+        if ($region->name == "Europe") {
             $sql = "SELECT flight.*,r.name FROM flight INNER JOIN connection c ON flight.connection_id = c.id
                                            INNER JOIN location l ON c.location_id1 = l.id
                                            INNER JOIN location l1 ON c.location_id2 = l1.id
@@ -202,14 +209,20 @@ class DAO
 
         $flights = $this->classQuery($sql, "Flight");
 
-        foreach ($flights as $row) {
+        foreach ($flights as $flight) {
 
-            $connection = $this->getConnections('id', $row->connection_id, true);
-            $row->connection = $connection;
+            $this->setConnectionFor($flight);
         }
         return $flights;
     }
 
+    public function deleteFlightByID($id){
+
+        $sql = "DELETE FROM flight WHERE id = $id";
+
+        $this->deleteQuery($sql);
+
+    }
 
     //ADDING
 
