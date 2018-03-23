@@ -167,18 +167,31 @@ class DAO
 
     public function getFlightsBetween($fromLocationObj, $toLocationObj)
     {
-        $allFlights = $this->getFlights();
+        $fromId = $fromLocationObj->id;
+        $toId = $toLocationObj->id;
+        $sql = "select flight.* from flight
+                  INNER JOIN connection c ON flight.connection_id = c.id
+                  WHERE c.location_id1 = $fromId AND c.location_id2= $toId;";
+        $flights = $this->classQuery($sql, "Flight");
 
-        // Below can be improved by using SQL instead
-        $filteredFlights = array();
-        foreach ($allFlights as $flight) {
-            if ($flight->connection->fromLocation == $fromLocationObj
-                && $flight->connection->toLocation == $toLocationObj) {
-                array_push($filteredFlights, $flight);
-            }
+        foreach($flights as $flight) {
+            $this->setConnectionFor($flight);
         }
 
-        return $filteredFlights;
+        return $flights;
+
+//        $allFlights = $this->getFlights();
+//
+//        // Below can be improved by using SQL instead
+//        $filteredFlights = array();
+//        foreach ($allFlights as $flight) {
+//            if ($flight->connection->fromLocation == $fromLocationObj
+//                && $flight->connection->toLocation == $toLocationObj) {
+//                array_push($filteredFlights, $flight);
+//            }
+//        }
+//
+//        return $filteredFlights;
     }
 
     public function getFlightsBetweenByDay($fromLocationObj, $toLocationObj) {
