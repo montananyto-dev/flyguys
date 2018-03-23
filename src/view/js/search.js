@@ -1,7 +1,8 @@
-$.ajax({url: "http://localhost:8000/controller/locations/names.php", success: function(result){
+$.ajax({url: "http://localhost:8000/controller/locations/names.php", success: function(result) {
     var fromLocations = JSON.parse(result);
-    
+
     console.log(fromLocations);
+
 
     // For From Locations - Generate DataList and set valid inputs
     setDataList(document.querySelector("#fromlist"), fromLocations);

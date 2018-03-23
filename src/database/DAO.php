@@ -171,8 +171,8 @@ class DAO
         $toId = $toLocationObj->id;
         $sql = "select flight.* from flight
                   INNER JOIN connection c ON flight.connection_id = c.id
-                  WHERE c.location_id1 = $fromId AND c.location_id2= $toId;";
-        $flights = $this->classQuery($sql, "Flight");
+                  WHERE c.location_id1 = :fromId AND c.location_id2= :toId;";
+        $flights = $this->classQuery($sql, "Flight", array("fromId" => $fromId, "toId" => $toId));
 
         foreach($flights as $flight) {
             $this->setConnectionFor($flight);
@@ -180,25 +180,39 @@ class DAO
 
         return $flights;
 
-//        $allFlights = $this->getFlights();
-//
-//        // Below can be improved by using SQL instead
-//        $filteredFlights = array();
-//        foreach ($allFlights as $flight) {
-//            if ($flight->connection->fromLocation == $fromLocationObj
-//                && $flight->connection->toLocation == $toLocationObj) {
-//                array_push($filteredFlights, $flight);
-//            }
-//        }
-//
-//        return $filteredFlights;
     }
 
-    public function getFlightsBetweenByDay($fromLocationObj, $toLocationObj) {
+    public function getFlightsBetweenByDay($fromLocationObj, $toLocationObj, $dayObj) {
+        $fromId = $fromLocationObj->id;
+        $toId = $toLocationObj->id;
+        $dayNum = $dayObj->position;
+        $sql = "select flight.* from flight
+                  INNER JOIN connection c ON flight.connection_id = c.id
+                  WHERE c.location_id1 = :fromId AND c.location_id2= :toId AND weekday(flight.departure_date_time)=:day";
+        $params = array("fromId" => $fromId, "toId" => $toId, "day" => $dayNum);
+        $flights = $this->classQuery($sql, "Flight", $params);
 
+        foreach($flights as $flight) {
+            $this->setConnectionFor($flight);
+        }
+
+        return $flights;
     }
 
-    public function getFlightsBetweenByDate($fromLocationObj, $toLocationObj) {
+    public function getFlightsBetweenByDate($fromLocationObj, $toLocationObj, $dateStr) {
+        $fromId = $fromLocationObj->id;
+        $toId = $toLocationObj->id;
+        $sql = "select flight.* from flight
+                  INNER JOIN connection c ON flight.connection_id = c.id
+                  WHERE c.location_id1 = :fromId AND c.location_id2= :toId AND DATE(flight.departure_date_time)=:date";
+        $params = array("fromId" => $fromId, "toId" => $toId, "date" => $dateStr);
+        $flights = $this->classQuery($sql, "Flight", $params);
+
+        foreach($flights as $flight) {
+            $this->setConnectionFor($flight);
+        }
+
+        return $flights;
 
     }
 
