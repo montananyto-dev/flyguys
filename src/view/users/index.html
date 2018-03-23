@@ -44,6 +44,8 @@
                 }});
             }
 
+            // Fill Basket with previous bookings
+
 
         </script>
     </head>
@@ -79,7 +81,7 @@
     
                     </div>
                     <div class="row">
-                        <select>
+                        <select id="day">
                             <option>Day</option>
                             <option>Monday</option>
                             <option>Tuesday</option>
@@ -90,7 +92,7 @@
                             <option>Sunday</option>
                         </select>
                         <span class="seperator"> or </span>
-                        <input type="date">
+                        <input type="date" id="date">
                         <button id="search">Search</button>
                     </div>
                 </form>
@@ -125,17 +127,29 @@
     // retrieving every flight that meets criteria
     <script>
         $("#search").click(function() {
-            
-            retriveData();
+            var fromValue = $("#from").val();
+            var toValue = $("#to").val();
+
+            var url = `http://localhost:8000/controller/locations/search.php?fromName=${fromValue}&toName=${toValue}`
+
+            var day = $("#day").val();
+            var date = $("#date").val();
+            if(day != "Day") {
+                url += "&day="+ day;
+            }
+            if(date) {
+                url += "&date="+ date;
+            }
+
+            retriveData(url);
             return false;
         })
 
-        function retriveData() {
-            var fromValue = document.getElementById("from").value;
-            var toValue = document.getElementById("to").value;
+        function retriveData(requestURL) {
+
             
             $.ajax({
-                url: `http://localhost:8000/controller/locations/search.php?fromName=${fromValue}&toName=${toValue}`, 
+                url: requestURL ,
                 success: function(result) {
                     var flights = JSON.parse(result);
 
@@ -214,12 +228,20 @@
                 return;
             }
 
+            var cookie = getCookieValue("idCode");
+
+            var url = `http://localhost:8000/controller/bookings/addBooking.php?cookie=${cookie}&bookingId=${flight.id}`;
+
             $.ajax({
-                url: ``, success: function(result) {
+                url: url,
+                success: function(result) {
+                    console.log("I want to add flightID "+ flight.id + " I have cookie " + getCookieValue("idCode"));
 
                 }
 
+
             });
+
 
 
             var basketItems = document.querySelector('#basket div');
