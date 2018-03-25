@@ -96,6 +96,11 @@ select {
     color:#8e8e8e;
 }
 
+.apology {
+    margin: 40px 40px;
+    font-size: 30px;
+}
+
 .squeeze {
     margin:0px 50px;
 }

@@ -119,10 +119,10 @@
 
     </script>
 
-    // obtaining dropdown details
+    <!-- obtaining dropdown details -->
     <script src="../js/search.js"></script>
 
-    // retrieving every flight that meets criteria
+    <!-- retrieving every flight that meets criteria -->
     <script>
         $("#search").click(function() {
             var fromValue = $("#from").val();
@@ -155,8 +155,13 @@
 
                     removeChildren(root);
 
-                    generateResults(root,flights);
-                    
+                    if(flights.length > 0) {
+                        generateResults(root,flights);
+                    } else {
+                        displayNoResults(root);
+                    }
+
+
                     return false;
                 }
                 
@@ -166,6 +171,18 @@
         function removeChildren(root) {
             while(root.firstChild)
                 root.removeChild(root.firstChild);
+        }
+
+        function displayNoResults(root) {
+            var title = document.createElement("h2");
+            title.innerText= "No Results";
+
+            var apology = document.createElement("h3");
+            apology.setAttribute("class", "apology");
+            apology.innerText = "Our apologies, we do not service this connection";
+
+            root.appendChild(title);
+            root.appendChild(apology);
         }
 
         function generateResults(root, flights) {
