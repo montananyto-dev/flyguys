@@ -21,6 +21,10 @@ main {
 #basket li {
     margin-left:10px;
 }
+#basket em {
+    margin-left: 5px;
+    font-size: 15px;
+}
 
 h1 {
     padding-bottom: 20px;

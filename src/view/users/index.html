@@ -58,8 +58,6 @@
             <ul id="basket">
                 <p class="underline">My Basket</p>
                 <div>
-                    <li>Rome to Paris</li>
-                    <li>New York to Boston</li>
                 </div>
                 <button>Checkout</button>
                 
@@ -194,19 +192,20 @@
             var tloc = flight.connection.toLocation;
             locations.innerHTML = `${floc.name} (${floc.region.name}) - ${tloc.name} (${tloc.region.name})`;
 
-            // Set button text
-            addBtn.innerHTML = `Add flight (£${flight.connection.cost})`;
-            addBtn.addEventListener('click', function() {
-                addToBasket(flight);
-            })
-
-            // Set date text
-            //var date = Date(flight.departure_date_time);
             var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
             var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             var startDate = new Date(flight.departure_date_time);
+            var fullDate = days[startDate.getDay()] + " " + startDate.getDate() + " " + months[startDate.getMonth()];
 
-            date.innerHTML = days[startDate.getDay()] + " " + startDate.getDate() + " " + months[startDate.getMonth()];
+            date.innerHTML = fullDate;
+
+            // Set button text
+            addBtn.innerHTML = `Add flight (£${flight.connection.cost})`;
+            addBtn.addEventListener('click', function() {
+                addToBasket(flight, fullDate);
+            });
+
+
 
             // Set departure and arrival time text
             times.innerHTML = "Departing at " + startDate.getHours() + ":" + startDate.getMinutes() + ", Arriving at {temp}";
@@ -222,7 +221,7 @@
             root.appendChild(section);
         }
 
-        function addToBasket(flight) {
+        function addToBasket(flight, dateStr) {
 
             if(alreadyAdded(flight.id)) {
                 console.log("Item already added");
@@ -230,7 +229,6 @@
             }
 
             var cookie = getCookieValue("idCode");
-
             var url = `http://localhost:8000/controller/bookings/addBooking.php?cookie=${cookie}&bookingId=${flight.id}`;
 
             $.ajax({
@@ -243,17 +241,19 @@
 
             });
 
-
-
             var basketItems = document.querySelector('#basket div');
-            
+
+            var dateItem = document.createElement("em");
+            dateItem.innerText = dateStr;
+
             var listItem = document.createElement('li');
-            listItem.innerHTML = flight.connection.fromLocation.code + " to " + flight.connection.toLocation.code;
+            listItem.innerHTML = flight.connection.fromLocation.name + " to " + flight.connection.toLocation.name;
 
             var hiddenId = document.createElement("input");
             hiddenId.setAttribute("type","hidden");
             hiddenId.setAttribute("value", flight.id);
 
+            basketItems.appendChild(dateItem);
             basketItems.appendChild(listItem);
             basketItems.appendChild(hiddenId);
         }
