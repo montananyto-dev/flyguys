@@ -113,6 +113,18 @@ class DAO
 
     //Public Methods
 
+    public function getAllRegionNames(){
+
+        $sql = "SELECT * FROM region";
+        $result = $this->classQuery($sql,'Region');
+
+        $names= array();
+        foreach ($result as $row){
+            $names[] = $row->name;
+        }
+        return $names;
+    }
+
     public function getRegionByName($nameStr) {
         $sql = "SELECT id, name from Region where name=:name";
         $result = $this->classQuery($sql, "Region", array('name' => $nameStr));

@@ -10,10 +10,12 @@ header("Access-Control-Allow-Origin: *");
 //$region = DAO::getInstance()->getRegions('name'. "Stansted", true);
 
 
-$regionName = DAO::getInstance()->getRegionByName('Domestic');
+//$regionName = DAO::getInstance()->getRegionByName('Domestic');
+//
+//$flight = DAO::getInstance()->getAllFlightsByRegion($regionName);;
 
-$flight = DAO::getInstance()->getAllFlightsByRegion($regionName);;
 
+$regionNames = DAO::getInstance()->getAllNameRegions();
 
-echo json_encode($flight);
+echo json_encode($regionNames);
 
