@@ -12,7 +12,6 @@ $flightID = $_GET['flight_id'];
 $valid = "The flight was successfully removed from the system";
 $invalid = "The flight could not be removed from the system";
 
-echo $flightID;
 
     if (isset($flightID)){
 

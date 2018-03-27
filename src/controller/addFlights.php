@@ -1,13 +1,19 @@
 <?php
 
-require_once __DIR__ . "/../database/DAO.php";
 require_once __DIR__ . "/../model/Region.php";
 require_once __DIR__ . "/../model/Location.php";
-require_once __DIR__ . "/../model/Flight.php";
+require_once __DIR__ . "/../model/Day.php";
+require_once __DIR__ . "/../database/DAO.php";
+
 
 header("Access-Control-Allow-Origin: *");
 
-var_dump($_POST);
+
+    $regionNames = DAO::getInstance()->getAllRegionNames();
+
+    echo json_encode($regionNames);
+
+
 
 //$flightID = $_GET['flight_id'];
 //
@@ -28,3 +34,4 @@ var_dump($_POST);
 //    echo json_encode($invalid);
 //
 //}
+

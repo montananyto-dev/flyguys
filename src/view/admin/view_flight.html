@@ -214,55 +214,42 @@
         regionLabel.innerHTML = 'region';
 
         var selectRegion = document.createElement('select');
-
-        var optionEurope = document.createElement('option');
-        optionEurope.innerHTML = 'Europe';
-        optionEurope.setAttribute('id', 'Europe');
-
-        var optionDomestic = document.createElement('option');
-        optionDomestic.innerHTML = "Domestic";
-        optionDomestic.setAttribute('id', 'Domestic');
+        selectRegion.setAttribute('id', 'select');
 
         var locationFromLabel = document.createElement('label');
         locationFromLabel.innerHTML = 'Departure';
         var locationFromLabelInput = document.createElement('input');
-        locationFromLabelInput.setAttribute('name','locationFrom');
+        locationFromLabelInput.setAttribute('name', 'locationFrom');
 
         var locationToLabel = document.createElement('label');
         locationToLabel.innerHTML = 'Arrival';
         var locationToInput = document.createElement('input');
-        locationToInput.setAttribute('name','locationTo');
+        locationToInput.setAttribute('name', 'locationTo');
 
         var flightDuration = document.createElement('label');
         flightDuration.innerHTML = 'Flight Duration';
         var flightDurationInput = document.createElement('input');
-        flightDurationInput.setAttribute('name','FlightDuration');
+        flightDurationInput.setAttribute('name', 'FlightDuration');
 
         var capacity = document.createElement('label');
         capacity.innerHTML = 'Capacity';
         var capacityInput = document.createElement('input');
-        capacityInput.setAttribute('name','Capacity');
+        capacityInput.setAttribute('name', 'Capacity');
 
         var cost = document.createElement('label');
         cost.innerHTML = 'Cost';
         var costInput = document.createElement('input');
-        costInput.setAttribute('name','Cost');
+        costInput.setAttribute('name', 'Cost');
 
         var submitButton = document.createElement("button");
         submitButton.innerHTML = 'submit';
         submitButton.setAttribute('id', 'submit');
 
-
-        $(function() {
+        $(function () {
 
             $('#addDestination').on('submit', function (e) {
-
                 e.preventDefault();
-
                 var formData = JSON.stringify($('#addDestination').serializeArray());
-
-                console.log(formData);
-
                 $.ajax({
 
                     type: "POST",
@@ -273,18 +260,14 @@
                     success: function (result) {
 
                     }, error: function () {
-
                     },
                 });
-
             });
-
         });
 
         form.appendChild(regionLabel);
-        selectRegion.appendChild(optionEurope);
-        selectRegion.appendChild(optionDomestic);
         form.appendChild(selectRegion);
+        getAllRegions(selectRegion);
         form.appendChild(locationFromLabel);
         form.appendChild(locationFromLabelInput);
         form.appendChild(locationToLabel);
@@ -297,10 +280,35 @@
         form.appendChild(costInput);
         form.appendChild(submitButton);
 
-        root.appendChild(form)
+        root.appendChild(form);
 
 
+    };
+
+    function getAllRegions(selectRegion) {
+
+        $.ajax({
+            url: 'http://localhost:8000/controller/addFlights.php',
+            success: function (result) {
+                var regionNames = JSON.parse(result);
+                setOptionForSelectRegion(selectRegion, regionNames);
+            }, error: function () {
+            },
+
+        });
+    };
+
+    function setOptionForSelectRegion(selectRegion, regionNames) {
+
+        regionNames.forEach(function (data) {
+            var element = document.createElement('option');
+            element.innerHTML = data;
+            console.log(data);
+            selectRegion.appendChild(element);
+        })
     }
+
+    function
 
 </script>
 
