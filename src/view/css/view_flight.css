@@ -68,32 +68,62 @@
     display:block;
 }
 
-/* table */
-
-/*#flight-table th{*/
-
-    /*padding-top: 12px;*/
-    /*padding-bottom: 12px;*/
-    /*text-align: left;*/
-    /*background-color: #4CAF50;*/
-    /*color: white;*/
-
-/*}*/
-
-/*#flight-table th,tr{*/
-
-    /*border: 1px solid #53dd41;*/
-    /*padding: 8px;*/
-/*}*/
-
-
-
-/*#flight-table tr{*/
-
-/*}*/
-
 /*!* CSS ADD DESTINATION *!*/
 
-label{
-    display:block;
+
+td[contentEditable] {
+    border-color: #00b5ad;
+}
+
+td[contenteditable]:not(:focus) {
+    -moz-box-shadow: 0 0 5px 5px #888;
+    -webkit-box-shadow: 0 0 5px 5px#888;
+    box-shadow: 0 0 5px 5px #888;
+}
+
+#flight-table{
+    border-spacing: 0px;
+    padding-bottom: 2px;
+    padding-top: 10px;
+}
+
+
+#flight-table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #5871af;
+    color: white;
+    border: 1px solid #ddd;
+
+}
+#flight-table tr {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #5871af;
+    color: white;
+    border: 1px solid #ddd;
+
+}
+
+td,th{
+    border: 1px solid #ddd;
+    padding: 8px;
+    display:inline-block;
+    width: 78px;
+    text-align: center;
+}
+
+.edit{
+    margin: 3px;
+}
+
+
+/*!* CSS ADD FORM *!*/
+
+#addDestination{
+
+    display:inline-grid;
+
 }
