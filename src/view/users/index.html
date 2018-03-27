@@ -114,10 +114,6 @@
             </section>
         </main>
     </body>
-    <script>
-        //form validation
-
-    </script>
 
     <!-- obtaining dropdown details -->
     <script src="../js/search.js"></script>
@@ -246,18 +242,19 @@
             }
 
             var cookie = getCookieValue("idCode");
-            var url = `http://localhost:8000/controller/bookings/addBooking.php?cookie=${cookie}&bookingId=${flight.id}`;
+            var url = `http://localhost:8000/controller/bookings/addBooking.php?cookie=${cookie}&flightId=${flight.id}`;
 
             $.ajax({
                 url: url,
                 success: function(result) {
-                    console.log("I want to add flightID "+ flight.id + " I have cookie " + getCookieValue("idCode"));
-
+                    console.log("Added flightId: "+ flight.id + " to booking of account: " + getCookieValue("idCode"));
                 }
-
-
             });
 
+            addElemsToBasket(flight, dateStr);
+        }
+
+        function addElemsToBasket(flight, dateStr) {
             var basketItems = document.querySelector('#basket div');
 
             var dateItem = document.createElement("em");

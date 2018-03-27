@@ -4,19 +4,18 @@ require_once __DIR__ . "/../../model/Account.php";
 require_once __DIR__ . "/../../model/Booking.php";
 
 //comment out below
-$_POST['cookie']="SFveD";
+$_GET['cookie']="SFveD";
 
-$cookie = $_POST['cookie'];
+$cookie = $_GET['cookie'];
 
 
-$acc = DAO::getInstance()->getAccounts('cookie', $cookie, true);
+$acc = DAO::getInstance()->getAccountByCookie($cookie);
 
-$booking = DAO::getInstance()->getPendingBookings($acc->id, true);
+$pendingBooking = DAO::getInstance()->getPendingBookings($acc);
 
-if(!isset($booking)) {
-    $newId = DAO::getInstance()->addBooking($acc->id);
-    $booking = DAO::getInstance()->getBookings('id', $newId);
+if(!isset($pendingBooking)) {
+    $pendingBooking = DAO::getInstance()->createPendingBooking($acc);
 }
 
-echo json_encode($booking);
-
+//Add flight id
+DAO::getInstance()->addFlightToBooking($pendingBooking, $_GET['flightId']);

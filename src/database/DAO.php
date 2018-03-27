@@ -47,10 +47,10 @@ class DAO
 
 
 
-    private function insertQuery($sql)
+    private function insertQuery($sql, $params = [])
     {
         $statement = $this->conn->prepare($sql);
-        $statement->execute();
+        $statement->execute($params);
         return $this->conn->lastInsertId();
     }
 
@@ -99,15 +99,13 @@ class DAO
 
     }
 
-    private function getAccounts($property = 1, $value = 1, $singleReturn = false)
+    public function getAccountByCookie($cookieStr)
     {
-        $result = $this->classQuery("SELECT id, email, password, cookie, salt FROM account WHERE $property = '$value'", "Account");
+        $sql = "SELECT * FROM account WHERE cookie = :cookie";
+        $params = array("cookie" => $cookieStr);
+        $result = $this->classQuery($sql,"Account", $params);
 
-        if ($singleReturn) {
-            return $result[0];
-        }
-
-        return $result;
+        return $result[0];
     }
 
 
@@ -265,15 +263,29 @@ class DAO
         return $newId;
     }
 
-    public function getPendingBookings($accId, $singleReturn = false)
+    public function getPendingBookings($accObj)
     {
-        $result = $this->classQuery("SELECT * FROM booking WHERE account_id=$accId AND state_id=1", "Booking");
+        $accId = $accObj->id;
+        $sql = "SELECT * FROM booking WHERE account_id=:id AND state_id=1";
+        $params = array("id" =>$accId);
+        $result = $this->classQuery($sql, "Booking", $params);
 
-        if ($singleReturn) {
-            return $result[0];
-        }
+        return $result[0];
+    }
 
-        return $result;
+    public function createPendingBooking($accObj) {
+        $sql = "INSERT INTO booking(account_id, state_id) VALUES(:accId, :stateId)";
+        $params = array("accId" => $accObj->id, "stateId" => 1);
+        $this->insertQuery($sql, $params);
+
+        return $this->getPendingBookings($accObj);
+
+    }
+
+    public function addFlightToBooking($bookObj, $flightIdentifier) {
+        $sql = "INSERT INTO booking_flight VALUES(:bId, :fId)";
+        $params = array("bId" => $bookObj->id, "fId" => $flightIdentifier);
+        $this->insertQuery($sql, $params);
     }
 }
 
