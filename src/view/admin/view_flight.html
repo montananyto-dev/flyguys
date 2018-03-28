@@ -84,6 +84,8 @@
         th1.innerHTML = "Departure";
         var th2 = document.createElement('th');
         th2.innerHTML = "Arrival";
+        var th7 = document.createElement('th');
+        th7.innerHTML = "Departure Time";
         var th3 = document.createElement('th');
         th3.innerHTML = "Capacity";
         var th4 = document.createElement('th');
@@ -96,14 +98,16 @@
         tr.appendChild(th0);
         tr.appendChild(th1);
         tr.appendChild(th2);
+        tr.appendChild(th7);
         tr.appendChild(th3);
         tr.appendChild(th4);
         tr.appendChild(th5);
         tr.appendChild(th6);
 
-        root.appendChild(table);
         table.appendChild(tr);
 
+
+        root.appendChild(table);
     }
 
     function clearTable(root) {
@@ -116,6 +120,8 @@
 
     function populateTable(data, root) {
 
+        console.log(data);
+
         var td6 = "";
 
         for (var i = 0; i < data.length; i++) {
@@ -123,24 +129,26 @@
             var tr = document.createElement('tr');
             tr.setAttribute('id', 'tr');
 
-            var td0 = document.createElement('td');
-            td0.innerHTML = data[i].id;
-            var td1 = document.createElement('td');
-            td1.innerHTML = data[i].connection.fromLocation.name;
-            var td2 = document.createElement('td');
-            td2.innerHTML = data[i].connection.toLocation.name;
-            var td3 = document.createElement('td');
-            td3.innerHTML = data[i].capacity;
-            var td4 = document.createElement('td');
-            td4.innerHTML = data[i].connection.cost;
-            var td5 = document.createElement('td');
-            td5.innerHTML = data[i].connection.flight_duration;
-            var td6 = document.createElement('td');
+            var flightId = document.createElement('td');
+            flightId.innerHTML = data[i].id;
+            var locationFrom = document.createElement('td');
+            locationFrom.innerHTML = data[i].connection.fromLocation.name;
+            var locationTo = document.createElement('td');
+            locationTo.innerHTML = data[i].connection.toLocation.name;
+            var departureDateTime = document.createElement('td');
+            departureDateTime.innerHTML = data[i].departure_date_time;
+            var capacity = document.createElement('td');
+            capacity.innerHTML = data[i].capacity;
+            var cost = document.createElement('td');
+            cost.innerHTML = data[i].connection.cost;
+            var duration = document.createElement('td');
+            duration.innerHTML = data[i].connection.flight_duration;
+            var regionName = document.createElement('td');
 
             if (data[i].connection.toLocation.region.name == "Europe" || data[i].connection.fromLocation.region.name == "Europe") {
-                td6.innerHTML = "Europe";
+                regionName.innerHTML = "Europe";
             } else {
-                td6.innerHTML = "Domestic"
+                regionName.innerHTML = "Domestic"
             }
 
             var editButton = document.createElement('button');
@@ -156,13 +164,14 @@
             deleteButton.setAttribute('id', data[i].id);
             deleteButton.setAttribute('onclick', 'deleteFlight(this.id);');
 
-            tr.appendChild(td0);
-            tr.appendChild(td1);
-            tr.appendChild(td2);
-            tr.appendChild(td3);
-            tr.appendChild(td4);
-            tr.appendChild(td5);
-            tr.appendChild(td6);
+            tr.appendChild(flightId);
+            tr.appendChild(locationFrom);
+            tr.appendChild(locationTo);
+            tr.appendChild(departureDateTime);
+            tr.appendChild(capacity);
+            tr.appendChild(cost);
+            tr.appendChild(duration);
+            tr.appendChild(regionName);
             tr.appendChild(editButton);
             tr.appendChild(deleteButton);
             root.appendChild(tr);
