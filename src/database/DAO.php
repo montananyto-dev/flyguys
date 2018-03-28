@@ -226,6 +226,28 @@ class DAO
 
     }
 
+    public function getCostAndFlightDurationForConnection($location1,$location2){
+
+        $sql1 = "SELECT location.id FROM location WHERE location.name = '$location1'";
+        $location1 = $this->classQuery($sql1,'Location');
+        $locationFromId = $location1[0]->id;
+
+        $sql2 = "SELECT location.id FROM location WHERE location.name = '$location2'";
+        $location2 = $this->classQuery($sql2,'Location');
+        $locationToId = $location2[0]->id;
+
+
+
+        $sql3 = "SELECT connection.cost,connection.flight_duration FROM connection WHERE
+        location_id1 = '$locationFromId' and location_id2 = '$locationToId'";
+
+        $result = $this->classQuery($sql3,'Connection');
+
+        return $result[0];
+
+
+    }
+
     public function getAllFlightsByRegion($region)
     {
         if ($region->name == "Europe") {

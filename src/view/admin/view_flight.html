@@ -172,8 +172,7 @@
 
     function editFlights(element) {
 
-
-        var $firstTr =  element.closest('tr').firstChild;
+        var $firstTr = element.closest('tr').firstChild;
         var $flightId = $firstTr.innerHTML;
 
         var currentTD = element.closest('tr').children;
@@ -191,9 +190,9 @@
 
         var buttonSave = document.createElement('button');
         buttonSave.innerHTML = 'save';
-        buttonSave.setAttribute('id','save');
+        buttonSave.setAttribute('id', 'save');
 
-       $(this).append(buttonSave);
+        $(this).append(buttonSave);
 
 
     }
@@ -251,17 +250,27 @@
         var flightDuration = document.createElement('label');
         flightDuration.innerHTML = 'Flight Duration';
         var flightDurationInput = document.createElement('input');
-        flightDurationInput.setAttribute('name', 'FlightDuration');
+        flightDurationInput.setAttribute('id', 'flightDuration');
+        flightDurationInput.setAttribute('readonly', 'readonly');
+
+        var cost = document.createElement('label');
+        cost.innerHTML = 'Cost';
+        var costInput = document.createElement('input');
+        costInput.setAttribute('id', 'cost');
+        costInput.setAttribute('readonly', 'readonly');
 
         var capacity = document.createElement('label');
         capacity.innerHTML = 'Capacity';
         var capacityInput = document.createElement('input');
         capacityInput.setAttribute('name', 'Capacity');
 
-        var cost = document.createElement('label');
-        cost.innerHTML = 'Cost';
-        var costInput = document.createElement('input');
-        costInput.setAttribute('name', 'Cost');
+
+        var departureDateLabel = document.createElement('label');
+        departureDateLabel.innerHTML = 'Departure date';
+        var departureDateInput = document.createElement('input');
+        departureDateInput.setAttribute('name', 'departureDate');
+        departureDateInput.setAttribute('type','date');
+
 
         var submitButton = document.createElement("button");
         submitButton.innerHTML = 'submit';
@@ -298,10 +307,13 @@
         form.appendChild(selectRegion);
         form.appendChild(flightDuration);
         form.appendChild(flightDurationInput);
-        form.appendChild(capacity);
-        form.appendChild(capacityInput);
         form.appendChild(cost);
         form.appendChild(costInput);
+        form.appendChild(capacity);
+        form.appendChild(capacityInput);
+        form.appendChild(departureDateLabel);
+        form.appendChild(departureDateInput);
+
         form.appendChild(submitButton);
 
         locationFromSelect.appendChild(optionDefaultLocationFrom);
@@ -313,28 +325,6 @@
 
 
     };
-
-    // function getAllRegions(selectRegion) {
-    //
-    //     $.ajax({
-    //         url: 'http://localhost:8000/controller/addFlights.php',
-    //         success: function (result) {
-    //             var regionNames = JSON.parse(result);
-    //             setOptionForSelectRegion(selectRegion, regionNames);
-    //         }, error: function () {
-    //         },
-    //
-    //     });
-    // };
-    //
-    // function setOptionForSelectRegion(selectRegion, regionNames) {
-    //
-    //     regionNames.forEach(function (data) {
-    //         var element = document.createElement('option');
-    //         element.innerHTML = data;
-    //         selectRegion.appendChild(element);
-    //     });
-    // };
 
     function getAllLocationTo(locationFromSelect) {
 
@@ -377,6 +367,7 @@
             success: function (result) {
 
                 setOptionForSelectLocationTo(result);
+                getFlightDurationAndCost();
             }
         })
     })
@@ -384,7 +375,51 @@
     $(document).on('change', '#locationTo', function () {
 
         updateRegion();
+        getFlightDurationAndCost();
+
     })
+
+    function getFlightDurationAndCost() {
+
+        var locationTo = $('#locationTo').find(":selected").text();
+        var locationFrom = $('#locationFrom').find(":selected").text();
+
+        $.ajax({
+
+            url: `http://localhost:8000/controller/getCostAndFlightDuration.php?locationFrom=${locationFrom}&locationTo=${locationTo}`,
+
+            success: function (result) {
+
+                var data = JSON.parse(result);
+                updateFlightDurationAndCost(data);
+            }
+        })
+
+    }
+
+    function updateFlightDurationAndCost(data) {
+
+        var flightDuration = data.flight_duration;
+        var cost = data.cost;
+
+        var flightDurationInput =  $('#flightDuration');
+        var costInput =  $('#cost');
+
+        if($('#flightDuration').val().length === 0){
+
+            console.log('empty');
+           flightDurationInput.val( flightDurationInput.val() + flightDuration );
+            costInput.val( costInput.val() + cost );
+        }else{
+
+            console.log('not empty');
+          flightDurationInput.val( "" );
+            costInput.val( "" );
+            flightDurationInput.val( flightDurationInput.val() + flightDuration );
+            costInput.val( costInput.val() + cost );
+        }
+
+    }
 
     function setOptionForSelectLocationTo(data) {
 
@@ -420,27 +455,27 @@
         }
     }
 
-    function updateRegion(){
+    function updateRegion() {
 
         if ($('#selectRegion option').length == 0) {
 
             console.log('empty');
-        }else{
+        } else {
 
             $('#selectRegion option:first').remove();
         }
-        var domestic = ['Stansted','Manchester','Glasgow','Dublin'];
+        var domestic = ['Stansted', 'Manchester', 'Glasgow', 'Dublin'];
 
         var locationTo = $('#locationTo').find(":selected").text();
         var locationFrom = $('#locationFrom').find(":selected").text();
 
 
-        if (domestic.includes(locationTo) && domestic.includes(locationFrom)){
+        if (domestic.includes(locationTo) && domestic.includes(locationFrom)) {
 
             var element = document.createElement('option');
             element.innerHTML = 'Domestic';
             $('#selectRegion').append(element);
-        }else{
+        } else {
 
             var element = document.createElement('option');
             element.innerHTML = 'Europe';

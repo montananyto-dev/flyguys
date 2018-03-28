@@ -15,6 +15,8 @@ header("Access-Control-Allow-Origin: *");
 
 
 
+
+
 //$flightID = $_GET['flight_id'];
 //
 //$valid = "The flight was successfully removed from the system";

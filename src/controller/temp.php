@@ -15,7 +15,10 @@ header("Access-Control-Allow-Origin: *");
 //$flight = DAO::getInstance()->getAllFlightsByRegion($regionName);;
 
 
-$regionNames = DAO::getInstance()->getAllNameRegions();
+$location1 = 'Stansted';
+$location2 = 'Paris';
+
+$regionNames = DAO::getInstance()->getCostAndFlightDurationForConnection($location1,$location2);
 
 echo json_encode($regionNames);
 
