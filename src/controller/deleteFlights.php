@@ -1,9 +1,6 @@
 <?php
 
 require_once __DIR__ . "/../database/DAO.php";
-require_once __DIR__ . "/../model/Region.php";
-require_once __DIR__ . "/../model/Location.php";
-require_once __DIR__ . "/../model/Flight.php";
 
 header("Access-Control-Allow-Origin: *");
 
@@ -13,15 +10,14 @@ $valid = "The flight was successfully removed from the system";
 $invalid = "The flight could not be removed from the system";
 
 
-    if (isset($flightID)){
+if (isset($flightID)) {
 
-        DAO::getInstance()->deleteFlightByID($flightID);
+    DAO::getInstance()->deleteFlightByID($flightID);
 
-        echo json_encode($valid);
+    echo json_encode($valid);
 
+} else {
 
-    }else{
+    echo json_encode($invalid);
 
-        echo json_encode($invalid);
-
-    }
+}

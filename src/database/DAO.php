@@ -36,16 +36,14 @@ class DAO
         return static::$instance;
     }
 
-
-    private function deleteQuery($sql){
+    private function deleteQuery($sql)
+    {
 
         $statement = $this->conn->prepare($sql);
 
         $statement->execute();
 
     }
-
-
 
     private function insertQuery($sql, $params = [])
     {
@@ -63,9 +61,10 @@ class DAO
         return $results;
     }
 
-    // SET ATTRIBUTE OBJECTS
+    // ----------------------------------------------------  SET ATTRIBUTE OBJECTS ----------------------------------------------------- //
 
-    private function setRegionFor($locationObj) {
+    private function setRegionFor($locationObj)
+    {
         $regionId = $locationObj->region_id;
         $sql = "SELECT * from region where id=$regionId";
         $region = $this->classQuery($sql, "Region");
@@ -73,7 +72,8 @@ class DAO
         $locationObj->region = $region[0];
     }
 
-    private function setLocationsFor($connectionObj) {
+    private function setLocationsFor($connectionObj)
+    {
         $fromLocationId = $connectionObj->location_id1;
         $toLocationId = $connectionObj->location_id2;
 
@@ -89,7 +89,8 @@ class DAO
         $connectionObj->toLocation = $toLocation[0];
     }
 
-    private function setConnectionFor($flightObj) {
+    private function setConnectionFor($flightObj)
+    {
         $connectionId = $flightObj->connection_id;
         $sql = "SELECT * from connection where id=$connectionId";
         $connection = $this->classQuery($sql, "Connection");
@@ -103,37 +104,39 @@ class DAO
     {
         $sql = "SELECT * FROM account WHERE cookie = :cookie";
         $params = array("cookie" => $cookieStr);
-        $result = $this->classQuery($sql,"Account", $params);
+        $result = $this->classQuery($sql, "Account", $params);
 
         return $result[0];
     }
 
+    // ----------------------------------------------------  PUBLIC METHODS ----------------------------------------------------- //
 
-    //Public Methods
-
-    public function getAllRegionNames(){
+    public function getAllRegionNames()
+    {
 
         $sql = "SELECT * FROM region";
-        $result = $this->classQuery($sql,'Region');
+        $result = $this->classQuery($sql, 'Region');
 
-        $names= array();
-        foreach ($result as $row){
+        $names = array();
+        foreach ($result as $row) {
             $names[] = $row->name;
         }
         return $names;
     }
 
-    public function getRegionByName($nameStr) {
-        $sql = "SELECT id, name from Region where name=:name";
+    public function getRegionByName($nameStr)
+    {
+        $sql = "SELECT id, name FROM Region WHERE name=:name";
         $result = $this->classQuery($sql, "Region", array('name' => $nameStr));
         return $result[0];
 //        return $this->getRegions('name', $nameStr, true);
     }
 
-    public function getAllFlights() {
+    public function getAllFlights()
+    {
         $sql = "SELECT * FROM flight";
         $results = $this->classQuery($sql, "Flight");
-        foreach($results as $result) {
+        foreach ($results as $result) {
             $this->setConnectionFor($result);
         }
         return $results;
@@ -144,7 +147,7 @@ class DAO
     {
         $sql = "SELECT * FROM location";
         $results = $this->classQuery($sql, "Location");
-        foreach($results as $result) {
+        foreach ($results as $result) {
             $this->setRegionFor($result);
         }
         return $results;
@@ -163,9 +166,9 @@ class DAO
     {
         $locationId = $locationObj->id;
         $sql = 'SELECT l2.* FROM connection '
-                . 'INNER JOIN location l ON connection.location_id1 = l.id '
-                . 'INNER JOIN location l2 ON connection.location_id2 = l2.id '
-                . 'where connection.location_id1=' . $locationId;
+            . 'INNER JOIN location l ON connection.location_id1 = l.id '
+            . 'INNER JOIN location l2 ON connection.location_id2 = l2.id '
+            . 'WHERE connection.location_id1=' . $locationId;
         $results = $this->classQuery($sql, "Location");
 
         foreach ($results as $result) {
@@ -179,12 +182,12 @@ class DAO
     {
         $fromId = $fromLocationObj->id;
         $toId = $toLocationObj->id;
-        $sql = "select flight.* from flight
+        $sql = "SELECT flight.* FROM flight
                   INNER JOIN connection c ON flight.connection_id = c.id
                   WHERE c.location_id1 = :fromId AND c.location_id2= :toId;";
         $flights = $this->classQuery($sql, "Flight", array("fromId" => $fromId, "toId" => $toId));
 
-        foreach($flights as $flight) {
+        foreach ($flights as $flight) {
             $this->setConnectionFor($flight);
         }
 
@@ -192,33 +195,35 @@ class DAO
 
     }
 
-    public function getFlightsBetweenByDay($fromLocationObj, $toLocationObj, $dayObj) {
+    public function getFlightsBetweenByDay($fromLocationObj, $toLocationObj, $dayObj)
+    {
         $fromId = $fromLocationObj->id;
         $toId = $toLocationObj->id;
         $dayNum = $dayObj->position;
-        $sql = "select flight.* from flight
+        $sql = "SELECT flight.* FROM flight
                   INNER JOIN connection c ON flight.connection_id = c.id
                   WHERE c.location_id1 = :fromId AND c.location_id2= :toId AND weekday(flight.departure_date_time)=:day";
         $params = array("fromId" => $fromId, "toId" => $toId, "day" => $dayNum);
         $flights = $this->classQuery($sql, "Flight", $params);
 
-        foreach($flights as $flight) {
+        foreach ($flights as $flight) {
             $this->setConnectionFor($flight);
         }
 
         return $flights;
     }
 
-    public function getFlightsBetweenByDate($fromLocationObj, $toLocationObj, $dateStr) {
+    public function getFlightsBetweenByDate($fromLocationObj, $toLocationObj, $dateStr)
+    {
         $fromId = $fromLocationObj->id;
         $toId = $toLocationObj->id;
-        $sql = "select flight.* from flight
+        $sql = "SELECT flight.* FROM flight
                   INNER JOIN connection c ON flight.connection_id = c.id
                   WHERE c.location_id1 = :fromId AND c.location_id2= :toId AND DATE(flight.departure_date_time)=:date";
         $params = array("fromId" => $fromId, "toId" => $toId, "date" => $dateStr);
         $flights = $this->classQuery($sql, "Flight", $params);
 
-        foreach($flights as $flight) {
+        foreach ($flights as $flight) {
             $this->setConnectionFor($flight);
         }
 
@@ -226,26 +231,33 @@ class DAO
 
     }
 
-    public function getCostAndFlightDurationForConnection($location1,$location2){
+    public function getConnectionFromTwoLocations($location1, $location2)
+    {
 
-        $sql1 = "SELECT location.id FROM location WHERE location.name = '$location1'";
-        $location1 = $this->classQuery($sql1,'Location');
+        $sql1 = "SELECT * FROM location WHERE location.name = '$location1'";
+        $location1 = $this->classQuery($sql1, 'Location');
+        foreach ($location1 as $result) {
+            $this->setRegionFor($result);
+        }
         $locationFromId = $location1[0]->id;
 
-        $sql2 = "SELECT location.id FROM location WHERE location.name = '$location2'";
-        $location2 = $this->classQuery($sql2,'Location');
+        $sql2 = "SELECT * FROM location WHERE location.name = '$location2'";
+        $location2 = $this->classQuery($sql2, 'Location');
+        foreach ($location2 as $result) {
+            $this->setRegionFor($result);
+        }
         $locationToId = $location2[0]->id;
 
-
-
-        $sql3 = "SELECT connection.cost,connection.flight_duration FROM connection WHERE
+        $sql3 = "SELECT * FROM connection WHERE
         location_id1 = '$locationFromId' and location_id2 = '$locationToId'";
 
-        $result = $this->classQuery($sql3,'Connection');
+        $results = $this->classQuery($sql3, 'Connection');
 
-        return $result[0];
+        foreach ($results as $result) {
+            $this->setLocationsFor($result);
+        }
 
-
+        return $results[0];
     }
 
     public function getAllFlightsByRegion($region)
@@ -275,7 +287,8 @@ class DAO
         return $flights;
     }
 
-    public function deleteFlightByID($id){
+    public function deleteFlightByID($id)
+    {
 
         $sql = "DELETE FROM flight WHERE id = $id";
 
@@ -283,7 +296,7 @@ class DAO
 
     }
 
-    //ADDING
+    // ----------------------------------------------------  INSERT METHODS ----------------------------------------------------- //
 
     public function addAccount($cookieStr)
     {
@@ -301,13 +314,14 @@ class DAO
     {
         $accId = $accObj->id;
         $sql = "SELECT * FROM booking WHERE account_id=:id AND state_id=1";
-        $params = array("id" =>$accId);
+        $params = array("id" => $accId);
         $result = $this->classQuery($sql, "Booking", $params);
 
         return $result[0];
     }
 
-    public function createPendingBooking($accObj) {
+    public function createPendingBooking($accObj)
+    {
         $sql = "INSERT INTO booking(account_id, state_id) VALUES(:accId, :stateId)";
         $params = array("accId" => $accObj->id, "stateId" => 1);
         $this->insertQuery($sql, $params);
@@ -316,18 +330,32 @@ class DAO
 
     }
 
-    public function addFlightToBooking($bookObj, $flightIdentifier) {
+    public function addFlightToBooking($bookObj, $flightIdentifier)
+    {
         $sql = "INSERT INTO booking_flight VALUES(:bId, :fId)";
         $params = array("bId" => $bookObj->id, "fId" => $flightIdentifier);
         $this->insertQuery($sql, $params);
     }
+
+    public function addANewFlight($data)
+    {
+        $locationFrom = $data[0]['value'];
+        $locationTo = $data[1]['value'];
+        $region = $data[2]['value'];
+        $flightDuration = $data[3]['value'];
+        $cost = $data[4]['value'];
+        $capacity = $data[5]['value'];
+        $departureDate = $data[6]['value'];
+
+        $result = $this->getConnectionFromTwoLocations($locationFrom, $locationTo);
+        $connectionId = $result->id;
+        $sql = "INSERT INTO flight (connection_id, departure_date_time, capacity )
+                 VALUES ($connectionId, '$departureDate', $capacity)";
+
+        $this->insertQuery($sql);
+
+    }
 }
-
-
-
-
-
-
 
 //function setPerItem($array, $identifier, $property, $anonFunction) {
 //    foreach($array as $item) {

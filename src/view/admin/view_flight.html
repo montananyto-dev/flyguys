@@ -250,26 +250,30 @@
         var flightDuration = document.createElement('label');
         flightDuration.innerHTML = 'Flight Duration';
         var flightDurationInput = document.createElement('input');
-        flightDurationInput.setAttribute('id', 'flightDuration');
+        flightDurationInput.id = 'flightDuration';
+        flightDurationInput.name = 'flightDuration';
+
         flightDurationInput.setAttribute('readonly', 'readonly');
 
         var cost = document.createElement('label');
         cost.innerHTML = 'Cost';
         var costInput = document.createElement('input');
         costInput.setAttribute('id', 'cost');
+        costInput.name = 'cost';
         costInput.setAttribute('readonly', 'readonly');
 
         var capacity = document.createElement('label');
         capacity.innerHTML = 'Capacity';
         var capacityInput = document.createElement('input');
         capacityInput.setAttribute('name', 'Capacity');
+        capacityInput.setAttribute('min', '50');
 
 
         var departureDateLabel = document.createElement('label');
         departureDateLabel.innerHTML = 'Departure date';
         var departureDateInput = document.createElement('input');
         departureDateInput.setAttribute('name', 'departureDate');
-        departureDateInput.setAttribute('type','date');
+        departureDateInput.setAttribute('type', 'date');
 
 
         var submitButton = document.createElement("button");
@@ -313,16 +317,13 @@
         form.appendChild(capacityInput);
         form.appendChild(departureDateLabel);
         form.appendChild(departureDateInput);
-
         form.appendChild(submitButton);
 
         locationFromSelect.appendChild(optionDefaultLocationFrom);
         locationToSelect.appendChild(optionDefaultLocationTo);
 
         root.appendChild(form);
-
         getAllLocationTo(locationFromSelect);
-
 
     };
 
@@ -386,39 +387,42 @@
 
         $.ajax({
 
-            url: `http://localhost:8000/controller/getCostAndFlightDuration.php?locationFrom=${locationFrom}&locationTo=${locationTo}`,
+            url: `http://localhost:8000/controller/getConnectionFromTwoLocations.php?locationFrom=${locationFrom}&locationTo=${locationTo}`,
 
             success: function (result) {
 
-                var data = JSON.parse(result);
+                console.log(result);
+                 var data = JSON.parse(result);
                 updateFlightDurationAndCost(data);
+            }, error: function () {
+
+
             }
         })
-
     }
 
     function updateFlightDurationAndCost(data) {
 
+
+        console.log(data);
+
         var flightDuration = data.flight_duration;
         var cost = data.cost;
 
-        var flightDurationInput =  $('#flightDuration');
-        var costInput =  $('#cost');
+        var flightDurationInput = $('#flightDuration');
+        var costInput = $('#cost');
 
-        if($('#flightDuration').val().length === 0){
+        if ($('#flightDuration').val().length === 0) {
 
-            console.log('empty');
-           flightDurationInput.val( flightDurationInput.val() + flightDuration );
-            costInput.val( costInput.val() + cost );
-        }else{
+            flightDurationInput.val(flightDurationInput.val() + flightDuration);
+            costInput.val(costInput.val() + cost);
+        } else {
 
-            console.log('not empty');
-          flightDurationInput.val( "" );
-            costInput.val( "" );
-            flightDurationInput.val( flightDurationInput.val() + flightDuration );
-            costInput.val( costInput.val() + cost );
+            flightDurationInput.val("");
+            costInput.val("");
+            flightDurationInput.val(flightDurationInput.val() + flightDuration);
+            costInput.val(costInput.val() + cost);
         }
-
     }
 
     function setOptionForSelectLocationTo(data) {

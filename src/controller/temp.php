@@ -18,7 +18,7 @@ header("Access-Control-Allow-Origin: *");
 $location1 = 'Stansted';
 $location2 = 'Paris';
 
-$regionNames = DAO::getInstance()->getCostAndFlightDurationForConnection($location1,$location2);
+$result = DAO::getInstance()->getConnectionFromTwoLocations($location1,$location2);
 
-echo json_encode($regionNames);
+echo json_encode($result);
 
