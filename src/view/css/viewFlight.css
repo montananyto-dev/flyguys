@@ -1,0 +1,39 @@
+
+#flight-table {
+    border-spacing: 0px;
+    padding-bottom: 2px;
+    padding-top: 10px;
+}
+
+#flight-table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #5871af;
+    color: white;
+    border: 1px solid #ddd;
+
+}
+
+#flight-table tr {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #5871af;
+    color: white;
+    border: 1px solid #ddd;
+}
+
+td, th {
+    border: 1px solid #ddd;
+    padding: 4px;
+    display: inline-block;
+    width: 78px;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#main {
+    text-align: center;
+}

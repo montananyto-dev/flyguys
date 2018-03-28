@@ -1,0 +1,90 @@
+
+@media screen and (min-width: 800px) { /*The following CSS runs only for displays with a width (in pixels) of more than 800px*/
+
+    .edit {
+        margin: 3px;
+    }
+
+    label {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        font-size: 25px;
+    }
+
+    select, input {
+
+        border-radius: 5px;
+        height: 30px;
+        width: 300px;
+        text-align-last: center;
+        color: black;
+        font-size: 20px;
+    }
+
+    #addDestination {
+        display: inline-grid;
+        margin-top: 40px;
+        background-color: #5972ad;
+        padding: 20px 50px 50px 50px;
+    }
+
+    #submit {
+        border-radius: 10px;
+        margin-top: 20px;
+        margin-right: auto;
+        margin-left: auto;
+        text-align: center;
+        width: 80px;
+        height: 30px;
+        background-color: black;
+        color: white;
+        font-weight: bold;
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    /*The following CSS runs only for displays with a width (in pixels) of less than 800px*/
+    .edit {
+        margin: 3px;
+    }
+
+    label {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        font-size: 17px;
+    }
+
+    select, input {
+
+        border-radius: 5px;
+        height: 20px;
+        width: 150px;
+        text-align-last: center;
+        color: black;
+        font-size: 15px;
+    }
+
+    #addDestination {
+        display: inline-grid;
+        margin-top: 40px;
+        background-color: #5972ad;
+        padding: 15px 30px 30px 30px;
+    }
+
+    #submit {
+        border-radius: 10px;
+        margin-top: 20px;
+        margin-right: auto;
+        margin-left: auto;
+        text-align: center;
+        width: 80px;
+        height: 30px;
+        background-color: black;
+        color: white;
+        font-weight: bold;
+        font-size: 10px;
+    }
+
+}
+
