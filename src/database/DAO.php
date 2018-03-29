@@ -352,8 +352,9 @@ class DAO
         $sql = "INSERT INTO flight (connection_id, departure_date_time, capacity )
                  VALUES ($connectionId, '$departureDate', $capacity)";
 
-        $this->insertQuery($sql);
+        $insertId = $this->insertQuery($sql);
 
+        return $insertId;
     }
 
     public function editFlight($flightId, $departureTime, $capacity)

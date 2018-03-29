@@ -6,8 +6,8 @@ header("Access-Control-Allow-Origin: *");
 
 $flightID = $_GET['flight_id'];
 
-$valid = "The flight was successfully removed from the system";
-$invalid = "The flight could not be removed from the system";
+$valid = "The flight " . $flightID . " was successfully removed from the system";
+$invalid = "The flight " . $flightID . " could not be removed from the system";
 
 
 if (isset($flightID)) {

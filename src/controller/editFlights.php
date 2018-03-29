@@ -10,8 +10,8 @@ $flightId = $_GET['flightId'];
 $departureTime = $_GET['departureTime'];
 $capacity = $_GET['capacity'];
 
-$valid = "The flight has been edited";
-$invalid = "The details of the flight could not be edited";
+$valid = "The flight " . $flightId . " has been edited";
+$invalid = "The flight " . $flightId . " could not be edited";
 
 
 if ((isset($flightId)) && (isset($departureTime)) && (isset($capacity))) {

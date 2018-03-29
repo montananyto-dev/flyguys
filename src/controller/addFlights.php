@@ -9,11 +9,14 @@ header("Access-Control-Allow-Origin: *");
 
 $data = json_decode(file_get_contents('php://input'), true);
 
+
 $invalid = "The flight could not be added to the system";
 
 if(isset($data)){
 
-    DAO::getInstance()->addANewFlight($data);
+   $insertId =  DAO::getInstance()->addANewFlight($data);
+
+    echo json_encode("The flight " . $insertId . " has been added to the system");
 
 }else{
 

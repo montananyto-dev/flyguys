@@ -275,39 +275,51 @@
 
         } else {
 
-            var departureTime = (tr).children.item(3).innerHTML;
-            var capacity = (tr).children.item(4).innerHTML;
 
-            insideTD[3].contentEditable = false;
-            insideTD[4].contentEditable = false;
+            if (confirm('Are you sure you want to save the changes for the Flight: ' + flightId + '?')) {
 
-            $('.edit').attr('disabled', false);
-            $('.delete').attr('disabled', false);
-            $(saveButton).hide();
-            $(editButton).show();
+                var departureTime = (tr).children.item(3).innerHTML;
+                var capacity = (tr).children.item(4).innerHTML;
 
-            $.ajax({
+                insideTD[3].contentEditable = false;
+                insideTD[4].contentEditable = false;
 
-                url: `http://localhost:8000/controller/editFlights.php?flightId=${flightId}&departureTime=${departureTime}&capacity=${capacity}`,
-                success: function(result){
+                $('.edit').attr('disabled', false);
+                $('.delete').attr('disabled', false);
+                $(saveButton).hide();
+                $(editButton).show();
 
-                    console.log(result);
-                }
-            })
+                $.ajax({
+
+                    url: `http://localhost:8000/controller/editFlights.php?flightId=${flightId}&departureTime=${departureTime}&capacity=${capacity}`,
+                    success: function (result) {
+
+                        alert(result);
+                    }
+                })
+            } else {
+                // Do nothing!
+            }
+        }
+    }
+
+    function deleteFlight(id) {
+
+        if (confirm('Are you sure you want to delete the Flight: ' + id + '?')) {
+            document.getElementById(id).parentElement.remove();
+            deleteFlightFromDatabase(id);
+        } else {
+            // Do nothing!
         }
 
     }
 
-    function deleteFlight(id) {
-        document.getElementById(id).parentElement.remove()
-        deleteFlightFromDatabase(id);
-    }
-
     function deleteFlightFromDatabase(flightNumber) {
+
         $.ajax({
             url: 'http://localhost:8000/controller/deleteFlights.php' + '?flight_id=' + flightNumber,
             success: function (result) {
-
+                alert(result);
             },
             error: function () {
             }
@@ -385,22 +397,30 @@
 
             $('#addDestination').on('submit', function (e) {
                 e.preventDefault();
-                var formData = JSON.stringify($('#addDestination').serializeArray());
 
-                console.log(formData);
+                if(confirm('Would you like to add the flight to the system')){
 
-                $.ajax({
+                    var formData = JSON.stringify($('#addDestination').serializeArray());
 
-                    type: "POST",
-                    url: 'http://localhost:8000/controller/addFlights.php',
-                    data: formData,
-                    dataType: "json",
-                    contentType: "application/json",
-                    success: function (result) {
+                    $.ajax({
 
-                    }, error: function () {
-                    },
-                });
+                        type: "POST",
+                        url: 'http://localhost:8000/controller/addFlights.php',
+                        data: formData,
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (result) {
+
+                            alert(result);
+
+                        }, error: function () {
+                        },
+                    });
+
+                }else{
+                    //do nothing
+                }
+
             });
         });
 
