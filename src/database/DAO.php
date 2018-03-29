@@ -355,6 +355,16 @@ class DAO
         $this->insertQuery($sql);
 
     }
+
+    public function editFlight($flightId, $departureTime, $capacity)
+    {
+        $sql = "UPDATE flight
+        SET departure_date_time = '$departureTime', capacity = $capacity 
+        WHERE flight.id =$flightId ";
+
+        $this->insertQuery($sql);
+
+    }
 }
 
 //function setPerItem($array, $identifier, $property, $anonFunction) {

@@ -124,9 +124,13 @@
 
     function populateTable(data, root) {
 
-        console.log(data);
 
         var td6 = "";
+
+        var result = [];
+        var departureTimeHtml = "";
+        var capacityHtml = "";
+
 
         for (var i = 0; i < data.length; i++) {
 
@@ -140,6 +144,7 @@
             var locationTo = document.createElement('td');
             locationTo.innerHTML = data[i].connection.toLocation.name;
             var departureDateTime = document.createElement('td');
+            departureDateTime.setAttribute('class', 'departure');
             departureDateTime.innerHTML = data[i].departure_date_time;
             var capacity = document.createElement('td');
             capacity.innerHTML = data[i].capacity;
@@ -149,17 +154,50 @@
             duration.innerHTML = data[i].connection.flight_duration;
             var regionName = document.createElement('td');
 
+
             if (data[i].connection.toLocation.region.name == "Europe" || data[i].connection.fromLocation.region.name == "Europe") {
+
                 regionName.innerHTML = "Europe";
             } else {
                 regionName.innerHTML = "Domestic"
             }
 
+
+            var buttonSave = document.createElement('button');
+            buttonSave.innerHTML = 'save';
+            buttonSave.setAttribute('class', 'save');
+            buttonSave.setAttribute('id', 'edit' + 'Id' + i);
+            buttonSave.addEventListener('click', function () {
+
+                editFlights(this);
+
+
+            });
+
+
+            var buttonCancel = document.createElement('button');
+            buttonCancel.innerHTML = 'cancel';
+            buttonCancel.setAttribute('class', 'cancel');
+            buttonCancel.setAttribute('id', 'edit' + data[i].id);
+            buttonCancel.addEventListener('click', function () {
+
+                editFlights(this, departureTimeHtml, capacityHtml);
+
+
+            })
+
+
             var editButton = document.createElement('button');
             editButton.innerHTML = 'edit';
             editButton.setAttribute('class', 'edit');
-            editButton.setAttribute('id', 'edit' + 'Id' + i);
-            editButton.setAttribute('onclick', 'editFlights(this);');
+            editButton.setAttribute('id', data[i].id);
+            editButton.addEventListener('click', function () {
+
+                result = editFlights(this);
+                departureTimeHtml = result[0];
+                capacityHtml = result[1];
+
+            })
 
 
             var deleteButton = document.createElement('button');
@@ -178,35 +216,85 @@
             tr.appendChild(regionName);
             tr.appendChild(editButton);
             tr.appendChild(deleteButton);
+            tr.appendChild(buttonSave);
+            tr.appendChild(buttonCancel);
             root.appendChild(tr);
 
+            $(buttonCancel).hide();
+            $(buttonSave).hide();
         }
     }
 
-    function editFlights(element) {
+    function editFlights(element, departureTimeHtml, capacityHtml) {
 
-        var $firstTr = element.closest('tr').firstChild;
-        var $flightId = $firstTr.innerHTML;
+        var tr = element.closest('tr');
 
-        var currentTD = element.closest('tr').children;
+        var flightId = (tr).children.item(0).innerHTML;
 
-        console.log(currentTD);
+        var departureTimeElement = (tr).children.item(3);
+        var capacityElement = (tr).children.item(4);
 
-        currentTD[1].contentEditable = true;
-        currentTD[2].contentEditable = true;
-        currentTD[3].contentEditable = true;
-        currentTD[4].contentEditable = true;
-        currentTD[5].contentEditable = true;
-        currentTD[6].contentEditable = true;
+        var editButton = (tr).children.item(8);
+        var deleteButton = (tr).children.item(9);
+        var saveButton = (tr).children.item(10);
+        var cancelButton = (tr).children.item(11);
 
-        element.closest('button').display = 'none';
+        var insideTD = element.closest('tr').children;
 
-        var buttonSave = document.createElement('button');
-        buttonSave.innerHTML = 'save';
-        buttonSave.setAttribute('id', 'save');
+        if (element.className == "edit") {
 
-        $(this).append(buttonSave);
+            var departureTimeHtml = (tr).children.item(3).innerHTML;
+            var capacityHtml = (tr).children.item(4).innerHTML;
 
+            insideTD[3].contentEditable = true;
+            insideTD[4].contentEditable = true;
+
+            $('.edit').attr('disabled', true);
+            $('.delete').attr('disabled', true);
+
+            $(editButton).hide();
+            $(deleteButton).hide();
+            $(cancelButton).show();
+            $(saveButton).show();
+
+            return [departureTimeHtml, capacityHtml];
+
+
+        } else if (element.className == 'cancel') {
+
+            departureTimeElement.innerHTML = departureTimeHtml;
+            capacityElement.innerHTML = capacityHtml;
+
+            insideTD[3].contentEditable = false;
+            insideTD[4].contentEditable = false;
+
+            $('.edit').attr('disabled', false);
+            $('.delete').attr('disabled', false);
+            $(saveButton).hide();
+            $(editButton).show();
+
+        } else {
+
+            var departureTime = (tr).children.item(3).innerHTML;
+            var capacity = (tr).children.item(4).innerHTML;
+
+            insideTD[3].contentEditable = false;
+            insideTD[4].contentEditable = false;
+
+            $('.edit').attr('disabled', false);
+            $('.delete').attr('disabled', false);
+            $(saveButton).hide();
+            $(editButton).show();
+
+            $.ajax({
+
+                url: `http://localhost:8000/controller/editFlights.php?flightId=${flightId}&departureTime=${departureTime}&capacity=${capacity}`,
+                success: function(result){
+
+                    console.log(result);
+                }
+            })
+        }
 
     }
 
@@ -405,7 +493,7 @@
             success: function (result) {
 
                 console.log(result);
-                 var data = JSON.parse(result);
+                var data = JSON.parse(result);
                 updateFlightDurationAndCost(data);
             }, error: function () {
 
@@ -415,9 +503,6 @@
     }
 
     function updateFlightDurationAndCost(data) {
-
-
-        console.log(data);
 
         var flightDuration = data.flight_duration;
         var cost = data.cost;
