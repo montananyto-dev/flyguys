@@ -126,7 +126,7 @@ class DAO
 
     public function getRegionByName($nameStr)
     {
-        $sql = "SELECT id, name FROM Region WHERE name=:name";
+        $sql = "SELECT id, name FROM region WHERE name=:name";
         $result = $this->classQuery($sql, "Region", array('name' => $nameStr));
         return $result[0];
 //        return $this->getRegions('name', $nameStr, true);
