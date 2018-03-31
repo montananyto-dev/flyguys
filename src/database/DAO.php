@@ -366,6 +366,18 @@ class DAO
         $this->insertQuery($sql);
 
     }
+
+    public function getFlightsByBooking($bookingObj) {
+        $sql = "SELECT * from flight where id IN (SELECT flight_id from booking_flight where booking_id = :bookId)";
+        $params = array("bookId" => $bookingObj->id);
+        $flights = $this->classQuery($sql, "Flight", $params);
+
+        foreach($flights as $flight) {
+            $this->setConnectionFor($flight);
+        }
+
+        return $flights;
+    }
 }
 
 //function setPerItem($array, $identifier, $property, $anonFunction) {

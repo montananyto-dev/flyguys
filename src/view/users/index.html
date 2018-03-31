@@ -115,6 +115,31 @@
         </main>
     </body>
 
+    <script>
+        // globals
+        var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    </script>
+
+    <script>
+        var cookie = getCookieValue("idCode");
+        var url = `http://localhost:8000/controller/bookings/getBasketFlights.php?cookie=${cookie}`;
+        $.ajax({
+            url: url,
+            success: function(result) {
+                console.log(result);
+                var flights = JSON.parse(result);
+                for(var i=0;i<flights.length;i++) {
+                    var flight = flights[i];
+
+                    var startDate = new Date(flight.departure_date_time);
+                    var fullDate = days[startDate.getDay()] + " " + startDate.getDate() + " " + months[startDate.getMonth()];
+                    addElemsToBasket(flight, fullDate);
+                }
+            }
+        });
+    </script>
+
     <!-- obtaining dropdown details -->
     <script src="../js/search.js"></script>
 
@@ -205,9 +230,8 @@
             var tloc = flight.connection.toLocation;
             locations.innerHTML = `${floc.name} (${floc.region.name}) - ${tloc.name} (${tloc.region.name})`;
 
-            var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-            var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             var startDate = new Date(flight.departure_date_time);
+
             var fullDate = days[startDate.getDay()] + " " + startDate.getDate() + " " + months[startDate.getMonth()];
 
             date.innerHTML = fullDate;
@@ -221,6 +245,7 @@
 
 
             // Set departure and arrival time text
+            startHours = startDate.getHours();
             times.innerHTML = "Departing at " + startDate.getHours() + ":" + startDate.getMinutes() + ", Arriving at {temp}";
 
             // Set class for styling
