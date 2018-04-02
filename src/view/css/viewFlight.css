@@ -106,11 +106,19 @@
         text-align: center;
     }
 
-    .edit {
+    .edit{
         font-size: 5px;
     }
 
     .delete{
+        font-size: 5px;
+    }
+
+    .save{
+        font-size: 5px;
+    }
+
+    .cancel{
         font-size: 5px;
     }
 }

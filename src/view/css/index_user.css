@@ -1,123 +1,282 @@
-main, #basket {
-    font-family: sans-serif;
+@media screen and (min-width: 900px) {
+    /*The following CSS runs only for displays with a width (in pixels) of more than 800px*/
+    main, #basket {
+        font-family: sans-serif;
+    }
+
+    main {
+        margin-left: 50px;
+        color: #444;
+        display: inline-block;
+    }
+
+    #basket {
+        position: fixed;
+        top: 10px;
+        right: 50px;
+        list-style-type: none;
+        border: 2px solid green;
+        padding: 10px 10px;
+        font-size: 25px;
+        margin-right: 50px;
+    }
+
+    ul#basket {
+
+        margin: 0px;
+    }
+
+    #basket li {
+        margin-left: 10px;
+        font-size: 15px;
+    }
+
+    #basket em {
+        margin-left: 5px;
+        font-size: 20px;
+    }
+
+    h1 {
+        padding-bottom: 20px;
+        text-decoration: underline;
+    }
+
+    button {
+        margin: 20px 0px;
+        padding: 5px;
+        font-size: 19px;
+        background-color: #00B5AD;
+        color: #fff;
+
+    }
+
+    div.row {
+        display: block;
+    }
+
+    input, select, #basket, button, #search {
+        border-radius: 5px;
+
+    }
+
+    .wrong {
+        color: red;
+    }
+
+    .right {
+        color: black;
+    }
+
+    .unanswered {
+        color: grey;
+    }
+
+    input[type=search] {
+        padding-left: 10px;
+        margin-right: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #400;
+        font-size: 24px;
+        display: inline;
+        height: 50px;
+    }
+
+    input[type=date] {
+        padding-left: 10px;
+        margin-right: 15px;
+        border: 1px solid #400;
+        font-size: 24px;
+        display: inline;
+        height: 50px;
+        width: 230px;
+
+    }
+
+    select {
+        padding-left: 10px;
+        border: 1px solid #400;
+        font-size: 24px;
+        display: inline;
+        height: 50px;
+        width: 160px;
+        margin-bottom: 20px;
+        background-color: white;
+    }
+
+    #search {
+        padding-left: 10px;
+        font-size: 20px;
+        border-radius: 10px;
+        color: #fff;
+        height: 50px;
+        background-color: #00B5AD
+    }
+
+    #basket a {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .apology {
+        margin: 40px 40px;
+        font-size: 30px;
+    }
+
+    .squeeze {
+        margin: 0px 50px;
+    }
+
+    span.separator {
+        font-size: 30px;
+        margin: 10px;
+    }
+
+    .underline {
+        font-weight: bold;
+        margin: 5px 0px;
+        text-decoration-color: rgb(197, 190, 190);
+        text-decoration-line: underline;
+        text-decoration-style: dashed;
+    }
+
 }
 
-main {
-    margin:40px auto;
-    max-width:1000px;
-    color: #444;
-}
+@media screen and (max-width: 900px) {
+    /*The following CSS runs only for displays with a width (in pixels) of more than 800px*/
+    main, #basket {
+        font-family: sans-serif;
+    }
 
-#basket {
-    position:fixed;
-    top:10;
-    right:120;
-    list-style-type: none;
-    border: 4px dashed rgb(197, 190, 190);
-    padding: 10px 10px;
-    font-size:25px
-}
+    main {
 
-#basket li {
-    margin-left:10px;
-}
-#basket em {
-    margin-left: 5px;
-    font-size: 15px;
-}
+        color: #444;
+        display: inline-block;
+    }
 
-h1 {
-    padding-bottom: 20px;
-    text-decoration: underline;
-}
+    #basket {
+        list-style-type: none;
+        border: 2px solid green;
+        padding: 10px 10px;
+        font-size: 25px;
 
-button {
-    margin: 20px 0px;
-    padding:5px;
-    font-size:20px;
-    background-color:#00B5AD;
-    color:#fff;
-    
-}
+    }
 
-div.row {
-    display:block;
-}
+    ul#basket {
 
-input, select, #basket,button, #search {
-    border-radius: 5px; 
-}
+        margin: 0px;
+    }
 
-.wrong {
-    color:red;
-}
+    #basket li {
+        margin-left: 10px;
+        font-size: 15px;
+    }
 
-.right {
-    color:black;   
-}
+    #basket em {
+        margin-left: 5px;
+        font-size: 20px;
+    }
 
-.unanswered {
-    color: grey;
-}
+    h1 {
+        padding-bottom: 20px;
+        text-decoration: underline;
+    }
 
-input[type=search] {
-    border: 1px solid #400;
-    margin: 0px auto;
-    margin-right:10px;
-    width:400px;
-    height:50px;
-    font-size: 30px;
-    display: inline;
-}
+    button {
+        margin: 20px 0px;
+        padding: 5px;
+        font-size: 19px;
+        background-color: #00B5AD;
+        color: #fff;
 
-input[type=date] {
-    margin: 19px auto;
-    border:1px solid #400;
-    height:50px;
-    font-size:25px;
-    color:#8e8e8e;
-}
+    }
 
-#search {
-    margin: 0px 100px;
-    font-size: 30px;
-    border-radius: 10px;
-    color: #fff;
-    height:50px;
-    background-color:#00B5AD
-}
+    div.row {
+        display: block;
+    }
 
-#basket a {
-    text-decoration: none;
-    color: #fff;
-}
+    input, select, #basket, button, #search {
+        border-radius: 5px;
 
-select {
-    width:155px;
-    height:50px;
-    font-size:25px;
-    padding-top:3px;
-    background-color:#fff;
-    color:#8e8e8e;
-}
+    }
 
-.apology {
-    margin: 40px 40px;
-    font-size: 30px;
-}
+    .wrong {
+        color: red;
+    }
 
-.squeeze {
-    margin:0px 50px;
-}
-span.seperator {
-    font-size: 30px;
-}
+    .right {
+        color: black;
+    }
 
-.underline {
-    font-weight:bold;
-    margin: 5px 0px;
-    text-decoration-color: rgb(197, 190, 190);
-    text-decoration-line: underline;
-    text-decoration-style: dashed;
-}
+    .unanswered {
+        color: grey;
+    }
 
+    input[type=search] {
+        padding-left: 10px;
+        margin-right: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #400;
+        font-size: 24px;
+        display: inline;
+        height: 50px;
+    }
+
+    input[type=date] {
+        padding-left: 10px;
+        margin-right: 15px;
+        border: 1px solid #400;
+        font-size: 24px;
+        display: inline;
+        height: 50px;
+        width: 230px;
+
+    }
+
+    select {
+        padding-left: 10px;
+        border: 1px solid #400;
+        font-size: 24px;
+        display: inline;
+        height: 50px;
+        width: 160px;
+        margin-bottom: 20px;
+        background-color: white;
+    }
+
+    #search {
+        padding-left: 10px;
+        font-size: 20px;
+        border-radius: 10px;
+        color: #fff;
+        height: 50px;
+        background-color: #00B5AD
+    }
+
+    #basket a {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .apology {
+        margin: 40px 40px;
+        font-size: 30px;
+    }
+
+    .squeeze {
+        margin: 0px 50px;
+    }
+
+    span.separator {
+        font-size: 30px;
+        margin: 10px;
+    }
+
+    .underline {
+        font-weight: bold;
+        margin: 5px 0px;
+        text-decoration-color: rgb(197, 190, 190);
+        text-decoration-line: underline;
+        text-decoration-style: dashed;
+    }
+
+}

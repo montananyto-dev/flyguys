@@ -105,9 +105,9 @@ function generateResult(root, flight) {
     section.setAttribute("class","flight");
 
     section.appendChild(locations);
-    section.appendChild(addBtn);
     section.appendChild(date);
-    section.appendChild(times)
+    section.appendChild(times);
+    section.appendChild(addBtn);
 
     root.appendChild(section);
 }

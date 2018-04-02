@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . "/../database/DAO.php";
-
 header("Access-Control-Allow-Origin: *");
+
+require_once __DIR__ . "/../database/DAO.php";
 
 $locationFrom = $_GET['locationFrom'];
 $locationTo = $_GET['locationTo'];

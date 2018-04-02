@@ -1,10 +1,8 @@
 <?php
 
-require_once __DIR__ . "/../database/DAO.php";
-
-
 header("Access-Control-Allow-Origin: *");
 
+require_once __DIR__ . "/../database/DAO.php";
 
 $flightId = $_GET['flightId'];
 $departureTime = $_GET['departureTime'];
