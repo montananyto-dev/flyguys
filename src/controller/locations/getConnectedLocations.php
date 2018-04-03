@@ -10,6 +10,7 @@ $toEncode = array();
 
 
 if(isset($_GET["name"])) {
+
     $location = DAO::getInstance()->getLocationByName($_GET["name"]);
 
     if(isset($location)) {
@@ -19,6 +20,11 @@ if(isset($_GET["name"])) {
             array_push($toEncode, $location->name);
         }
     }
+
+
+}else{
+
+    $toEncode = [];
 }
 
 echo json_encode($toEncode);

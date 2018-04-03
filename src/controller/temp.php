@@ -18,7 +18,4 @@ header("Access-Control-Allow-Origin: *");
 $location1 = 'Stansted';
 $location2 = 'Paris';
 
-$result = DAO::getInstance()->getConnectionFromTwoLocations($location1,$location2);
-
-echo json_encode($result);
 

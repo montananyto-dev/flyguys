@@ -23,6 +23,7 @@ function retrieveData(requestURL) {
     $.ajax({
         url: requestURL,
         success: function (result) {
+
             var flights = JSON.parse(result);
 
             var root = document.getElementById("results")
@@ -88,8 +89,6 @@ function generateResult(root, flight) {
     var locationFrom = floc.name;
     var locationTo = tloc.name;
 
-    console.log('call getConnection');
-
     getConnection(locationFrom, locationTo, function (connection) {
 
             next(connection);
@@ -98,7 +97,7 @@ function generateResult(root, flight) {
 
     function next(connection) {
 
-        var startDate = new Date(flight.departure_date_time.replace(' ','T'));
+        var startDate = new Date(flight.departure_date_time.replace(' ', 'T'));
 
         var flightDuration = connection.flight_duration;
         var a = flightDuration.split(':'); // split it at the colons
@@ -107,11 +106,11 @@ function generateResult(root, flight) {
 
         var departureToMinute = startDate.getMinutes() + startDate.getHours() * 60;
 
-        var arrivalTime = convertMinsToHrsMins(departureToMinute + flightDurationToMinutes);
+        var arrivalTime = convertMinutesToHoursMinutes(departureToMinute + flightDurationToMinutes);
 
-        function convertMinsToHrsMins(mins) {
-            let h = Math.floor(mins / 60);
-            let m = mins % 60;
+        function convertMinutesToHoursMinutes(minutes) {
+            let h = Math.floor(minutes / 60);
+            let m = minutes % 60;
             h = h < 10 ? '0' + h : h;
             m = m < 10 ? '0' + m : m;
             return `${h}:${m}`;
