@@ -12,5 +12,8 @@ $.ajax({
             var fullDate = days[startDate.getDay()] + " " + startDate.getDate() + " " + months[startDate.getMonth()];
             addElemsToBasket(flight, fullDate);
         }
+    },error(){
+
+        console.log('nothing');
     }
 });

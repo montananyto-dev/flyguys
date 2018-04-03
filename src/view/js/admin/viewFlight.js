@@ -233,7 +233,9 @@ function editFlights(element, departureTimeHtml, capacityHtml) {
             $('.edit').attr('disabled', false);
             $('.delete').attr('disabled', false);
             $(saveButton).hide();
+            $(cancelButton).hide();
             $(editButton).show();
+            $(deleteButton).show();
 
             $.ajax({
 
@@ -247,6 +249,17 @@ function editFlights(element, departureTimeHtml, capacityHtml) {
             // Do nothing!
         }
     }
+}
+
+function deleteFlight(id) {
+
+    if (confirm('Are you sure you want to delete the Flight: ' + id + '?')) {
+        document.getElementById(id).parentElement.remove();
+        deleteFlightFromDatabase(id);
+    } else {
+        // Do nothing!
+    }
+
 }
 
 function deleteFlightFromDatabase(flightNumber) {
