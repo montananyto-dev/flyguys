@@ -310,6 +310,13 @@ class DAO
         return $newId;
     }
 
+    public function deleteFlightFromBooking($flightId){
+
+        $sql = "DELETE FROM booking_flight WHERE flight_id = $flightId";
+
+        $this->deleteQuery($sql);
+    }
+
     public function getPendingBookings($accObj)
     {
         $accId = $accObj->id;

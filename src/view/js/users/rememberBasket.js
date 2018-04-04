@@ -16,7 +16,7 @@ if(cookie == null){
                 var flight = flights[i];
 
                 var startDate = new Date(flight.departure_date_time);
-                var fullDate = days[startDate.getDay()] + " " + startDate.getDate() + " " + months[startDate.getMonth()];
+                var fullDate = days[startDate.getDay()] + " " + startDate.getDate() + " " + months[startDate.getMonth()] + " "+ startDate.getFullYear();
                 addElemsToBasket(flight, fullDate);
             }
         }, error() {

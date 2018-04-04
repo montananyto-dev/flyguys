@@ -107,7 +107,7 @@ function generateResult(root, flight) {
     }
 
 
-    var fullDate = days[startDate.getDay()] + " " + startDate.getDate() + " " + months[startDate.getMonth()] + " " + [startDate.getFullYear()];
+    var fullDate = days[startDate.getDay()] + " " + startDate.getDate() + " " + months[startDate.getMonth()] + " " + startDate.getFullYear();
 
     date.innerHTML = fullDate;
 
@@ -135,13 +135,12 @@ function generateResult(root, flight) {
 
     root.appendChild(section);
 
-
 }
 
 function addToBasket(flight, dateStr) {
 
     if (alreadyAdded(flight.id)) {
-        alert("The flight " + flight.id+ " is aready in your basket");
+        alert("The flight " + flight.id+ " is already in your basket");
 
     }else{
 
@@ -159,6 +158,8 @@ function addToBasket(flight, dateStr) {
 }
 
 function addElemsToBasket(flight, dateStr) {
+
+    console.log(dateStr);
 
     var basketItems = document.querySelector('#basket div')
 
@@ -212,12 +213,12 @@ function removeFromBasket(flight,divBasket){
 
     $.ajax({
 
-        url: url = `http://localhost:8000/controller/bookings/removeBooking.php?cookie=${cookie}&toName=${toValue}`,
+        url: url = `http://localhost:8000/controller/bookings/removeBooking.php?cookie=${cookie}&flightId=${flight.id}`,
 
         success:function(result){
 
-            alert(flight.id);
             $(divBasket).fadeOut();
+            alert("The flight " + flight.id + " has been removed from your basket");
 
         }
 

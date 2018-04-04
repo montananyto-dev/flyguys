@@ -53,6 +53,7 @@
     button#removeFromBasket {
         margin: 0px 0px 0px 15px;
         font-size: 10px;
+        float:right;
     }
 
     div.row {
@@ -200,6 +201,7 @@
     button#removeFromBasket {
         margin: 0px 0px 0px 15px;
         font-size: 10px;
+        float:right;
     }
 
     div.row {
