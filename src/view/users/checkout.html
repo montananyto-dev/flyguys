@@ -13,13 +13,30 @@
 
 </head>
 <body>
-
     <script>
-        // if(use DOES NOT have cookie / isn't value)
-        //    Alert() them, then re-direct back to index.html
-        // else
-        //    obtain booking information
-        //    continue to generate page...
+        function getCookieValue(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return null;
+        }
+
+        if(getCookieValue("idCode")==null) {
+            alert("No cookie, wtf!");
+            // leave page
+        }
+
+
+
     </script>
 
     <h1>Checkout</h1>
@@ -43,7 +60,26 @@
 
     <script>
 
-        // below is dummy data
+        $.ajax({
+            url: `http://localhost:8000/controller/bookings/getBasketFlights.php?cookie=${getCookieValue("idCode")}`,
+            success: function(result) {
+                var flights = JSON.parse(result);
+
+                var root = document.getElementById("results")
+
+                removeChildren(root);
+
+                if (flights.length > 0) {
+                    generateResults(root, flights);
+                } else {
+                    displayNoResults(root);
+                }
+
+
+                return false;
+            }
+
+        });
         var jsonstuff = '[{"flightId":1, "from":"Stansted","to":"Paris"},{"flightId":5,"from":"Stansted","to":"Berlin"}]';
 
         var flights = JSON.parse(jsonstuff);
