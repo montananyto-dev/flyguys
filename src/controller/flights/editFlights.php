@@ -2,7 +2,9 @@
 
 header("Access-Control-Allow-Origin: *");
 
-require_once __DIR__ . "/../database/DAO.php";
+require_once __DIR__ . "/../../model/Flight.php";
+require_once __DIR__ . "/../../model/Location.php";
+require_once __DIR__ . "/../../database/DAO.php";
 
 $flightId = $_GET['flightId'];
 $departureTime = $_GET['departureTime'];

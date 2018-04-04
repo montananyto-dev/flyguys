@@ -7,7 +7,7 @@ $(function () {
 function retrieveAllFlights(regionName) {
     $.ajax({
 
-        url: 'http://localhost:8000/controller/getFlights.php' + regionName,
+        url: 'http://localhost:8000/controller/flights/getFlights.php' + regionName,
         success: function (result) {
 
             var allFlights = JSON.parse(result);
@@ -239,7 +239,7 @@ function editFlights(element, departureTimeHtml, capacityHtml) {
 
             $.ajax({
 
-                url: `http://localhost:8000/controller/editFlights.php?flightId=${flightId}&departureTime=${departureTime}&capacity=${capacity}`,
+                url: `http://localhost:8000/controller/flights/editFlights.php?flightId=${flightId}&departureTime=${departureTime}&capacity=${capacity}`,
                 success: function (result) {
 
                     alert(result);
@@ -265,7 +265,7 @@ function deleteFlight(id) {
 function deleteFlightFromDatabase(flightNumber) {
 
     $.ajax({
-        url: 'http://localhost:8000/controller/deleteFlights.php' + '?flight_id=' + flightNumber,
+        url: 'http://localhost:8000/controller/flights/deleteFlights.php' + '?flight_id=' + flightNumber,
         success: function (result) {
             alert(result);
         },
@@ -353,7 +353,7 @@ function generateForm() {
                 $.ajax({
 
                     type: "POST",
-                    url: 'http://localhost:8000/controller/addFlights.php',
+                    url: 'http://localhost:8000/controller/flights/addFlights.php',
                     data: formData,
                     dataType: "json",
                     contentType: "application/json",
@@ -456,7 +456,7 @@ function getFlightDurationAndCost() {
 
     $.ajax({
 
-        url: `http://localhost:8000/controller/getConnectionFromTwoLocations.php?locationFrom=${locationFrom}&locationTo=${locationTo}`,
+        url: `http://localhost:8000/controller/connections/getConnectionFromTwoLocations.php?locationFrom=${locationFrom}&locationTo=${locationTo}`,
 
         success: function (result) {
 

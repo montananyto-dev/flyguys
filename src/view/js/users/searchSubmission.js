@@ -161,7 +161,11 @@ function addToBasket(flight, dateStr) {
 }
 
 function addElemsToBasket(flight, dateStr) {
-    var basketItems = document.querySelector('#basket div');
+
+    var basketItems = document.querySelector('#basket div')
+
+    var divBasket = document.createElement('div');
+    divBasket.setAttribute('id',flight.id);
 
     var dateItem = document.createElement("em");
     dateItem.innerText = dateStr;
@@ -177,15 +181,19 @@ function addElemsToBasket(flight, dateStr) {
     buttonRemove.setAttribute('id','removeFromBasket');
     buttonRemove.innerHTML = 'remove';
     buttonRemove.value = flight.id ;
+    buttonRemove.addEventListener('click', function () {
+        removeFromBasket(flight, divBasket);
+    });
 
     var lineBreak = document.createElement('hr');
 
 
-    basketItems.appendChild(dateItem);
-    basketItems.appendChild(buttonRemove);
-    basketItems.appendChild(listItem);
-    basketItems.appendChild(hiddenId);
-    basketItems.appendChild(lineBreak);
+    basketItems.appendChild(divBasket);
+    divBasket.appendChild(dateItem);
+    divBasket.appendChild(buttonRemove);
+    divBasket.appendChild(listItem);
+    divBasket.appendChild(hiddenId);
+    divBasket.appendChild(lineBreak);
 
 }
 
@@ -200,21 +208,17 @@ function alreadyAdded(id) {
     return toReturn;
 }
 
-$("#removeFromBasket").click(function () {
-    var fromValue = $("#from").val();
-    var toValue = $("#to").val();
+function removeFromBasket(flight,divBasket){
 
-    var url = `http://localhost:8000/controller/locations/search.php?fromName=${fromValue}&toName=${toValue}`;
+    $.ajax({
 
-    var day = $("#day").val();
-    var date = $("#date").val();
-    if (day != "Day") {
-        url += "&day=" + day;
-    }
-    if (date) {
-        url += "&date=" + date;
-    }
+        url: url = `http://localhost:8000/controller/locations/search.php?fromName=${fromValue}&toName=${toValue}`,
 
-    retrieveData(url);
-    return false;
-})
+
+    })
+
+    alert(flight.id);
+    $(divBasket).fadeOut();
+
+
+}
