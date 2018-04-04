@@ -8,6 +8,10 @@
     <title>FlyGuys Checkout</title>
     <link rel="shortcut icon" type="image/png" href="../images/favicon.png"/>
 
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
 
     <link rel="stylesheet" type="text/css" href="../css/users/checkout.css">
 
@@ -65,39 +69,26 @@
             success: function(result) {
                 var flights = JSON.parse(result);
 
-                var root = document.getElementById("results")
+                console.log(flights);
 
-                removeChildren(root);
+                var list = document.querySelector("#checkoutFlights");
+                flights.forEach(function(flight) {
+                    console.log(flight);
+                    var item = document.createElement("li");
+                    item.innerHTML = flight.connection.fromLocation.name + " to " + flight.connection.toLocation.name;
 
-                if (flights.length > 0) {
-                    generateResults(root, flights);
-                } else {
-                    displayNoResults(root);
-                }
+                    item.addEventListener("click", function() {
+                        switchContext(flight.id)
+                    });
 
+                    list.appendChild(item);
+                });
 
-                return false;
             }
 
         });
         var jsonstuff = '[{"flightId":1, "from":"Stansted","to":"Paris"},{"flightId":5,"from":"Stansted","to":"Berlin"}]';
 
-        var flights = JSON.parse(jsonstuff);
-
-        console.log(flights);
-
-        var list = document.querySelector("#checkoutFlights");
-        flights.forEach(function(flight) {
-            console.log(flight);
-            var item = document.createElement("li");
-            item.innerHTML = flight.from + " to " + flight.to;
-
-            item.addEventListener("click", function() {
-                switchContext(flight.flightId)
-            });
-
-            list.appendChild(item);
-        });
 
         function switchContext(id) {
             console.log("Clickky" + id);
