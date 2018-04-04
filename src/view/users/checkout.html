@@ -15,6 +15,50 @@
 
     <link rel="stylesheet" type="text/css" href="../css/users/checkout.css">
 
+    <style>
+        .login-modal, .signup-modal {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(1.1);
+            transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+        }
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 1rem 1.5rem;
+            width: 24rem;
+            border-radius: 0.5rem;
+        }
+        .close-button {
+            float: right;
+            width: 1.5rem;
+            line-height: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 0.25rem;
+            background-color: lightgray;
+        }
+        .close-button:hover {
+            background-color: darkgray;
+        }
+        .show-modal {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1.0);
+            transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+        }
+
+    </style>
+
 </head>
 <body>
     <script>
@@ -60,9 +104,46 @@
         <a href="#" id="addPassenger">+ add passenger</a>
     </section>
 
-    <button>Pay</button>
+    <button id="payBtn">Pay</button>
+
+    <div class="login-modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h1>Login</h1>
+            <form>
+                <input placeholder="email">
+                <input placeholder="password">
+                <input type="submit">
+            </form>
+        </div>
+    </div>
+    <div class="signup-modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h1>Login</h1>
+            <form>
+                <input placeholder="email">
+                <input placeholder="password">
+                <input placeholder="confirm password">
+                <input type="submit">
+            </form>
+        </div>
+    </div>
+
 
     <script>
+        $("#payBtn").click(function() {
+            document.querySelector(".signup-modal").classList.toggle("show-modal");
+        });
+        $(".close-button").click(function() {
+            document.querySelector(".signup-modal").classList.toggle("show-modal");
+        });
+
+    </script>
+
+    <script>
+
+        var globalKVP = {};
 
         $.ajax({
             url: `http://localhost:8000/controller/bookings/getBasketFlights.php?cookie=${getCookieValue("idCode")}`,
@@ -78,7 +159,7 @@
                     item.innerHTML = flight.connection.fromLocation.name + " to " + flight.connection.toLocation.name;
 
                     item.addEventListener("click", function() {
-                        switchContext(flight.id)
+                        switchContext(flight.id, getCurrentPassengers());
                     });
 
                     list.appendChild(item);
@@ -87,11 +168,13 @@
             }
 
         });
-        var jsonstuff = '[{"flightId":1, "from":"Stansted","to":"Paris"},{"flightId":5,"from":"Stansted","to":"Berlin"}]';
 
-
-        function switchContext(id) {
+        function switchContext(id, toSave) {
             console.log("Clickky" + id);
+            if(globalKVP[id]==undefined) {
+                globalKVP[id] = "hello";
+            }
+            console.log(globalKVP);
         }
 
 
@@ -118,11 +201,12 @@
 
             document.querySelector("#passengerInfo").appendChild(section);
         }
+
+        function getCurrentPassengers() {
+            // to resume, related to saving current passenger upon ContextSwtich.
+            $("#passengerInfo").children;
+        }
     </script>
-
-
-
-
 
 
 </body>
