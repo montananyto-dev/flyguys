@@ -94,7 +94,7 @@
 
     <section>
         <form id="passengerInfo">
-            <section class="passengerDetails">
+            <section class="passengerDetails" id ="1">
                 <input type="text" placeholder="firstName">
                 <input type="text" placeholder="MiddleName">
                 <input type="text" placeholder="LastName">
@@ -187,10 +187,15 @@
 
 
         document.querySelector("#addPassenger").addEventListener("click", function() {
-            createPassengerDetailsSection()
+
+            var numberOfPassengers = $('#passengerInfo section').length;
+            createPassengerDetailsSection(numberOfPassengers);
         });
 
-        function createPassengerDetailsSection() {
+        function createPassengerDetailsSection(numberOfPassengers) {
+
+
+            numberOfPassengers += 1;
 
             var passengerFirstName = document.createElement("input");
             passengerFirstName.setAttribute("type", "text");
@@ -222,6 +227,7 @@
 
             var section = document.createElement("section");
             section.setAttribute("class", "passengerDetails");
+            section.setAttribute("id", numberOfPassengers.toString());
 
             var buttonRemove = document.createElement("button");
             buttonRemove.innerHTML = "remove";
