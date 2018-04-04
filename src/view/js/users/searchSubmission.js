@@ -218,6 +218,7 @@ function removeFromBasket(flight,divBasket){
         success:function(result){
 
             $(divBasket).fadeOut();
+            $(divBasket).remove();
             alert("The flight " + flight.id + " has been removed from your basket");
 
         }
