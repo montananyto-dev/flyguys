@@ -75,6 +75,8 @@ function generateResults(root, flights) {
 
 function generateResult(root, flight) {
 
+    console.log(flight);
+
     var locations = document.createElement("h3");
     var addBtn = document.createElement("button");
     var date = document.createElement("em");
@@ -84,86 +86,58 @@ function generateResult(root, flight) {
     // Set location text
     var floc = flight.connection.fromLocation;
     var tloc = flight.connection.toLocation;
+    var flightDuration = flight.connection.flight_duration;
+
     locations.innerHTML = `${floc.name} (${floc.region.name}) - ${tloc.name} (${tloc.region.name})`;
 
-    var locationFrom = floc.name;
-    var locationTo = tloc.name;
+    var startDate = new Date(flight.departure_date_time.replace(' ', 'T'));
 
-    getConnection(locationFrom, locationTo, function (connection) {
+    var a = flightDuration.split(':'); // split it at the colons
+    // Hours are worth 60 minutes.
+    var flightDurationToMinutes = (+a[0]) * 60 + (+a[1]);
 
-            next(connection);
-        }
-    );
+    var departureToMinute = startDate.getMinutes() + startDate.getHours() * 60;
 
-    function next(connection) {
+    var arrivalTime = convertMinutesToHoursMinutes(departureToMinute + flightDurationToMinutes);
 
-        var startDate = new Date(flight.departure_date_time.replace(' ', 'T'));
-
-        var flightDuration = connection.flight_duration;
-        var a = flightDuration.split(':'); // split it at the colons
-        // Hours are worth 60 minutes.
-        var flightDurationToMinutes = (+a[0]) * 60 + (+a[1]);
-
-        var departureToMinute = startDate.getMinutes() + startDate.getHours() * 60;
-
-        var arrivalTime = convertMinutesToHoursMinutes(departureToMinute + flightDurationToMinutes);
-
-        function convertMinutesToHoursMinutes(minutes) {
-            let h = Math.floor(minutes / 60);
-            let m = minutes % 60;
-            h = h < 10 ? '0' + h : h;
-            m = m < 10 ? '0' + m : m;
-            return `${h}:${m}`;
-        }
-
-
-        var fullDate = days[startDate.getDay()] + " " + startDate.getDate() + " " + months[startDate.getMonth()] + " " + [startDate.getFullYear()];
-
-        date.innerHTML = fullDate;
-
-        // Set button text
-        addBtn.innerHTML = `Add flight (£${flight.connection.cost})`;
-        addBtn.addEventListener('click', function () {
-            addToBasket(flight, fullDate);
-        });
-
-
-        // Set departure and arrival time text
-        // var startHours = startDate.getHours();
-        // If getMinutes() is less than 10, return a 0, if greater, return an empty string
-
-        times.innerHTML = "Departing at " + startDate.getHours() + ":" + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes()
-            + ", Arriving at " + arrivalTime;
-
-        // Set class for styling
-        section.setAttribute("class", "flight");
-
-        section.appendChild(locations);
-        section.appendChild(date);
-        section.appendChild(times);
-        section.appendChild(addBtn);
-
-        root.appendChild(section);
-
+    function convertMinutesToHoursMinutes(minutes) {
+        let h = Math.floor(minutes / 60);
+        let m = minutes % 60;
+        h = h < 10 ? '0' + h : h;
+        m = m < 10 ? '0' + m : m;
+        return `${h}:${m}`;
     }
 
-}
 
-function getConnection(locationFrom, locationTo, callback) {
+    var fullDate = days[startDate.getDay()] + " " + startDate.getDate() + " " + months[startDate.getMonth()] + " " + [startDate.getFullYear()];
 
-    $.ajax({
+    date.innerHTML = fullDate;
 
-        url: `http://localhost:8000/controller/getConnectionFromTwoLocations.php?locationFrom=${locationFrom}&locationTo=${locationTo}`,
-
-        success: function (result) {
-
-            var data = JSON.parse(result);
-            callback(data);
-
-        }, error: function () {
-
-        }
+    // Set button text
+    addBtn.innerHTML = `Add flight (£${flight.connection.cost})`;
+    addBtn.addEventListener('click', function () {
+        addToBasket(flight, fullDate);
     });
+
+
+    // Set departure and arrival time text
+    // var startHours = startDate.getHours();
+    // If getMinutes() is less than 10, return a 0, if greater, return an empty string
+
+    times.innerHTML = "Departing at " + startDate.getHours() + ":" + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes()
+        + ", Arriving at " + arrivalTime;
+
+    // Set class for styling
+    section.setAttribute("class", "flight");
+
+    section.appendChild(locations);
+    section.appendChild(date);
+    section.appendChild(times);
+    section.appendChild(addBtn);
+
+    root.appendChild(section);
+
+
 }
 
 function addToBasket(flight, dateStr) {
