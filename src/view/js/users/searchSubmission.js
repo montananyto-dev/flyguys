@@ -173,9 +173,20 @@ function addElemsToBasket(flight, dateStr) {
     hiddenId.setAttribute("type", "hidden");
     hiddenId.setAttribute("value", flight.id);
 
+    var buttonRemove = document.createElement('button');
+    buttonRemove.setAttribute('id','removeFromBasket');
+    buttonRemove.innerHTML = 'remove';
+    buttonRemove.value = flight.id ;
+
+    var lineBreak = document.createElement('hr');
+
+
     basketItems.appendChild(dateItem);
+    basketItems.appendChild(buttonRemove);
     basketItems.appendChild(listItem);
     basketItems.appendChild(hiddenId);
+    basketItems.appendChild(lineBreak);
+
 }
 
 function alreadyAdded(id) {
@@ -188,3 +199,22 @@ function alreadyAdded(id) {
     });
     return toReturn;
 }
+
+$("#removeFromBasket").click(function () {
+    var fromValue = $("#from").val();
+    var toValue = $("#to").val();
+
+    var url = `http://localhost:8000/controller/locations/search.php?fromName=${fromValue}&toName=${toValue}`;
+
+    var day = $("#day").val();
+    var date = $("#date").val();
+    if (day != "Day") {
+        url += "&day=" + day;
+    }
+    if (date) {
+        url += "&date=" + date;
+    }
+
+    retrieveData(url);
+    return false;
+})
