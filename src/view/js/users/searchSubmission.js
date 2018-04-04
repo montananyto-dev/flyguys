@@ -1,4 +1,5 @@
 $("#search").click(function () {
+
     var fromValue = $("#from").val();
     var toValue = $("#to").val();
 
@@ -15,6 +16,7 @@ $("#search").click(function () {
 
     retrieveData(url);
     return false;
+
 })
 
 function retrieveData(requestURL) {
@@ -226,3 +228,4 @@ function removeFromBasket(flight,divBasket){
     })
 
 }
+
