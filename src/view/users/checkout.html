@@ -95,8 +95,14 @@
     <section>
         <form id="passengerInfo">
             <section class="passengerDetails">
-                <input type="text" placeholder="name">
+                <input type="text" placeholder="firstName">
+                <input type="text" placeholder="MiddleName">
+                <input type="text" placeholder="LastName">
                 <input type="text" placeholder="passport number">
+                <input type="text" placeholder="identify_card">
+                <input type="text" placeholder="countryCode">
+                <input type="date" placeholder="DOB">
+
             </section>
 
 
@@ -185,19 +191,54 @@
         });
 
         function createPassengerDetailsSection() {
-            var passengerName = document.createElement("input");
-            passengerName.setAttribute("type", "text");
-            passengerName.setAttribute("placeholder", "name");
 
-            var passportNum = document.createElement("input");
-            passportNum.setAttribute("type", "text");
-            passportNum.setAttribute("placeholder", "passport number");
+            var passengerFirstName = document.createElement("input");
+            passengerFirstName.setAttribute("type", "text");
+            passengerFirstName.setAttribute("placeholder", "firstName");
+
+            var passengerMiddleName = document.createElement("input");
+            passengerMiddleName.setAttribute("type", "text");
+            passengerMiddleName.setAttribute("placeholder", "middleName");
+
+            var passengerLastName = document.createElement("input");
+            passengerLastName.setAttribute("type", "text");
+            passengerLastName.setAttribute("placeholder", "lastName");
+
+            var passportNumber = document.createElement("input");
+            passportNumber.setAttribute("type", "text");
+            passportNumber.setAttribute("placeholder", "passportNumber");
+
+            var identifyCard = document.createElement("input");
+            identifyCard.setAttribute("type", "text");
+            identifyCard.setAttribute("placeholder", "identifyCard");
+
+            var countryCode = document.createElement("input");
+            countryCode.setAttribute("type", "text");
+            countryCode.setAttribute("placeholder", "countryCode");
+
+            var dateOfBirth = document.createElement("input");
+            dateOfBirth.setAttribute("type", "date");
+            dateOfBirth.setAttribute("placeholder", "dateOfBirth");
 
             var section = document.createElement("section");
             section.setAttribute("class", "passengerDetails");
 
-            section.appendChild(passengerName);
-            section.appendChild(passportNum);
+            var buttonRemove = document.createElement("button");
+            buttonRemove.innerHTML = "remove";
+            buttonRemove.addEventListener("click",function(){
+
+             $(this).parent().remove();
+
+            })
+
+            section.appendChild(passengerFirstName);
+            section.appendChild(passengerMiddleName);
+            section.appendChild(passengerLastName);
+            section.appendChild(passportNumber);
+            section.appendChild(identifyCard);
+            section.appendChild(countryCode);
+            section.appendChild(dateOfBirth);
+            section.appendChild(buttonRemove);
 
             document.querySelector("#passengerInfo").appendChild(section);
         }
