@@ -75,8 +75,6 @@ function generateResults(root, flights) {
 
 function generateResult(root, flight) {
 
-    console.log(flight);
-
     var locations = document.createElement("h3");
     var addBtn = document.createElement("button");
     var date = document.createElement("em");
@@ -143,21 +141,21 @@ function generateResult(root, flight) {
 function addToBasket(flight, dateStr) {
 
     if (alreadyAdded(flight.id)) {
-        console.log("Item already added");
-        return;
+        alert("The flight " + flight.id+ " is aready in your basket");
+
+    }else{
+
+        var cookie = getCookieValue("idCode");
+        var url = `http://localhost:8000/controller/bookings/addBooking.php?cookie=${cookie}&flightId=${flight.id}`;
+
+        $.ajax({
+            url: url,
+            success: function (result) {
+                console.log("Added flightId: " + flight.id + " to booking of account: " + getCookieValue("idCode"));
+                addElemsToBasket(flight, dateStr);
+            }
+        });
     }
-
-    var cookie = getCookieValue("idCode");
-    var url = `http://localhost:8000/controller/bookings/addBooking.php?cookie=${cookie}&flightId=${flight.id}`;
-
-    $.ajax({
-        url: url,
-        success: function (result) {
-            console.log("Added flightId: " + flight.id + " to booking of account: " + getCookieValue("idCode"));
-        }
-    });
-
-    addElemsToBasket(flight, dateStr);
 }
 
 function addElemsToBasket(flight, dateStr) {
@@ -210,15 +208,19 @@ function alreadyAdded(id) {
 
 function removeFromBasket(flight,divBasket){
 
+    var cookie = getCookieValue("idCode");
+
     $.ajax({
 
-        url: url = `http://localhost:8000/controller/locations/search.php?fromName=${fromValue}&toName=${toValue}`,
+        url: url = `http://localhost:8000/controller/bookings/removeBooking.php?cookie=${cookie}&toName=${toValue}`,
 
+        success:function(result){
+
+            alert(flight.id);
+            $(divBasket).fadeOut();
+
+        }
 
     })
-
-    alert(flight.id);
-    $(divBasket).fadeOut();
-
 
 }

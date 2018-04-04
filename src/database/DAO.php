@@ -317,6 +317,25 @@ class DAO
         $params = array("id" => $accId);
         $result = $this->classQuery($sql, "Booking", $params);
 
+        if (count($result) <= 0) {
+
+            return 'No results';
+
+        } else {
+
+            return $result[0];
+        }
+
+
+    }
+
+    public function getSinglePendingBooking($accObj,$flightId)
+    {
+        $accId = $accObj->id;
+        $sql = "SELECT * FROM booking WHERE account_id=:id AND state_id=1";
+        $params = array("id" => $accId);
+        $result = $this->classQuery($sql, "Booking", $params);
+
         return $result[0];
     }
 

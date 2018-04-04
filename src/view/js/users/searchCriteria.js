@@ -1,9 +1,5 @@
 $.ajax({url: "http://localhost:8000/controller/locations/names.php", success: function(result) {
     var fromLocations = JSON.parse(result);
-
-    console.log(fromLocations);
-
-
     // For From Locations - Generate DataList and set valid inputs
     setDataList(document.querySelector("#fromlist"), fromLocations);
     setValidInputs(document.querySelector("#from"), fromLocations);
@@ -11,7 +7,7 @@ $.ajax({url: "http://localhost:8000/controller/locations/names.php", success: fu
     $("#from").focusout(function() {
         var selectedFromLocation = document.getElementById("from").value;
         $.ajax({url: `http://localhost:8000/controller/locations/getConnectedLocations.php?name=${selectedFromLocation}`, success: function(result) {
-            console.log(result);
+
             var toLocations = JSON.parse(result);
             deleteChildItems(document.querySelector("#tolist"));
             setDataList(document.querySelector("#tolist"), toLocations);

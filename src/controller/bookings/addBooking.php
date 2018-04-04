@@ -11,9 +11,14 @@ $acc = DAO::getInstance()->getAccountByCookie($cookie);
 
 $pendingBooking = DAO::getInstance()->getPendingBookings($acc);
 
-if(!isset($pendingBooking)) {
-    $pendingBooking = DAO::getInstance()->createPendingBooking($acc);
-}
+if (is_object($pendingBooking)) {
 
-//Add flight id
-DAO::getInstance()->addFlightToBooking($pendingBooking, $_GET['flightId']);
+    $result = DAO::getInstance()->addFlightToBooking($pendingBooking, $_GET['flightId']);
+
+} else {
+
+    $pendingBooking = DAO::getInstance()->createPendingBooking($acc);
+
+    $result = DAO::getInstance()->addFlightToBooking($pendingBooking, $_GET['flightId']);
+
+}

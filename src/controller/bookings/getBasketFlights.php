@@ -12,8 +12,13 @@ $acc = DAO::getInstance()->getAccountByCookie($cookie);
 
 $pendingBooking = DAO::getInstance()->getPendingBookings($acc);
 
-if(isset($pendingBooking)) {
+if (is_object($pendingBooking)) {
+
     $toEncode = DAO::getInstance()->getFlightsByBooking($pendingBooking);
+    echo json_encode($toEncode);
+
+} else {
+
+    echo json_encode($toEncode);
 }
 
-echo json_encode($toEncode);
