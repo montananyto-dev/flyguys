@@ -2,7 +2,7 @@ $("#search").click(function () {
     var fromValue = $("#from").val();
     var toValue = $("#to").val();
 
-    var url = `http://localhost:8000/controller/locations/search.php?fromName=${fromValue}&toName=${toValue}`
+    var url = `http://localhost:8000/controller/locations/search.php?fromName=${fromValue}&toName=${toValue}`;
 
     var day = $("#day").val();
     var date = $("#date").val();
