@@ -296,37 +296,36 @@ function addButtonSubmitToForm() {
     var submitButton = document.createElement('button');
     submitButton.setAttribute('id', 'finalSubmit');
     submitButton.innerHTML = 'pay now';
-    submitButton.setAttribute('type', 'submit');
-
 
     $('#validPassengers').after(submitButton);
 
-}
-
-
-$(function () {
-
-    $('#finalSubmit').on('submit', function (e) {
+    submitButton.addEventListener('click', function (e) {
 
         e.preventDefault();
 
         var formData = JSON.stringify($('#passengerInfo').serializeArray());
         console.log(formData);
 
-        $.ajax({
+        if (confirm('Would you like to pay now')) {
 
-            type: "POST",
-            url: `http://localhost:8000/controller/makePayment.php?cookie=${getCookieValue("idCode")}`,
-            data: formData,
-            dataType: "json",
-            contentType: "application/json",
+            $.ajax({
 
-            success: function (result) {
+                type: "POST",
+                url: `http://localhost:8000/controller/makePayment.php?cookie=${getCookieValue("idCode")}`,
+                data: formData,
+                dataType: "json",
+                contentType: "application/json",
+
+                success: function (result) {
 
 
-            }, error() {
+                }, error() {
 
-            }
-        })
+                }
+            })
+        }
+
     })
-});
+}
+
+
