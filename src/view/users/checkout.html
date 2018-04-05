@@ -126,25 +126,49 @@
     <div class="signup-modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
-            <h1>Login</h1>
-            <form>
+            <h1>Sign up</h1>
+            <form action="" method="GET">
                 <input placeholder="email">
                 <input placeholder="password">
                 <input placeholder="confirm password">
-                <input type="submit">
+                <button id="signupBtn">Submit</button>
             </form>
         </div>
     </div>
 
 
     <script>
-        $("#payBtn").click(function() {
-            document.querySelector(".signup-modal").classList.toggle("show-modal");
-        });
-        $(".close-button").click(function() {
-            document.querySelector(".signup-modal").classList.toggle("show-modal");
-        });
+        $.ajax({
+            url: `http://localhost:8000/controller/accounts/getAccountDetails.php?cookie=${getCookieValue("idCode")}`,
+            success: function(result) {
+                var accountDetails = JSON.parse(result);
 
+                if(accountDetails.email==null) {
+                    $("#payBtn").click(function() {
+                        document.querySelector(".signup-modal").classList.toggle("show-modal");
+                    });
+                    $(".close-button").click(function() {
+                        document.querySelector(".signup-modal").classList.toggle("show-modal");
+                    });
+                } else {
+                    $("#payBtn").click(function() {
+                        document.querySelector(".login-modal").classList.toggle("show-modal");
+                    });
+                    $(".close-button").click(function() {
+                        document.querySelector(".login-modal").classList.toggle("show-modal");
+                    });
+                }
+            }
+
+        });
+    </script>
+
+    <script>
+        $("#signupBtn").click(function() {
+           //get values in signup form
+
+           //submit to end-point
+        });
     </script>
 
     <script>
@@ -235,7 +259,7 @@
 
              $(this).parent().remove();
 
-            })
+            });
 
             section.appendChild(passengerFirstName);
             section.appendChild(passengerMiddleName);
