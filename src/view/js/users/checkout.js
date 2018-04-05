@@ -50,7 +50,6 @@ $.ajax({
 
         var list = document.querySelector("#checkoutFlights");
         flights.forEach(function (flight) {
-            console.log(flight);
             var item = document.createElement("li");
             item.innerHTML = flight.connection.fromLocation.name + " to " + flight.connection.toLocation.name;
 
@@ -71,13 +70,13 @@ $('#addPassengers').on('click', function (e) {
 
     var numberOfPassengers = $('.numberOfPassengers').val();
 
-    // if (numberOfPassengers == 0) {
-    //     alert('Add a minimum of one passenger');
-    // } else {
-    var root = document.querySelector(".passengers");
-    clearNumberOfPassengers(root);
-    createPassengerDetailsSection(numberOfPassengers);
-    // }
+    if (numberOfPassengers == 0) {
+        alert('Add a minimum of one passenger');
+    } else {
+        var root = document.querySelector(".passengers");
+        clearNumberOfPassengers(root);
+        createPassengerDetailsSection(numberOfPassengers);
+    }
 });
 
 $('#validPassengers').on('click', function (e) {
@@ -87,35 +86,35 @@ $('#validPassengers').on('click', function (e) {
     var numberOfPassengers = $('.numberOfPassengers').val();
     var checkPassengerDiv = $('.passengers > section').length;
 
-    // var check = validationPassengersField();
-    //
-    // if (numberOfPassengers === 0) {
-    //     alert('Please add a passenger');
-    // } else if (checkPassengerDiv === 0) {
-    //     alert("Please valid the number of passengers");
-    // } else if (check) {
-    //
-    //     alert("Please enter the passenger details");
-    //
-    // } else {
-    document.querySelector(".login-modal").classList.toggle("show-modal");
-    // }
+    var check = validationPassengersField();
+
+    if (numberOfPassengers === 0) {
+        alert('Please add a passenger');
+    } else if (checkPassengerDiv === 0) {
+        alert("Please valid the number of passengers");
+    } else if (check) {
+
+        alert("Please enter the passenger details");
+
+    } else {
+        document.querySelector(".login-modal").classList.toggle("show-modal");
+    }
 
 });
 
-// function validationPassengersField() {
-//
-//     var result = $(".passengers input[required]").filter(function () {
-//         return $.trim($(this).val()).length === 0
-//     }).length === 0;
-//
-//     if (result == true) {
-//         return false;
-//     } else {
-//         return true;
-//     }
-//
-// }
+function validationPassengersField() {
+
+    var result = $(".passengers input[required]").filter(function () {
+        return $.trim($(this).val()).length === 0
+    }).length === 0;
+
+    if (result == true) {
+        return false;
+    } else {
+        return true;
+    }
+
+}
 
 function clearNumberOfPassengers(root) {
     while (root.firstChild) {
@@ -231,7 +230,7 @@ $('#submit-login').on('click', function (e) {
     }
     else if (password.length === 0) {
         alert("Please enter a password");
-    }else {
+    } else {
 
         var formData = JSON.stringify($('#login-form').serializeArray());
 
@@ -245,22 +244,15 @@ $('#submit-login').on('click', function (e) {
 
             success: function (result) {
 
-                console.log( result);
-
-                  if(email === result.email){
-
-                      document.querySelector(".login-modal").classList.toggle("show-modal");
-
-                      addButtonSubmitToForm();
-                  }
-
+                if (email === result.email) {
+                    document.querySelector(".login-modal").classList.toggle("show-modal");
+                    addButtonSubmitToForm();
+                }
             }, error() {
 
             }
-
         })
     }
-
 });
 
 $('#submit-signUp').on('click', function (e) {
@@ -280,11 +272,8 @@ $('#submit-signUp').on('click', function (e) {
 
     else if (password.length === 0 || passwordConfirmation === 0) {
         alert("Please enter a password");
-    }else{
-
-
+    } else {
         var formData = JSON.stringify($('#signUp-form').serializeArray());
-        console.log(formData);
 
         $.ajax({
 
@@ -295,22 +284,19 @@ $('#submit-signUp').on('click', function (e) {
             contentType: "application/json",
 
             success: function (result) {
-
                 alert(result);
-
             }, error() {
-
             }
         })
     }
 });
 
-function addButtonSubmitToForm(){
+function addButtonSubmitToForm() {
 
     var submitButton = document.createElement('button');
-    submitButton.setAttribute('id','finalSubmit');
+    submitButton.setAttribute('id', 'finalSubmit');
     submitButton.innerHTML = 'pay now';
-    submitButton.setAttribute('type','submit');
+    submitButton.setAttribute('type', 'submit');
 
 
     $('#validPassengers').after(submitButton);
@@ -323,8 +309,6 @@ $(function () {
     $('#finalSubmit').on('submit', function (e) {
 
         e.preventDefault();
-
-        alert('test');
 
         var formData = JSON.stringify($('#passengerInfo').serializeArray());
         console.log(formData);
