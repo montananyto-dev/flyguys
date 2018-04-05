@@ -6,9 +6,6 @@ require_once __DIR__ . "/../../model/Account.php";
 $data = json_decode(file_get_contents('php://input'), true);
 $cookie = $_GET['cookie'];
 
-
-var_dump($data);
-
 $invalid = "The account does not exist, please sign up";
 $passwordInvalid = "The password does not match the email account";
 

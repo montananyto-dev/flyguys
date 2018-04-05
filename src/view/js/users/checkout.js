@@ -84,9 +84,9 @@ $('#validPassengers').on('click', function (e) {
 
     e.preventDefault();
 
-    // var numberOfPassengers = $('.numberOfPassengers').val();
-    // var checkPassengerDiv = $('.passengers > section').length;
-    //
+    var numberOfPassengers = $('.numberOfPassengers').val();
+    var checkPassengerDiv = $('.passengers > section').length;
+
     // var check = validationPassengersField();
     //
     // if (numberOfPassengers === 0) {
@@ -103,19 +103,19 @@ $('#validPassengers').on('click', function (e) {
 
 });
 
-function validationPassengersField() {
-
-    var result = $(".passengers input[required]").filter(function () {
-        return $.trim($(this).val()).length === 0
-    }).length === 0;
-
-    if (result == true) {
-        return false;
-    } else {
-        return true;
-    }
-
-}
+// function validationPassengersField() {
+//
+//     var result = $(".passengers input[required]").filter(function () {
+//         return $.trim($(this).val()).length === 0
+//     }).length === 0;
+//
+//     if (result == true) {
+//         return false;
+//     } else {
+//         return true;
+//     }
+//
+// }
 
 function clearNumberOfPassengers(root) {
     while (root.firstChild) {
@@ -194,7 +194,6 @@ $('#login-modal').on('click', function (e) {
 
 });
 
-
 $('#signUp').on('click', function (e) {
 
     e.preventDefault();
@@ -202,7 +201,6 @@ $('#signUp').on('click', function (e) {
     document.querySelector(".signUp-modal").classList.toggle("show-modal");
 
 });
-
 
 $('#login').on('click', function (e) {
 
@@ -228,19 +226,14 @@ $('#submit-login').on('click', function (e) {
     var email = $('#email-login').val();
     var password = $('#password-login').val();
 
-    console.log(email);
-    console.log(password);
-    //
-    // if (email.length < 5) {
-    //     alert("Please ensure that your email is valid");
-    // }
-    // else if (password.length === 0) {
-    //     alert("Please enter a password");
-    // }else {
+    if (email.length < 5) {
+        alert("Please ensure that your email is valid");
+    }
+    else if (password.length === 0) {
+        alert("Please enter a password");
+    }else {
 
         var formData = JSON.stringify($('#login-form').serializeArray());
-
-        console.log(formData);
 
         $.ajax({
 
@@ -252,17 +245,23 @@ $('#submit-login').on('click', function (e) {
 
             success: function (result) {
 
-                alert(result);
+                console.log( result);
+
+                  if(email === result.email){
+
+                      document.querySelector(".login-modal").classList.toggle("show-modal");
+
+                      addButtonSubmitToForm();
+                  }
 
             }, error() {
 
             }
 
         })
-    // }
+    }
 
 });
-
 
 $('#submit-signUp').on('click', function (e) {
 
@@ -304,4 +303,46 @@ $('#submit-signUp').on('click', function (e) {
             }
         })
     }
+});
+
+function addButtonSubmitToForm(){
+
+    var submitButton = document.createElement('button');
+    submitButton.setAttribute('id','finalSubmit');
+    submitButton.innerHTML = 'pay now';
+    submitButton.setAttribute('type','submit');
+
+
+    $('#validPassengers').after(submitButton);
+
+}
+
+
+$(function () {
+
+    $('#finalSubmit').on('submit', function (e) {
+
+        e.preventDefault();
+
+        alert('test');
+
+        var formData = JSON.stringify($('#passengerInfo').serializeArray());
+        console.log(formData);
+
+        $.ajax({
+
+            type: "POST",
+            url: `http://localhost:8000/controller/makePayment.php?cookie=${getCookieValue("idCode")}`,
+            data: formData,
+            dataType: "json",
+            contentType: "application/json",
+
+            success: function (result) {
+
+
+            }, error() {
+
+            }
+        })
+    })
 });

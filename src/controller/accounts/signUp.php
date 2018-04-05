@@ -21,8 +21,6 @@ if (is_object($accounts)) {
 
     $account = DAO::getInstance()->getAccountByEmail($email);
 
-    var_dump($account);
-
     echo json_encode($account);
 
 }
