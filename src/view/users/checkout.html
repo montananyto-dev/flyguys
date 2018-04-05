@@ -15,270 +15,60 @@
 
     <link rel="stylesheet" type="text/css" href="../css/users/checkout.css">
 
-    <style>
-        .login-modal, .signup-modal {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            visibility: hidden;
-            transform: scale(1.1);
-            transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
-        }
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 1rem 1.5rem;
-            width: 24rem;
-            border-radius: 0.5rem;
-        }
-        .close-button {
-            float: right;
-            width: 1.5rem;
-            line-height: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 0.25rem;
-            background-color: lightgray;
-        }
-        .close-button:hover {
-            background-color: darkgray;
-        }
-        .show-modal {
-            opacity: 1;
-            visibility: visible;
-            transform: scale(1.0);
-            transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
-        }
-
-    </style>
-
 </head>
 <body>
-    <script>
-        function getCookieValue(cname) {
-            var name = cname + "=";
-            var decodedCookie = decodeURIComponent(document.cookie);
-            var ca = decodedCookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
-                }
-                if (c.indexOf(name) == 0) {
-                    return c.substring(name.length, c.length);
-                }
-            }
-            return null;
-        }
 
-        if(getCookieValue("idCode")==null) {
-            alert("No cookie, wtf!");
-            // leave page
-        }
+<h1>Checkout</h1>
 
-
-
-    </script>
-
-    <h1>Checkout</h1>
+<form id="passengerInfo">
 
     <ul id="checkoutFlights">
+
     </ul>
+    <label>Number of passengers</label>
+    <input class="numberOfPassengers" type="number" min="1" max="5">
+    <button id="addPassengers">valid number of passengers</button>
+    <div class="passengers">
 
-    <section>
-        <form id="passengerInfo">
-            <section class="passengerDetails" id ="1">
-                <input type="text" placeholder="firstName">
-                <input type="text" placeholder="MiddleName">
-                <input type="text" placeholder="LastName">
-                <input type="text" placeholder="passport number">
-                <input type="text" placeholder="identify_card">
-                <input type="text" placeholder="countryCode">
-                <input type="date" placeholder="DOB">
+    </div>
 
-            </section>
-
-
-        </form>
-        <a href="#" id="addPassenger">+ add passenger</a>
-    </section>
-
-    <button id="payBtn">Pay</button>
+    <button id="validPassengers">Valid passengers</button>
 
     <div class="login-modal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
+            <span class="close-button-login">&times;</span>
             <h1>Login</h1>
-            <form>
+            <form action="#" method="GET">
                 <input placeholder="email">
                 <input placeholder="password">
-                <input type="submit">
+                <button type="submit" id="submit-login">Submit</button>
+                <br/>
+                <br/>
+                <label>Or Sign up</label>
+                <button id="signUp">sign up</button>
             </form>
         </div>
     </div>
-    <div class="signup-modal">
+
+    <div class="signUp-modal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
+            <span class="close-button-signUp">&times;</span>
             <h1>Sign up</h1>
-            <form action="" method="GET">
+            <form action="#" method="GET">
                 <input placeholder="email">
                 <input placeholder="password">
                 <input placeholder="confirm password">
-                <button id="signupBtn">Submit</button>
+                <button type="submit" id="submit-signUp">Submit</button>
+                <br/>
+                <br/>
+                <label>Or Login</label>
+                <button id="login">Login</button>
             </form>
         </div>
     </div>
 
-
-    <script>
-        $.ajax({
-            url: `http://localhost:8000/controller/accounts/getAccountDetails.php?cookie=${getCookieValue("idCode")}`,
-            success: function(result) {
-                var accountDetails = JSON.parse(result);
-
-                if(accountDetails.email==null) {
-                    $("#payBtn").click(function() {
-                        document.querySelector(".signup-modal").classList.toggle("show-modal");
-                    });
-                    $(".close-button").click(function() {
-                        document.querySelector(".signup-modal").classList.toggle("show-modal");
-                    });
-                } else {
-                    $("#payBtn").click(function() {
-                        document.querySelector(".login-modal").classList.toggle("show-modal");
-                    });
-                    $(".close-button").click(function() {
-                        document.querySelector(".login-modal").classList.toggle("show-modal");
-                    });
-                }
-            }
-
-        });
-    </script>
-
-    <script>
-        $("#signupBtn").click(function() {
-           //get values in signup form
-
-           //submit to end-point
-        });
-    </script>
-
-    <script>
-
-        var globalKVP = {};
-
-        $.ajax({
-            url: `http://localhost:8000/controller/bookings/getBasketFlights.php?cookie=${getCookieValue("idCode")}`,
-            success: function(result) {
-                var flights = JSON.parse(result);
-
-                console.log(flights);
-
-                var list = document.querySelector("#checkoutFlights");
-                flights.forEach(function(flight) {
-                    console.log(flight);
-                    var item = document.createElement("li");
-                    item.innerHTML = flight.connection.fromLocation.name + " to " + flight.connection.toLocation.name;
-
-                    item.addEventListener("click", function() {
-                        switchContext(flight.id, getCurrentPassengers());
-                    });
-
-                    list.appendChild(item);
-                });
-
-            }
-
-        });
-
-        function switchContext(id, toSave) {
-            console.log("Clickky" + id);
-            if(globalKVP[id]==undefined) {
-                globalKVP[id] = "hello";
-            }
-            console.log(globalKVP);
-        }
-
-
-
-
-        document.querySelector("#addPassenger").addEventListener("click", function() {
-
-            var numberOfPassengers = $('#passengerInfo section').length;
-            createPassengerDetailsSection(numberOfPassengers);
-        });
-
-        function createPassengerDetailsSection(numberOfPassengers) {
-
-
-            numberOfPassengers += 1;
-
-            var passengerFirstName = document.createElement("input");
-            passengerFirstName.setAttribute("type", "text");
-            passengerFirstName.setAttribute("placeholder", "firstName");
-
-            var passengerMiddleName = document.createElement("input");
-            passengerMiddleName.setAttribute("type", "text");
-            passengerMiddleName.setAttribute("placeholder", "middleName");
-
-            var passengerLastName = document.createElement("input");
-            passengerLastName.setAttribute("type", "text");
-            passengerLastName.setAttribute("placeholder", "lastName");
-
-            var passportNumber = document.createElement("input");
-            passportNumber.setAttribute("type", "text");
-            passportNumber.setAttribute("placeholder", "passportNumber");
-
-            var identifyCard = document.createElement("input");
-            identifyCard.setAttribute("type", "text");
-            identifyCard.setAttribute("placeholder", "identifyCard");
-
-            var countryCode = document.createElement("input");
-            countryCode.setAttribute("type", "text");
-            countryCode.setAttribute("placeholder", "countryCode");
-
-            var dateOfBirth = document.createElement("input");
-            dateOfBirth.setAttribute("type", "date");
-            dateOfBirth.setAttribute("placeholder", "dateOfBirth");
-
-            var section = document.createElement("section");
-            section.setAttribute("class", "passengerDetails");
-            section.setAttribute("id", numberOfPassengers.toString());
-
-            var buttonRemove = document.createElement("button");
-            buttonRemove.innerHTML = "remove";
-            buttonRemove.addEventListener("click",function(){
-
-             $(this).parent().remove();
-
-            });
-
-            section.appendChild(passengerFirstName);
-            section.appendChild(passengerMiddleName);
-            section.appendChild(passengerLastName);
-            section.appendChild(passportNumber);
-            section.appendChild(identifyCard);
-            section.appendChild(countryCode);
-            section.appendChild(dateOfBirth);
-            section.appendChild(buttonRemove);
-
-            document.querySelector("#passengerInfo").appendChild(section);
-        }
-
-        function getCurrentPassengers() {
-            // to resume, related to saving current passenger upon ContextSwtich.
-            $("#passengerInfo").children;
-        }
-    </script>
-
+</form>
 
 </body>
+<script src="../js/users/checkout.js"></script>
 </html>
