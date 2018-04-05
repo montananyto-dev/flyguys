@@ -43,12 +43,6 @@ if (getCookieValue("idCode") == null) {
 //
 // });
 
-$("#signupBtn").click(function () {
-    //get values in signup form
-
-    //submit to end-point
-});
-
 $.ajax({
     url: `http://localhost:8000/controller/bookings/getBasketFlights.php?cookie=${getCookieValue("idCode")}`,
     success: function (result) {
@@ -77,35 +71,35 @@ $('#addPassengers').on('click', function (e) {
 
     var numberOfPassengers = $('.numberOfPassengers').val();
 
-    if (numberOfPassengers == 0) {
-        alert('Add a minimum of one passenger');
-    } else {
-        var root = document.querySelector(".passengers");
-        clearNumberOfPassengers(root);
-        createPassengerDetailsSection(numberOfPassengers);
-    }
+    // if (numberOfPassengers == 0) {
+    //     alert('Add a minimum of one passenger');
+    // } else {
+    var root = document.querySelector(".passengers");
+    clearNumberOfPassengers(root);
+    createPassengerDetailsSection(numberOfPassengers);
+    // }
 });
 
 $('#validPassengers').on('click', function (e) {
 
     e.preventDefault();
 
-    var numberOfPassengers = $('.numberOfPassengers').val();
-    var checkPassengerDiv = $('.passengers > section').length;
-
-    var check = validationPassengersField();
-
-    if (numberOfPassengers === 0) {
-        alert('Please add a passenger');
-    } else if (checkPassengerDiv === 0) {
-        alert("Please valid the number of passengers");
-    } else if (check) {
-
-        alert("Please enter the passenger details");
-
-    } else {
-        document.querySelector(".login-modal").classList.toggle("show-modal");
-    }
+    // var numberOfPassengers = $('.numberOfPassengers').val();
+    // var checkPassengerDiv = $('.passengers > section').length;
+    //
+    // var check = validationPassengersField();
+    //
+    // if (numberOfPassengers === 0) {
+    //     alert('Please add a passenger');
+    // } else if (checkPassengerDiv === 0) {
+    //     alert("Please valid the number of passengers");
+    // } else if (check) {
+    //
+    //     alert("Please enter the passenger details");
+    //
+    // } else {
+    document.querySelector(".login-modal").classList.toggle("show-modal");
+    // }
 
 });
 
@@ -136,36 +130,43 @@ function createPassengerDetailsSection(numberOfPassengers) {
         var passengerFirstName = document.createElement("input");
         passengerFirstName.setAttribute("type", "text");
         passengerFirstName.setAttribute("placeholder", "firstName");
+        passengerFirstName.setAttribute("name", "fname");
         passengerFirstName.setAttribute("required", "");
 
         var passengerMiddleName = document.createElement("input");
         passengerMiddleName.setAttribute("type", "text");
         passengerMiddleName.setAttribute("placeholder", "middleName");
+        passengerMiddleName.setAttribute("name", "mname");
         passengerMiddleName.setAttribute("required", "");
 
         var passengerLastName = document.createElement("input");
         passengerLastName.setAttribute("type", "text");
         passengerLastName.setAttribute("placeholder", "lastName");
+        passengerLastName.setAttribute("name", "lname");
         passengerLastName.setAttribute("required", "");
 
         var passportNumber = document.createElement("input");
         passportNumber.setAttribute("type", "text");
         passportNumber.setAttribute("placeholder", "passportNumber");
+        passportNumber.setAttribute("name", "passport_number");
         passportNumber.setAttribute("required", "");
 
         var identifyCard = document.createElement("input");
         identifyCard.setAttribute("type", "text");
         identifyCard.setAttribute("placeholder", "identifyCard");
+        identifyCard.setAttribute("name", "identify_card");
         identifyCard.setAttribute("required", "");
 
         var countryCode = document.createElement("input");
         countryCode.setAttribute("type", "text");
         countryCode.setAttribute("placeholder", "countryCode");
+        countryCode.setAttribute("name", "country_code");
         countryCode.setAttribute("required", "");
 
         var dateOfBirth = document.createElement("input");
         dateOfBirth.setAttribute("type", "date");
         dateOfBirth.setAttribute("placeholder", "dateOfBirth");
+        dateOfBirth.setAttribute("name", "dob");
         dateOfBirth.setAttribute("required", "");
 
         var section = document.createElement("section");
@@ -185,12 +186,6 @@ function createPassengerDetailsSection(numberOfPassengers) {
 
     }
 }
-
-function getCurrentPassengers() {
-    // to resume, related to saving current passenger upon ContextSwtich.
-    $("#passengerInfo").children;
-}
-
 
 $('#login-modal').on('click', function (e) {
 
@@ -217,12 +212,12 @@ $('#login').on('click', function (e) {
 
 });
 
-$(".close-button-login").on('click',function () {
+$(".close-button-login").on('click', function () {
 
     document.querySelector(".login-modal").classList.toggle("show-modal");
 });
 
-$(".close-button-signUp").on('click',function () {
+$(".close-button-signUp").on('click', function () {
 
     document.querySelector(".signUp-modal").classList.toggle("show-modal");
 });
@@ -230,7 +225,41 @@ $(".close-button-signUp").on('click',function () {
 $('#submit-login').on('click', function (e) {
 
     e.preventDefault();
-    alert('submit login');
+    var email = $('#email-login').val();
+    var password = $('#password-login').val();
+
+    console.log(email);
+    console.log(password);
+    //
+    // if (email.length < 5) {
+    //     alert("Please ensure that your email is valid");
+    // }
+    // else if (password.length === 0) {
+    //     alert("Please enter a password");
+    // }else {
+
+        var formData = JSON.stringify($('#login-form').serializeArray());
+
+        console.log(formData);
+
+        $.ajax({
+
+            type: "POST",
+            url: `http://localhost:8000/controller/accounts/login.php?cookie=${getCookieValue("idCode")}`,
+            data: formData,
+            dataType: "json",
+            contentType: "application/json",
+
+            success: function (result) {
+
+                alert(result);
+
+            }, error() {
+
+            }
+
+        })
+    // }
 
 });
 
@@ -238,6 +267,41 @@ $('#submit-login').on('click', function (e) {
 $('#submit-signUp').on('click', function (e) {
 
     e.preventDefault();
-    alert('submit signUp');
 
+    var email = $('#email-signUp').val();
+    var password = $('#password-signUp').val();
+    var passwordConfirmation = $('#passwordConfirmation-signUp').val();
+
+    if (password != passwordConfirmation) {
+        alert("Please ensure that the passwords are the same");
+    }
+    else if (email.length < 5) {
+        alert("Please ensure that your email is valid");
+    }
+
+    else if (password.length === 0 || passwordConfirmation === 0) {
+        alert("Please enter a password");
+    }else{
+
+
+        var formData = JSON.stringify($('#signUp-form').serializeArray());
+        console.log(formData);
+
+        $.ajax({
+
+            type: "POST",
+            url: `http://localhost:8000/controller/accounts/signUp.php?cookie=${getCookieValue("idCode")}`,
+            data: formData,
+            dataType: "json",
+            contentType: "application/json",
+
+            success: function (result) {
+
+                alert(result);
+
+            }, error() {
+
+            }
+        })
+    }
 });

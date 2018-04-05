@@ -34,18 +34,24 @@
 
     <button id="validPassengers">Valid passengers</button>
 
+</form>
+
     <div class="login-modal">
         <div class="modal-content">
             <span class="close-button-login">&times;</span>
             <h1>Login</h1>
-            <form action="#" method="GET">
-                <input placeholder="email">
-                <input placeholder="password">
+
+            <form id="login-form">
+
+                <input id="email-login" placeholder="email" type="email" name="email">
+                <input id="password-login" placeholder="password" type="password" name="password">
+
                 <button type="submit" id="submit-login">Submit</button>
                 <br/>
                 <br/>
                 <label>Or Sign up</label>
                 <button id="signUp">sign up</button>
+
             </form>
         </div>
     </div>
@@ -54,20 +60,24 @@
         <div class="modal-content">
             <span class="close-button-signUp">&times;</span>
             <h1>Sign up</h1>
-            <form action="#" method="GET">
-                <input placeholder="email">
-                <input placeholder="password">
-                <input placeholder="confirm password">
+
+            <form id="signUp-form">
+
+                <input id="email-signUp" placeholder="email" type="email" name="email">
+                <input id="password-signUp" placeholder="password" type="password" name="password">
+                <input id="passwordConfirmation-signUp" placeholder="confirm password" type="password" name="passwordConfirmation">
+
                 <button type="submit" id="submit-signUp">Submit</button>
                 <br/>
                 <br/>
                 <label>Or Login</label>
                 <button id="login">Login</button>
+
             </form>
         </div>
     </div>
 
-</form>
+
 
 </body>
 <script src="../js/users/checkout.js"></script>

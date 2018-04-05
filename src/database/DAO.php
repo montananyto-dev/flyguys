@@ -100,6 +100,55 @@ class DAO
 
     }
 
+    // ----------------------------------------------------  PUBLIC METHODS ----------------------------------------------------- //
+
+    public function checkIfAccountExist($data){
+
+        $email = $data[0]['value'];
+
+        $sql = "SELECT * FROM account WHERE email = '$email'";
+        $results = $this->classQuery($sql, "Account");
+
+        if (count($results) <= 0) {
+
+            return 'No results';
+
+        } else {
+
+            return $results[0];
+        }
+
+    }
+
+    public function checkIfAccountExistWithPassword($data){
+
+        $email = $data[0]['value'];
+        $password = $data[1]['value'];
+
+        $sql = "SELECT * FROM account WHERE email = '$email'";
+        $result = $this->classQuery($sql, "Account");
+
+        if (count($result) <= 0) {
+
+            return 'No results';
+
+        } else {
+
+            $hash = $result[0]->password;
+
+            if (password_verify($password, $hash)) {
+
+                return $result[0];
+
+            } else {
+
+                return 'Password is invalid ';
+
+            }
+        }
+
+    }
+
     public function getAccountByCookie($cookieStr)
     {
         $sql = "SELECT * FROM account WHERE cookie = :cookie";
@@ -109,7 +158,14 @@ class DAO
         return $result[0];
     }
 
-    // ----------------------------------------------------  PUBLIC METHODS ----------------------------------------------------- //
+    public function getAccountByEmail($email)
+    {
+        $sql = "SELECT * FROM account WHERE email = '$email'";
+
+        $result = $this->classQuery($sql, "Account");
+
+        return $result[0];
+    }
 
     public function getAllRegionNames()
     {
@@ -304,6 +360,19 @@ class DAO
         return $newId;
     }
 
+    public function addInformationToExistingPendingAccount($data,$cookieStr)
+
+    {
+        $email = $data[0]['value'];
+        $password = $data[1]['value'];
+
+        $hashPassword = password_hash($password, PASSWORD_BCRYPT);
+
+        $result = $this->insertQuery("UPDATE account set email ='$email' ,password = '$hashPassword' WHERE cookie = '$cookieStr'");
+
+        return $email;
+    }
+
     public function addBooking($accountId)
     {
         $newId = $this->insertQuery("INSERT INTO booking(account_id) VALUES($accountId)");
@@ -334,16 +403,6 @@ class DAO
         }
 
 
-    }
-
-    public function getSinglePendingBooking($accObj,$flightId)
-    {
-        $accId = $accObj->id;
-        $sql = "SELECT * FROM booking WHERE account_id=:id AND state_id=1";
-        $params = array("id" => $accId);
-        $result = $this->classQuery($sql, "Booking", $params);
-
-        return $result[0];
     }
 
     public function createPendingBooking($accObj)
