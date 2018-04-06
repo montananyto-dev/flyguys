@@ -1,3 +1,12 @@
+var flights = null;
+var cookieAccount = null;
+var loginAccount = null;
+var signUpAccount = null;
+
+var login = false;
+var signUp = false;
+
+
 function getCookieValue(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -19,35 +28,21 @@ if (getCookieValue("idCode") == null) {
     // leave page
 }
 
-// $.ajax({
-//     url: `http://localhost:8000/controller/accounts/getAccountDetails.php?cookie=${getCookieValue("idCode")}`,
-//     success: function (result) {
-//         var accountDetails = JSON.parse(result);
-//
-//         if (accountDetails.email == null) {
-//             $("#payBtn").click(function () {
-//                 document.querySelector(".signup-modal").classList.toggle("show-modal");
-//             });
-//             $(".close-button").click(function () {
-//                 document.querySelector(".signup-modal").classList.toggle("show-modal");
-//             });
-//         } else {
-//             $("#payBtn").click(function () {
-//                 document.querySelector(".login-modal").classList.toggle("show-modal");
-//             });
-//             $(".close-button").click(function () {
-//                 document.querySelector(".login-modal").classList.toggle("show-modal");
-//             });
-//         }
-//     }
-//
-// });
+$.ajax({
+    url: `http://localhost:8000/controller/accounts/getAccountDetails.php?cookie=${getCookieValue("idCode")}`,
+    success: function (result) {
+        cookieAccount = JSON.parse(result);
+    }, error() {
+
+    }
+
+});
 
 $.ajax({
     url: `http://localhost:8000/controller/bookings/getBasketFlights.php?cookie=${getCookieValue("idCode")}`,
     success: function (result) {
-        var flights = JSON.parse(result);
-
+        flights = JSON.parse(result);
+        console.log(flights);
         var list = document.querySelector("#checkoutFlights");
         flights.forEach(function (flight) {
             var item = document.createElement("li");
@@ -84,7 +79,7 @@ $('#validPassengers').on('click', function (e) {
     e.preventDefault();
 
     var numberOfPassengers = $('.numberOfPassengers').val();
-    var checkPassengerDiv = $('.passengers > section').length;
+    var checkPassengerDiv = $('.passengers > form').length;
 
     var check = validationPassengersField();
 
@@ -97,7 +92,7 @@ $('#validPassengers').on('click', function (e) {
         alert("Please enter the passenger details");
 
     } else {
-        document.querySelector(".login-modal").classList.toggle("show-modal");
+    document.querySelector(".login-modal").classList.toggle("show-modal");
     }
 
 });
@@ -127,7 +122,11 @@ function createPassengerDetailsSection(numberOfPassengers) {
     for (var i = 0; i < numberOfPassengers; i++) {
 
         var idnum = document.createElement("span");
-        idnum.innerText = `Passenger No. ${i+1}: `;
+        idnum.innerText = `Passenger No. ${i + 1}: `;
+
+        var form = document.createElement('form');
+        form.setAttribute("class", "singlePassenger");
+        form.setAttribute("id", "form" + (i + 1));
 
         var passengerFirstName = document.createElement("input");
         passengerFirstName.setAttribute("type", "text");
@@ -148,7 +147,7 @@ function createPassengerDetailsSection(numberOfPassengers) {
         passengerLastName.setAttribute("required", "");
 
         var row1 = document.createElement("div");
-        row1.setAttribute("class","row");
+        row1.setAttribute("class", "row");
 
         row1.appendChild(passengerFirstName);
         row1.appendChild(passengerMiddleName);
@@ -179,23 +178,18 @@ function createPassengerDetailsSection(numberOfPassengers) {
         dateOfBirth.setAttribute("required", "");
 
         var row2 = document.createElement("div");
-        row2.setAttribute("class","row");
+        row2.setAttribute("class", "row");
 
         row2.appendChild(passportNumber);
         row2.appendChild(identifyCard);
         row2.appendChild(countryCode);
         row2.appendChild(dateOfBirth);
 
-        var section = document.createElement("section");
-        section.setAttribute("class", "singlePassenger");
-        section.setAttribute("id", i + 1);
+        form.appendChild(idnum);
+        form.appendChild(row1);
+        form.appendChild(row2);
 
-
-        section.appendChild(idnum);
-        section.appendChild(row1);
-        section.appendChild(row2);
-
-        document.querySelector(".passengers").appendChild(section);
+        document.querySelector(".passengers").appendChild(form);
 
     }
 }
@@ -236,37 +230,57 @@ $(".close-button-signUp").on('click', function () {
 $('#submit-login').on('click', function (e) {
 
     e.preventDefault();
-    var email = $('#email-login').val();
-    var password = $('#password-login').val();
 
-    if (email.length < 5) {
-        alert("Please ensure that your email is valid");
-    }
-    else if (password.length === 0) {
-        alert("Please enter a password");
-    } else {
+        var email = $('#email-login').val();
+        var password = $('#password-login').val();
 
-        var formData = JSON.stringify($('#login-form').serializeArray());
+        if (email.length < 5) {
+            alert("Please ensure that your email is valid");
+        }
+        else if (password.length === 0) {
+            alert("Please enter a password");
+        } else {
 
-        $.ajax({
+            var formData = JSON.stringify($('#login-form').serializeArray());
 
-            type: "POST",
-            url: `http://localhost:8000/controller/accounts/login.php?cookie=${getCookieValue("idCode")}`,
-            data: formData,
-            dataType: "json",
-            contentType: "application/json",
+            $.ajax({
 
-            success: function (result) {
+                type: "POST",
+                url: `http://localhost:8000/controller/accounts/login.php?cookie=${getCookieValue("idCode")}`,
+                data: formData,
+                dataType: "json",
+                contentType: "application/json",
 
-                if (email === result.email) {
-                    document.querySelector(".login-modal").classList.toggle("show-modal");
-                    addButtonSubmitToForm();
+                success: function (result) {
+
+                    if (result === 'The account does not exist, please sign up') {
+                        alert('The account does not exist, please sign up');
+
+                    } else if (result === 'The password does not match the email account') {
+                        alert('The password does not match the email account');
+                    } else {
+                        loginAccount = result;
+
+                        if (email === result.email) {
+
+                            if($('#finalSubmit').length){
+
+
+                            }else{
+                                addButtonSubmitToForm();
+                            }
+                            document.querySelector(".login-modal").classList.toggle("show-modal");
+                            login = true;
+                            $('#validPassengers').remove();
+
+                        }
+                    }
+                }, error() {
+
                 }
-            }, error() {
+            })
+        }
 
-            }
-        })
-    }
 });
 
 $('#submit-signUp').on('click', function (e) {
@@ -298,7 +312,27 @@ $('#submit-signUp').on('click', function (e) {
             contentType: "application/json",
 
             success: function (result) {
+
                 alert(result);
+                if(result==='The account already exist, please login to your account'){
+
+                    document.querySelector(".signUp-modal").classList.toggle("show-modal");
+                    document.querySelector(".login-modal").classList.toggle("show-modal");
+                }else{
+
+                    signUpAccount = result;
+                    signUp = true;
+                    document.querySelector(".signUp-modal").classList.toggle("show-modal");
+                    document.querySelector(".login-modal").classList.toggle("show-modal");
+
+                    if($('#finalSubmit').length){
+
+                    }else{
+                        addButtonSubmitToForm();
+                    }
+
+                }
+
             }, error() {
             }
         })
@@ -317,7 +351,28 @@ function addButtonSubmitToForm() {
 
         e.preventDefault();
 
-        var formData = JSON.stringify($('#passengerInfo').serializeArray());
+        var forms = [];
+
+        $(".passengers").each(function () {
+            forms = ($(this).find('form')); //<-- Should return all input elements in that specific form.
+        });
+
+
+        var formsID = [];
+        for (var i = 0; i < forms.length; i++) {
+            formsID.push(forms[i].id);
+        }
+
+        var formData = [];
+        for (var i = 0; i < formsID.length; i++) {
+            var data = JSON.stringify($('#' + formsID[i]).serializeArray());
+            formData.push(data);
+        }
+
+        formData.push(flights);
+        formData.push(cookieAccount);
+        formData.push(loginAccount);
+
         console.log(formData);
 
         if (confirm('Would you like to pay now')) {
@@ -340,6 +395,9 @@ function addButtonSubmitToForm() {
         }
 
     })
+
 }
+
+
 
 

@@ -28,6 +28,7 @@ ul {
 }
 
 button {
+    margin:auto;
     padding-left: 10px;
     font-size: 20px;
     border-radius: 10px;
