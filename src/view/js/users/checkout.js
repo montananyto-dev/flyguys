@@ -159,6 +159,9 @@ function createPassengerDetailsSection(numberOfPassengers) {
         passportNumber.setAttribute("name", "passport_number");
         passportNumber.setAttribute("required", "");
 
+        var seperator = document.createElement("span");
+        seperator.innerText = "/";
+
         var identifyCard = document.createElement("input");
         identifyCard.setAttribute("type", "text");
         identifyCard.setAttribute("placeholder", "ID Card");
@@ -169,6 +172,7 @@ function createPassengerDetailsSection(numberOfPassengers) {
         row2.setAttribute("class", "row");
 
         row2.appendChild(passportNumber);
+        row2.appendChild(seperator);
         row2.appendChild(identifyCard);
 
         var countryCode = document.createElement("input");
