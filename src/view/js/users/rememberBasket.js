@@ -1,8 +1,6 @@
 var cookie = getCookieValue("idCode");
 
-if(cookie == null){
-
-}else{
+if(cookie != null){
 
     console.log(cookie + " is not null and let check basket");
 

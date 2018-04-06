@@ -121,7 +121,7 @@ function createPassengerDetailsSection(numberOfPassengers) {
 
     for (var i = 0; i < numberOfPassengers; i++) {
 
-        var idnum = document.createElement("span");
+        var idnum = document.createElement("p");
         idnum.innerText = `Passenger No. ${i + 1}: `;
 
         var form = document.createElement('form');
@@ -130,19 +130,19 @@ function createPassengerDetailsSection(numberOfPassengers) {
 
         var passengerFirstName = document.createElement("input");
         passengerFirstName.setAttribute("type", "text");
-        passengerFirstName.setAttribute("placeholder", "firstName");
+        passengerFirstName.setAttribute("placeholder", "First Name");
         passengerFirstName.setAttribute("name", "fname");
         passengerFirstName.setAttribute("required", "");
 
         var passengerMiddleName = document.createElement("input");
         passengerMiddleName.setAttribute("type", "text");
-        passengerMiddleName.setAttribute("placeholder", "middleName");
+        passengerMiddleName.setAttribute("placeholder", "Middle Name");
         passengerMiddleName.setAttribute("name", "mname");
         passengerMiddleName.setAttribute("required", "");
 
         var passengerLastName = document.createElement("input");
         passengerLastName.setAttribute("type", "text");
-        passengerLastName.setAttribute("placeholder", "lastName");
+        passengerLastName.setAttribute("placeholder", "Last Name");
         passengerLastName.setAttribute("name", "lname");
         passengerLastName.setAttribute("required", "");
 
@@ -155,39 +155,43 @@ function createPassengerDetailsSection(numberOfPassengers) {
 
         var passportNumber = document.createElement("input");
         passportNumber.setAttribute("type", "text");
-        passportNumber.setAttribute("placeholder", "passportNumber");
+        passportNumber.setAttribute("placeholder", "Passport Number");
         passportNumber.setAttribute("name", "passport_number");
         passportNumber.setAttribute("required", "");
 
         var identifyCard = document.createElement("input");
         identifyCard.setAttribute("type", "text");
-        identifyCard.setAttribute("placeholder", "identifyCard");
+        identifyCard.setAttribute("placeholder", "ID Card");
         identifyCard.setAttribute("name", "identify_card");
         identifyCard.setAttribute("required", "");
-
-        var countryCode = document.createElement("input");
-        countryCode.setAttribute("type", "text");
-        countryCode.setAttribute("placeholder", "countryCode");
-        countryCode.setAttribute("name", "country_code");
-        countryCode.setAttribute("required", "");
-
-        var dateOfBirth = document.createElement("input");
-        dateOfBirth.setAttribute("type", "date");
-        dateOfBirth.setAttribute("placeholder", "dateOfBirth");
-        dateOfBirth.setAttribute("name", "dob");
-        dateOfBirth.setAttribute("required", "");
 
         var row2 = document.createElement("div");
         row2.setAttribute("class", "row");
 
         row2.appendChild(passportNumber);
         row2.appendChild(identifyCard);
-        row2.appendChild(countryCode);
-        row2.appendChild(dateOfBirth);
+
+        var countryCode = document.createElement("input");
+        countryCode.setAttribute("type", "text");
+        countryCode.setAttribute("placeholder", "Country Code");
+        countryCode.setAttribute("name", "country_code");
+        countryCode.setAttribute("required", "");
+
+        var dateOfBirth = document.createElement("input");
+        dateOfBirth.setAttribute("type", "date");
+        dateOfBirth.setAttribute("name", "dob");
+        dateOfBirth.setAttribute("required", "");
+
+        var row3 = document.createElement("div");
+        row3.setAttribute("class", "row");
+
+        row3.appendChild(countryCode);
+        row3.appendChild(dateOfBirth);
 
         form.appendChild(idnum);
         form.appendChild(row1);
         form.appendChild(row2);
+        form.appendChild(row3);
 
         document.querySelector(".passengers").appendChild(form);
 
