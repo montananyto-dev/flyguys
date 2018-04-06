@@ -302,7 +302,6 @@ $('#submit-login').on('click', function (e) {
                             }
 
                             login(loginAccountDetails);
-
                         }
                     }
                 }, error() {
@@ -431,15 +430,21 @@ function login(loginAccountDetails){
 
     console.log(loginAccountDetails);
 
+    document.cookie = `idCode=${loginAccountDetails.cookie}`;
+
+    console.log(document.cookie);
+
     var email = loginAccountDetails.email;
 
     document.querySelector(".login-modal").classList.toggle("show-modal");
     localStorage.setItem("loginState", "true");
-    localStorage.setItem("loginEmail",email);
+    localStorage.setItem("loginEmail", email);
     $(".logout").show();
     $('#validPassengers').remove();
 
     $('.welcome').html("Welcome " + email);
+
+    location.reload();
 
 }
 
