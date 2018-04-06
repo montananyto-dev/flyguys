@@ -12,7 +12,7 @@ $( document ).ready(function() {
         $('.welcome').html("Welcome " + email);
 
     }else{
-        $('.welcome').html("Welcome ");
+        $('.welcome').html("Welcome, newcomer ");
         $(".logout").hide();
     }
 
