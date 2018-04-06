@@ -1,10 +1,34 @@
-var flights = null;
-var cookieAccount = null;
-var loginAccount = null;
-var signUpAccount = null;
 
-var login = false;
-var signUp = false;
+// function to check the login state
+$( document ).ready(function() {
+
+    var loginState = localStorage.getItem('loginState');
+    var email = localStorage.getItem('loginEmail');
+
+    if(loginState === "true"){
+
+        alert("you are logged in");
+
+        $('.welcome').html("Welcome " + email);
+
+    }else{
+        $('.welcome').html("Welcome ");
+        $(".logout").hide();
+    }
+
+});
+
+$('.logout').on('click', function (e) {
+
+    e.preventDefault();
+    $(".logout").hide();
+    localStorage.setItem("loginState", "false");
+    $('.welcome').html("Welcome ");
+
+});
+
+
+
 
 
 function getCookieValue(cname) {
@@ -31,7 +55,7 @@ if (getCookieValue("idCode") == null) {
 $.ajax({
     url: `http://localhost:8000/controller/accounts/getAccountDetails.php?cookie=${getCookieValue("idCode")}`,
     success: function (result) {
-        cookieAccount = JSON.parse(result);
+       var cookieAccount = JSON.parse(result);
     }, error() {
 
     }
@@ -41,7 +65,7 @@ $.ajax({
 $.ajax({
     url: `http://localhost:8000/controller/bookings/getBasketFlights.php?cookie=${getCookieValue("idCode")}`,
     success: function (result) {
-        flights = JSON.parse(result);
+        var flights = JSON.parse(result);
         console.log(flights);
         var list = document.querySelector("#checkoutFlights");
         flights.forEach(function (flight) {
@@ -267,19 +291,17 @@ $('#submit-login').on('click', function (e) {
                     } else if (result === 'The password does not match the email account') {
                         alert('The password does not match the email account');
                     } else {
-                        loginAccount = result;
+                       var  loginAccountDetails = result;
 
                         if (email === result.email) {
 
                             if($('#finalSubmit').length){
 
-
                             }else{
                                 addButtonSubmitToForm();
                             }
-                            document.querySelector(".login-modal").classList.toggle("show-modal");
-                            login = true;
-                            $('#validPassengers').remove();
+
+                            login(loginAccountDetails);
 
                         }
                     }
@@ -328,8 +350,7 @@ $('#submit-signUp').on('click', function (e) {
                     document.querySelector(".login-modal").classList.toggle("show-modal");
                 }else{
 
-                    signUpAccount = result;
-                    signUp = true;
+                   var  signUpAccount = result;
                     document.querySelector(".signUp-modal").classList.toggle("show-modal");
                     document.querySelector(".login-modal").classList.toggle("show-modal");
 
@@ -406,6 +427,20 @@ function addButtonSubmitToForm() {
 
 }
 
+function login(loginAccountDetails){
 
+    console.log(loginAccountDetails);
+
+    var email = loginAccountDetails.email;
+
+    document.querySelector(".login-modal").classList.toggle("show-modal");
+    localStorage.setItem("loginState", "true");
+    localStorage.setItem("loginEmail",email);
+    $(".logout").show();
+    $('#validPassengers').remove();
+
+    $('.welcome').html("Welcome " + email);
+
+}
 
 
