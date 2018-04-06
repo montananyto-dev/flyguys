@@ -52,7 +52,7 @@ $.ajax({
         flights.forEach(function (flight) {
             var item = document.createElement("li");
             item.innerHTML = flight.connection.fromLocation.name + " to " + flight.connection.toLocation.name;
-
+            item.innerText += ` (£${flight.connection.cost})`;
             item.addEventListener("click", function () {
                 switchContext(flight.id, getCurrentPassengers());
             });
@@ -126,6 +126,9 @@ function createPassengerDetailsSection(numberOfPassengers) {
 
     for (var i = 0; i < numberOfPassengers; i++) {
 
+        var idnum = document.createElement("span");
+        idnum.innerText = `Passenger No. ${i+1}: `;
+
         var passengerFirstName = document.createElement("input");
         passengerFirstName.setAttribute("type", "text");
         passengerFirstName.setAttribute("placeholder", "firstName");
@@ -143,6 +146,13 @@ function createPassengerDetailsSection(numberOfPassengers) {
         passengerLastName.setAttribute("placeholder", "lastName");
         passengerLastName.setAttribute("name", "lname");
         passengerLastName.setAttribute("required", "");
+
+        var row1 = document.createElement("div");
+        row1.setAttribute("class","row");
+
+        row1.appendChild(passengerFirstName);
+        row1.appendChild(passengerMiddleName);
+        row1.appendChild(passengerLastName);
 
         var passportNumber = document.createElement("input");
         passportNumber.setAttribute("type", "text");
@@ -168,18 +178,22 @@ function createPassengerDetailsSection(numberOfPassengers) {
         dateOfBirth.setAttribute("name", "dob");
         dateOfBirth.setAttribute("required", "");
 
+        var row2 = document.createElement("div");
+        row2.setAttribute("class","row");
+
+        row2.appendChild(passportNumber);
+        row2.appendChild(identifyCard);
+        row2.appendChild(countryCode);
+        row2.appendChild(dateOfBirth);
+
         var section = document.createElement("section");
-        section.setAttribute("class", "passengerDetails");
+        section.setAttribute("class", "singlePassenger");
         section.setAttribute("id", i + 1);
 
 
-        section.appendChild(passengerFirstName);
-        section.appendChild(passengerMiddleName);
-        section.appendChild(passengerLastName);
-        section.appendChild(passportNumber);
-        section.appendChild(identifyCard);
-        section.appendChild(countryCode);
-        section.appendChild(dateOfBirth);
+        section.appendChild(idnum);
+        section.appendChild(row1);
+        section.appendChild(row2);
 
         document.querySelector(".passengers").appendChild(section);
 

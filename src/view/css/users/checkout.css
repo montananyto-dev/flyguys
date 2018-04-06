@@ -1,3 +1,42 @@
+body {
+    font-family: sans-serif;
+    margin-left: 50px;
+    color: #444;
+}
+
+p, span, li, input, label {
+    font-size: 20px;
+}
+
+li {
+    list-style: none;
+}
+
+ul {
+    border-radius: 5px;
+    border: 2px solid green;
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 0px;
+
+}
+
+.singlePassenger {
+    border: 2px solid green;
+    margin: 5px 10px;
+    display: inline-block;
+}
+
+button {
+    padding-left: 10px;
+    font-size: 20px;
+    border-radius: 10px;
+    color: #fff;
+    height: 35px;
+    background-color: #00B5AD
+}
+
+
 .login-modal, .signUp-modal {
     position: fixed;
     left: 0;
