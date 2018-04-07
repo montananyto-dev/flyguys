@@ -47,19 +47,8 @@ function getCookieValue(cname) {
 }
 
 if (getCookieValue("idCode") == null) {
-    alert("No cookie, wtf!");
-    // leave page
+    window.location.replace("index.html");
 }
-
-$.ajax({
-    url: `http://localhost:8000/controller/accounts/getAccountDetails.php?cookie=${getCookieValue("idCode")}`,
-    success: function (result) {
-       var cookieAccount = JSON.parse(result);
-    }, error() {
-
-    }
-
-});
 
 $.ajax({
     url: `http://localhost:8000/controller/bookings/getBasketFlights.php?cookie=${getCookieValue("idCode")}`,
@@ -71,9 +60,6 @@ $.ajax({
             var item = document.createElement("li");
             item.innerHTML = flight.connection.fromLocation.name + " to " + flight.connection.toLocation.name;
             item.innerText += ` (£${flight.connection.cost})`;
-            item.addEventListener("click", function () {
-                switchContext(flight.id, getCurrentPassengers());
-            });
 
             list.appendChild(item);
         });
@@ -111,13 +97,10 @@ $('#validPassengers').on('click', function (e) {
     } else if (checkPassengerDiv === 0) {
         alert("Please valid the number of passengers");
     } else if (check) {
-
         alert("Please enter the passenger details");
-
     } else {
-    document.querySelector(".login-modal").classList.toggle("show-modal");
+        document.querySelector(".login-modal").classList.toggle("show-modal");
     }
-
 });
 
 function validationPassengersField() {
@@ -126,11 +109,7 @@ function validationPassengersField() {
         return $.trim($(this).val()).length === 0
     }).length === 0;
 
-    if (result == true) {
-        return false;
-    } else {
-        return true;
-    }
+    return !result;
 
 }
 
@@ -262,52 +241,52 @@ $('#submit-login').on('click', function (e) {
 
     e.preventDefault();
 
-        var email = $('#email-login').val();
-        var password = $('#password-login').val();
 
-        if (email.length < 5) {
-            alert("Please ensure that your email is valid");
-        }
-        else if (password.length === 0) {
-            alert("Please enter a password");
-        } else {
+    var email = $('#email-login').val();
+    var password = $('#password-login').val();
 
-            var formData = JSON.stringify($('#login-form').serializeArray());
+    if (email.length < 5) {
+        alert("Please ensure that your email is valid");
+    }
+    else if (password.length === 0) {
+        alert("Please enter a password");
+    } else {
+        var formData = JSON.stringify($('#login-form').serializeArray());
 
-            $.ajax({
+        $.ajax({
 
-                type: "POST",
-                url: `http://localhost:8000/controller/accounts/login.php?cookie=${getCookieValue("idCode")}`,
-                data: formData,
-                dataType: "json",
-                contentType: "application/json",
+            type: "POST",
+            url: `http://localhost:8000/controller/accounts/login.php?cookie=${getCookieValue("idCode")}`,
+            data: formData,
+            dataType: "json",
+            contentType: "application/json",
 
-                success: function (result) {
+            success: function (result) {
 
-                    if (result === 'The account does not exist, please sign up') {
-                        alert('The account does not exist, please sign up');
+                if (result === 'The account does not exist, please sign up') {
+                    alert(result);
 
-                    } else if (result === 'The password does not match the email account') {
-                        alert('The password does not match the email account');
-                    } else {
-                       var  loginAccountDetails = result;
+                } else if (result === 'The password does not match the email account') {
+                    alert(result);
+                } else {
+                   var loginAccountDetails = result;
 
-                        if (email === result.email) {
+                    if (email === result.email) {
 
-                            if($('#finalSubmit').length){
+                        // confused what is happening here
+                        if($('#finalSubmit').length){ // === 0 ? It's just .length
 
-                            }else{
-                                addButtonSubmitToForm();
-                            }
-
-                            login(loginAccountDetails);
+                        }else{
+                            addButtonSubmitToForm();
                         }
-                    }
-                }, error() {
 
+                        login(loginAccountDetails);
+                    }
                 }
-            })
-        }
+            }
+        })
+    }
+
 
 });
 
@@ -321,49 +300,54 @@ $('#submit-signUp').on('click', function (e) {
 
     if (password != passwordConfirmation) {
         alert("Please ensure that the passwords are the same");
+        return;
     }
-    else if (email.length < 5) {
+
+    if (email.length < 5) {
         alert("Please ensure that your email is valid");
+        return;
     }
 
-    else if (password.length === 0 || passwordConfirmation === 0) {
+    if (password.length === 0 || passwordConfirmation === 0) {
         alert("Please enter a password");
-    } else {
-        var formData = JSON.stringify($('#signUp-form').serializeArray());
-
-        $.ajax({
-
-            type: "POST",
-            url: `http://localhost:8000/controller/accounts/signUp.php?cookie=${getCookieValue("idCode")}`,
-            data: formData,
-            dataType: "json",
-            contentType: "application/json",
-
-            success: function (result) {
-
-                alert(result);
-                if(result==='The account already exist, please login to your account'){
-
-                    document.querySelector(".signUp-modal").classList.toggle("show-modal");
-                    document.querySelector(".login-modal").classList.toggle("show-modal");
-                }else{
-
-                   var  signUpAccount = result;
-                    document.querySelector(".signUp-modal").classList.toggle("show-modal");
-                    document.querySelector(".login-modal").classList.toggle("show-modal");
-
-                    if($('#finalSubmit').length){
-
-                    }else{
-                        addButtonSubmitToForm();
-                    }
-
-                }
-
-            }, error() {
-            }
-        })
+        return;
     }
+
+
+    var formData = JSON.stringify($('#signUp-form').serializeArray());
+
+    $.ajax({
+        type: "POST",
+        url: `http://localhost:8000/controller/accounts/signUp.php?cookie=${getCookieValue("idCode")}`,
+        data: formData,
+        dataType: "json",
+        contentType: "application/json",
+
+        success: function (result) {
+
+            if(result==='The account already exist, please login to your account'){
+                document.querySelector(".signUp-modal").classList.toggle("show-modal");
+                document.querySelector(".login-modal").classList.toggle("show-modal");
+            }else{
+
+               var  signUpAccount = result;
+                document.querySelector(".signUp-modal").classList.toggle("show-modal");
+                //document.querySelector(".login-modal").classList.toggle("show-modal");
+
+                // if($('#finalSubmit').length){
+                //
+                // }else{
+                //     addButtonSubmitToForm();
+                // }
+
+                if(!$('#finalSubmit').length){
+                    addButtonSubmitToForm();
+                }
+            }
+
+        }
+    })
+
 });
 
 function addButtonSubmitToForm() {
@@ -384,7 +368,6 @@ function addButtonSubmitToForm() {
             forms = ($(this).find('form')); //<-- Should return all input elements in that specific form.
         });
 
-
         var formsID = [];
         for (var i = 0; i < forms.length; i++) {
             formsID.push(forms[i].id);
@@ -396,6 +379,7 @@ function addButtonSubmitToForm() {
             formData.push(data);
         }
 
+        // WHERE DOES flights, cookieAccount and loginAccount come from?
         formData.push(flights);
         formData.push(cookieAccount);
         formData.push(loginAccount);
@@ -443,7 +427,7 @@ function login(loginAccountDetails){
 
     $('.welcome').html("Welcome " + email);
 
-    location.reload();
+    //location.reload();
 
 }
 
