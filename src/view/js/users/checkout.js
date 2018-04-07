@@ -7,8 +7,6 @@ $( document ).ready(function() {
 
     if(loginState === "true"){
 
-        alert("you are logged in");
-
         $('.welcome').html("Welcome " + email);
 
     }else{
@@ -23,7 +21,8 @@ $('.logout').on('click', function (e) {
     e.preventDefault();
     $(".logout").hide();
     localStorage.setItem("loginState", "false");
-    $('.welcome').html("Welcome ");
+    document.cookie = 'idCode=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    window.location.replace("index.html");
 
 });
 
