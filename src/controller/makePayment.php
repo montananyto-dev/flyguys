@@ -1,8 +1,14 @@
 <?php
 
-$cookie = $_GET['cookie'];
-echo "hello";
+header("Access-Control-Allow-Origin: *");
 
-//$obj = json_decode($_POST["info"]);
+require_once __DIR__ . "/../model/Flight.php";
+require_once __DIR__ . "/../database/DAO.php";
 
-//echo $obj[0]->fname;
+
+
+
+$data = json_decode(file_get_contents('php://input'), true);
+
+echo json_encode($data);
+

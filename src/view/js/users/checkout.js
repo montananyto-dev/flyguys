@@ -26,10 +26,6 @@ $('.logout').on('click', function (e) {
 
 });
 
-
-
-
-
 function getCookieValue(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -362,43 +358,56 @@ function addButtonSubmitToForm() {
 
         e.preventDefault();
 
-        var allPassengers = [];
-
         var forms = [];
         $(".passengers").each(function () {
             forms = ($(this).find('form')); //<-- Should return all input elements in that specific form.
         });
 
+        var allPassengers = Array();
+
         for(var i = 0; i < forms.length; i++) {
             var currentForm = forms[i];
-            var passenger = {
-                fname: currentForm.fname.value,
-                mname: currentForm.mname.value,
-                lname: currentForm.lname.value,
-                passport_number: currentForm.passport_number.value,
-                identity_card: currentForm.identify_card.value,
-                country_code: currentForm.country_code.value,
-                dob: currentForm.dob.value
-            };
+            console.log(currentForm);
+
+            var passenger = ({
+
+                "fname": currentForm.fname.value,
+                "mname": currentForm.mname.value,
+                "lname": currentForm.lname.value,
+                "passport_number": currentForm.passport_number.value,
+                "identity_card": currentForm.identify_card.value,
+                "country_code": currentForm.country_code.value,
+                "dob": currentForm.dob.value
+            })
+
+
             allPassengers.push(passenger);
         }
 
+        var cookie = getCookieValue("idCode");
+
+        var allPassengersJson = {"cookie":cookie,"passengers":allPassengers};
+
+        var data = JSON.stringify(allPassengersJson);
+
+        console.log(data);
 
         if (confirm('Would you like to pay now')) {
-            var passengersJson = JSON.stringify(allPassengers);
 
             $.ajax({
                 type: "POST",
-                url: `http://localhost:8000/controller/makePayment.php?cookie=${getCookieValue("idCode")}`,
-                data: {info: passengersJson},
+                url: `http://localhost:8000/controller/makePayment.php`,
+                data: data,
                 dataType: "json",
                 contentType: "application/json",
 
                 success: function (result) {
+
                     console.log("Sent, result: " + result);
+
                 },
-                error: function(result) {
-                    console.log(result);
+                error: function (err) {
+                    console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
                 }
             });
         }
