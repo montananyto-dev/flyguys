@@ -362,51 +362,48 @@ function addButtonSubmitToForm() {
 
         e.preventDefault();
 
-        var forms = [];
+        var allPassengers = [];
 
+        var forms = [];
         $(".passengers").each(function () {
             forms = ($(this).find('form')); //<-- Should return all input elements in that specific form.
         });
 
-        var formsID = [];
-        for (var i = 0; i < forms.length; i++) {
-            formsID.push(forms[i].id);
+        for(var i = 0; i < forms.length; i++) {
+            var currentForm = forms[i];
+            var passenger = {
+                fname: currentForm.fname.value,
+                mname: currentForm.mname.value,
+                lname: currentForm.lname.value,
+                passport_number: currentForm.passport_number.value,
+                identity_card: currentForm.identify_card.value,
+                country_code: currentForm.country_code.value,
+                dob: currentForm.dob.value
+            };
+            allPassengers.push(passenger);
         }
 
-        var formData = [];
-        for (var i = 0; i < formsID.length; i++) {
-            var data = JSON.stringify($('#' + formsID[i]).serializeArray());
-            formData.push(data);
-        }
-
-        // WHERE DOES flights, cookieAccount and loginAccount come from?
-        formData.push(flights);
-        formData.push(cookieAccount);
-        formData.push(loginAccount);
-
-        console.log(formData);
 
         if (confirm('Would you like to pay now')) {
+            var passengersJson = JSON.stringify(allPassengers);
 
             $.ajax({
-
                 type: "POST",
                 url: `http://localhost:8000/controller/makePayment.php?cookie=${getCookieValue("idCode")}`,
-                data: formData,
+                data: {info: passengersJson},
                 dataType: "json",
                 contentType: "application/json",
 
                 success: function (result) {
-
-
-                }, error() {
-
+                    console.log("Sent, result: " + result);
+                },
+                error: function(result) {
+                    console.log(result);
                 }
-            })
+            });
         }
 
-    })
-
+    });
 }
 
 function login(loginAccountDetails){

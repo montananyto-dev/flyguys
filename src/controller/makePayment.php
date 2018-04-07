@@ -1,7 +1,8 @@
 <?php
 
-$data = json_decode(file_get_contents('php://input'), true);
 $cookie = $_GET['cookie'];
+echo "hello";
 
-var_dump($data);
-var_dump($cookie);
+//$obj = json_decode($_POST["info"]);
+
+//echo $obj[0]->fname;
