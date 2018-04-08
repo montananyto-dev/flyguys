@@ -344,10 +344,10 @@ function addButtonSubmitToForm() {
 
         var forms = [];
         $(".passengers").each(function () {
-            forms = ($(this).find('form')); //<-- Should return all input elements in that specific form.
+            forms = ($(this).find('form'));
         });
 
-        var allPassengers = Array();
+        var allPassengers = [];
 
         for(var i = 0; i < forms.length; i++) {
             var currentForm = forms[i];
