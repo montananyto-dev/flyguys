@@ -7,15 +7,15 @@ $('#validPassengers').on('click', function (e) {
 
     var check = validationPassengersField();
 
-    if (numberOfPassengers === 0) {
-        alert('Please add a passenger');
-    } else if (checkPassengerDiv === 0) {
-        alert("Please valid the number of passengers");
-    } else if (check) {
-        alert("Please enter the passenger details");
-    } else {
+    // if (numberOfPassengers === 0) {
+    //     alert('Please add a passenger');
+    // } else if (checkPassengerDiv === 0) {
+    //     alert("Please valid the number of passengers");
+    // } else if (check) {
+    //     alert("Please enter the passenger details");
+    // } else {
         document.querySelector(".login-modal").classList.toggle("show-modal");
-    }
+    // }
 });
 
 function validationPassengersField() {

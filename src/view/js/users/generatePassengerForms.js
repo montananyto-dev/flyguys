@@ -101,6 +101,9 @@ function createPassengerDetailsSection(numberOfPassengers) {
 
         document.querySelector(".passengers").appendChild(form);
 
+        $('#validPassengers').show();
+
+
     }
 }
 

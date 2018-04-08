@@ -21,7 +21,5 @@ foreach($data['passengers'] as $passengerInfo) {
 
 DAO::getInstance()->completeBooking($booking);
 
-
-
 echo json_encode($data);
 

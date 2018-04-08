@@ -1,132 +1,349 @@
-.body {
-    font-family: sans-serif;
-    margin-left: 50px;
-    margin-top: 60px;
-    color: #444;
+/*Screen size more than 700 px */
+
+@media screen and (min-width: 700px) {
+
+    .body {
+        font-family: sans-serif;
+        margin-left: 50px;
+        margin-top: 60px;
+        color: #444;
+    }
+
+    .nav {
+        overflow: hidden;
+        background-color: #333;
+        position: fixed;
+        top: 0;
+        width: 101%;
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+
+    .nav button {
+        float: right;
+        text-align: center;
+        font-size: 15px;
+        margin: 10px 40px 10px 10px;
+    }
+
+    span.welcome {
+        float: left;
+        display: block;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+    }
+
+    p, span, li, input, label {
+        font-size: 20px;
+    }
+
+    li {
+        list-style: none;
+    }
+
+    p {
+        margin: 5px 0px;
+    }
+
+    input {
+        margin-right: 10px;
+        margin-bottom: 10px;
+        border-radius: 2px;
+    }
+
+    input[type="date"] {
+        margin-right: 10px;
+        margin-bottom: 10px;
+        border-radius: 2px;
+        height: 25px;
+        color: grey;
+        width: 190px;
+    }
+
+    ul {
+        border-radius: 5px;
+        border: 2px solid green;
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 0px;
+    }
+
+    span {
+        margin: 0px 25px 0px 15px;
+    }
+
+    .singlePassenger {
+        border: 2px solid green;
+        display: inline-block;
+        padding-left: 5px;
+        border-radius: 4px;
+    }
+
+    button {
+        padding-left: 10px;
+        font-size: 20px;
+        border-radius: 10px;
+        color: #fff;
+        background-color: #00B5AD;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .login-modal, .signUp-modal {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(1.1);
+        transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+    }
+
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 10px;
+        border-radius: 10px;
+        width: 400px
+    }
+
+    .modal-content input {
+        display: block;
+        margin: auto;
+        width: 300px;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .modal-content h1 {
+        text-align: center;
+        margin: 10px;
+    }
+
+    .modal-content button {
+        margin: auto;
+        display: block;
+        margin-top: 10px;
+        font-size: 22px;
+    }
+
+    #signUp {
+        display: inline;
+        height: 25px;
+        text-align: center;
+        font-size: 15px;
+
+    }
+
+    #login {
+        display: inline;
+        height: 25px;
+        text-align: center;
+        font-size: 15px;
+    }
+
+    .modal-content label {
+        color: darkgrey;
+    }
+
+    .close-button-login, .close-button-signUp {
+        float: right;
+        width: 1.5rem;
+        line-height: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 0.25rem;
+        background-color: lightgray;
+        margin-right: 0px;
+    }
+
+    .close-button:hover {
+        background-color: darkgray;
+    }
+
+    .show-modal {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1.0);
+        transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+    }
 }
 
-.nav {
-    overflow: hidden;
-    background-color: #333;
-    position: fixed;
-    top: 0;
-    width: 101%;
-    margin-left: -10px;
-    margin-right: -10px;
-}
+@media screen and (max-width: 700px) {
 
-.nav button{
-    float: right;
-    text-align: center;
-    font-size: 15px;
-    margin: 10px 40px 10px 10px;
-}
+    .body {
+        font-family: sans-serif;
+        margin-top: 60px;
+        color: #444;
+    }
 
-span.welcome{
-    float: left;
-    display: block;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
+    h1{
+        margin-top: 110px;
+        font-size:27px;
+    }
 
-}
+    h2{
+        font-size: 20px;
+    }
+    .nav {
+        overflow: hidden;
+        background-color: #333;
+        position: fixed;
+        top: 0;
+        width: 101%;
+        margin-left: -10px;
+        margin-right: -10px;
+    }
 
-p, span, li, input, label {
-    font-size: 20px;
-}
+    .nav button {
+        float: right;
+        text-align: center;
+        margin: 10px 40px 10px 10px;
+    }
 
-li {
-    list-style: none;
-}
+    span.welcome {
+        float: left;
+        display: block;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
 
-p {
-    margin: 5px 0px;
-}
+    }
 
-input {
-    margin-right: 10px;
-    margin-bottom: 10px;
-    border-radius: 2px;
-}
+    p, span, li, input, label {
+    }
 
-input[type="date"] {
-    margin-right: 10px;
-    margin-bottom: 10px;
-    border-radius: 2px;
-    height: 25px;
-    color: grey;
-    width: 190px;
-}
+    li {
+        list-style: none;
+    }
 
-ul {
-    border-radius: 5px;
-    border: 2px solid green;
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 0px;
+    p {
+        margin: 5px 0px;
+    }
 
-}
+    input {
+        margin-right: 10px;
+        margin-bottom: 10px;
+        border-radius: 2px;
+    }
 
-span {
-    margin: 0px 25px 0px 15px;
-}
+    input[type="date"] {
+        margin-right: 10px;
+        margin-bottom: 10px;
+        border-radius: 2px;
+        color: grey;
+    }
 
-.singlePassenger {
-    border: 2px solid green;
-    margin: 5px 10px;
-    display: inline-block;
-    padding-left: 5px;
-    border-radius: 4px;
-}
+    ul {
+        border-radius: 5px;
+        border: 2px solid green;
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 0px;
+    }
 
-button {
-    margin:auto;
-    padding-left: 10px;
-    font-size: 20px;
-    border-radius: 10px;
-    color: #fff;
-    height: 35px;
-    background-color: #00B5AD
-}
+    span {
+    }
 
+    .singlePassenger {
+        border: 2px solid green;
+        display: inline-block;
+        padding-left: 5px;
+        border-radius: 4px;
+    }
 
-.login-modal, .signUp-modal {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    visibility: hidden;
-    transform: scale(1.1);
-    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
-}
-.modal-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 1rem 1.5rem;
-    width: 24rem;
-    border-radius: 0.5rem;
-}
-.close-button-login,.close-button-signUp {
-    float: right;
-    width: 1.5rem;
-    line-height: 1.5rem;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 0.25rem;
-    background-color: lightgray;
-}
-.close-button:hover {
-    background-color: darkgray;
-}
-.show-modal {
-    opacity: 1;
-    visibility: visible;
-    transform: scale(1.0);
-    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+    button {
+        padding-left: 10px;
+        border-radius: 10px;
+        color: #fff;
+        background-color: #00B5AD;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .login-modal, .signUp-modal {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(1.1);
+        transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+    }
+
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 10px;
+        border-radius: 10px;
+        width: 180px;
+    }
+
+    .modal-content input {
+        display: block;
+        margin: auto;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .modal-content h1 {
+        text-align: center;
+        margin: 10px;
+        font-size: 30px;
+    }
+
+    .modal-content button {
+        margin: auto;
+        display: block;
+        margin-top: 10px;
+    }
+
+    #signUp {
+        display: inline;
+        text-align: center;
+    }
+
+    #login {
+        display: inline;
+        text-align: center;
+    }
+
+    .modal-content label {
+        color: darkgrey;
+    }
+
+    .close-button-login, .close-button-signUp {
+        float: right;
+        width: 1.5rem;
+        line-height: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 0.25rem;
+        background-color: lightgray;
+        margin-right: 0px;
+    }
+
+    .close-button:hover {
+        background-color: darkgray;
+    }
+
+    .show-modal {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1.0);
+        transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+    }
 }
