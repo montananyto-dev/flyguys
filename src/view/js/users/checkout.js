@@ -1,5 +1,4 @@
 
-// function to check the login state
 $( document ).ready(function() {
 
     var loginState = localStorage.getItem('loginState');
@@ -17,7 +16,6 @@ $( document ).ready(function() {
 });
 
 $('.logout').on('click', function (e) {
-
     e.preventDefault();
     $(".logout").hide();
     localStorage.setItem("loginState", "false");
@@ -201,14 +199,12 @@ function createPassengerDetailsSection(numberOfPassengers) {
 }
 
 $('#login-modal').on('click', function (e) {
-
     e.preventDefault();
     document.querySelector(".login-modal").classList.toggle("show-modal");
 
 });
 
 $('#signUp').on('click', function (e) {
-
     e.preventDefault();
     document.querySelector(".login-modal").classList.toggle("show-modal");
     document.querySelector(".signUp-modal").classList.toggle("show-modal");
@@ -216,7 +212,6 @@ $('#signUp').on('click', function (e) {
 });
 
 $('#login').on('click', function (e) {
-
     e.preventDefault();
     document.querySelector(".signUp-modal").classList.toggle("show-modal");
     document.querySelector(".login-modal").classList.toggle("show-modal");
@@ -224,12 +219,10 @@ $('#login').on('click', function (e) {
 });
 
 $(".close-button-login").on('click', function () {
-
     document.querySelector(".login-modal").classList.toggle("show-modal");
 });
 
 $(".close-button-signUp").on('click', function () {
-
     document.querySelector(".signUp-modal").classList.toggle("show-modal");
 });
 
@@ -283,7 +276,6 @@ $('#submit-login').on('click', function (e) {
         })
     }
 
-
 });
 
 $('#submit-signUp').on('click', function (e) {
@@ -328,19 +320,11 @@ $('#submit-signUp').on('click', function (e) {
 
                var  signUpAccount = result;
                 document.querySelector(".signUp-modal").classList.toggle("show-modal");
-                //document.querySelector(".login-modal").classList.toggle("show-modal");
-
-                // if($('#finalSubmit').length){
-                //
-                // }else{
-                //     addButtonSubmitToForm();
-                // }
 
                 if(!$('#finalSubmit').length){
                     addButtonSubmitToForm();
                 }
             }
-
         }
     })
 
@@ -378,16 +362,14 @@ function addButtonSubmitToForm() {
                 "identity_card": currentForm.identify_card.value,
                 "country_code": currentForm.country_code.value,
                 "dob": currentForm.dob.value
-            })
+            });
 
 
             allPassengers.push(passenger);
         }
 
         var cookie = getCookieValue("idCode");
-
         var allPassengersJson = {"cookie":cookie,"passengers":allPassengers};
-
         var data = JSON.stringify(allPassengersJson);
 
         console.log(data);
@@ -433,8 +415,4 @@ function login(loginAccountDetails){
 
     $('.welcome').html("Welcome " + email);
 
-    //location.reload();
-
 }
-
-
