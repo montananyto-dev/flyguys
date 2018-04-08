@@ -4,6 +4,8 @@ require_once(__DIR__ . '/../model/Flight.php');
 require_once(__DIR__ . '/../model/Connection.php');
 require_once(__DIR__ . '/../model/Region.php');
 require_once(__DIR__ . '/../model/Account.php');
+require_once(__DIR__ . '/../model/Booking.php');
+require_once(__DIR__ . '/../model/Passenger.php');
 
 class DAO
 {
@@ -463,11 +465,36 @@ class DAO
 
         return $flights;
     }
+
+    public function createPassenger($info) {
+        $sql = "INSERT INTO passenger(passport_number, identify_card, country_code, fname, mname, lname, dob) "
+                . "VALUES(:pass_num, :id_card, :cont_code, :fname, :mname, :lname, :dob)";
+        $params = array("pass_num" => $info['passport_number'],
+                        "id_card" => $info['identity_card'],
+                        "cont_code" => $info['country_code'],
+                        "fname" => $info['fname'],
+                        "mname" => $info['mname'],
+                        "lname" => $info['lname'],
+                        "dob" => $info['dob']);
+        $id = $this->insertQuery($sql, $params);
+
+        $retrivalSql = "SELECT * from passenger WHERE id=:id";
+        $retrivalParams = array("id" => $id);
+
+        $passengerObj = $this->classQuery($retrivalSql, "Passenger", $retrivalParams);
+        $passengerObj[0]->id = $id;
+        return $passengerObj[0];
+    }
+
+    public function addPassengerToBooking($book, $passenger) {
+        $insertSQL = "INSERT INTO passenger_booking() VALUES(:passId, :bookId)";
+        $params = array("passId" => $passenger->id, "bookId" => $book->id);
+        $this->insertQuery($insertSQL, $params);
+    }
+
+    public function completeBooking($book) {
+        $sql = "UPDATE booking SET state_id=2 WHERE id=:bookId";
+        $params = array("bookId" => $book->id);
+        $this->insertQuery($sql, $params);
+    }
 }
-
-//function setPerItem($array, $identifier, $property, $anonFunction) {
-//    foreach($array as $item) {
-//        $item->$property = $anonFunction($identifier);
-//    }
-//}
-
