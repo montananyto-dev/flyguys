@@ -45,8 +45,8 @@ function submitForLogin() {
         success: function (result) {
 
             if(correctCredentials(result)) {
-                addButtonSubmitToForm();
-                login(result);
+                addButtonSubmitToForm(result);
+
                 // var loginAccountDetails = result;
                 //
                 // if (email === result.email) {
@@ -119,13 +119,33 @@ $('#submit-signUp').on('click', function (e) {
 
 });
 
-function addButtonSubmitToForm() {
+function addButtonSubmitToForm(result) {
+    var cookie = getCookieValue("idCode");
+    var amount = $(".numberOfPassengers").val();
 
-    var submitButton = document.createElement('button');
-    submitButton.setAttribute('id', 'finalSubmit');
-    submitButton.innerHTML = 'pay now';
+    $.ajax({
+        url: `http://localhost:8000/controller/bookings/calculateTotal.php?cookie=${cookie}&amount=${amount}`,
 
-    $('#validPassengers').after(submitButton);
+        success: function (totalCost) {
+            var data = JSON.parse(totalCost);
+
+            var submitButton = document.createElement('button');
+            submitButton.setAttribute('id', 'finalSubmit');
+            submitButton.innerHTML = `Pay (£${data.total})`;
+
+            $('#validPassengers').after(submitButton);
+            login(result);
+
+            addPaymentEvent(submitButton);
+
+        },
+        error: function (err) {
+            console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+        }
+    });
+}
+
+function addPaymentEvent(submitButton) {
 
     submitButton.addEventListener('click', function (e) {
 
