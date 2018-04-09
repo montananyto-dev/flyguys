@@ -2,37 +2,21 @@ function validLoginCredentials(email, pwd) {
     return email.length >= 5 && pwd.length > 0;
 }
 
-function validSignUpCredentials(email, password, passwordConfirmation) {
+$('#submit-login').on('click', function (e) {
 
-    var toReturn = true;
-    if (password != passwordConfirmation) {
-        alert("Please ensure that the passwords are the same");
-        toReturn = false;
+    e.preventDefault();
+
+    var email = $('#email-login').val();
+    var password = $('#password-login').val();
+
+    if (validLoginCredentials(email, password)) {
+        submitForLogin();
     }
 
-    if (email.length < 5) {
-        alert("Please ensure that your email is valid");
-        toReturn = false;
-    }
-
-    if (password.length === 0 || passwordConfirmation === 0) {
-        alert("Please enter a password");
-        toReturn = false;
-    }
-
-    return toReturn;
-}
-
-function correctCredentials(result) {
-    if(result == 'The account does not exist, please sign up'
-        || result == 'The password does not match the email account') {
-        alert(result);
-        return false;
-    }
-    return true;
-}
+});
 
 function submitForLogin() {
+
     var formData = JSON.stringify($('#login-form').serializeArray());
 
     $.ajax({
@@ -44,27 +28,51 @@ function submitForLogin() {
 
         success: function (result) {
 
-            if(correctCredentials(result)) {
-                addButtonSubmitToForm(result);
+            if (result === 'The account does not exist, please sign up') {
+                alert(result);
 
-                // var loginAccountDetails = result;
-                //
-                // if (email === result.email) {
-                //     // confused what is happening here
-                //     if($('#finalSubmit').length){ // === 0 ? It's just .length
-                //
-                //     }else{
-                //         addButtonSubmitToForm();
-                    // }
+            } else if (result === 'The password does not match the email account') {
+                alert(result);
+            } else {
+                document.querySelector(".login-modal").classList.toggle("show-modal");
+                var loginAccountDetails = result;
+                login(loginAccountDetails);
 
-                    // login(loginAccountDetails);
-                // }
             }
         }
     })
 }
 
-function submitForSignup() {
+$('#submit-signUp').on('click', function (e) {
+
+    e.preventDefault();
+
+    var email = $('#email-signUp').val();
+    var password = $('#password-signUp').val();
+    var passwordConfirmation = $('#passwordConfirmation-signUp').val();
+
+    if (password != passwordConfirmation) {
+        alert("Please ensure that the passwords are the same");
+        return;
+    }
+
+    if (email.length < 5) {
+        alert("Please ensure that your email is valid");
+        return;
+    }
+
+    if (password.length === 0 || passwordConfirmation === 0) {
+        alert("Please enter a password");
+        return;
+    }
+
+    submitForSignUp();
+
+
+});
+
+function submitForSignUp() {
+
     var formData = JSON.stringify($('#signUp-form').serializeArray());
 
     $.ajax({
@@ -76,50 +84,41 @@ function submitForSignup() {
 
         success: function (result) {
 
-            if(result==='The account already exist, please login to your account'){
+            if (result === 'The account already exist, please login to your account') {
+
+                alert(result);
                 document.querySelector(".signUp-modal").classList.toggle("show-modal");
                 document.querySelector(".login-modal").classList.toggle("show-modal");
-            }else{
+            } else {
 
-                var signUpAccount = result;
+                alert(" The account has been created");
+
                 document.querySelector(".signUp-modal").classList.toggle("show-modal");
+                document.querySelector(".login-modal").classList.toggle("show-modal");
 
-                if(!$('#finalSubmit').length){
-                    addButtonSubmitToForm();
-                }
             }
         }
     })
 }
 
-$('#submit-login').on('click', function (e) {
+function login(loginAccountDetails) {
 
-    e.preventDefault();
+    document.cookie = `idCode=${loginAccountDetails.cookie}`;
 
-    var email = $('#email-login').val();
-    var password = $('#password-login').val();
+    var email = loginAccountDetails.email;
 
-    if(validLoginCredentials(email, password)) {
-        submitForLogin(email);
-    }
+    localStorage.setItem("loginState", "true");
+    localStorage.setItem("loginEmail", email);
+    $(".logout").show();
 
-});
+    $('.welcome').html("Welcome " + email);
 
-$('#submit-signUp').on('click', function (e) {
+    addButtonSubmitToForm();
 
-    e.preventDefault();
+}
 
-    var email = $('#email-signUp').val();
-    var password = $('#password-signUp').val();
-    var passwordConfirmation = $('#passwordConfirmation-signUp').val();
+function addButtonSubmitToForm() {
 
-    if(validSignUpCredentials(email, password, passwordConfirmation)) {
-        submitForSignup();
-    }
-
-});
-
-function addButtonSubmitToForm(result) {
     var cookie = getCookieValue("idCode");
     var amount = $(".numberOfPassengers").val();
 
@@ -129,12 +128,15 @@ function addButtonSubmitToForm(result) {
         success: function (totalCost) {
             var data = JSON.parse(totalCost);
 
+            console.log("ADD FINAL BUTTON");
+
             var submitButton = document.createElement('button');
             submitButton.setAttribute('id', 'finalSubmit');
             submitButton.innerHTML = `Pay (£${data.total})`;
 
             $('#validPassengers').after(submitButton);
-            login(result);
+
+            $('#validPassengers').hide();
 
             addPaymentEvent(submitButton);
 
@@ -158,9 +160,8 @@ function addPaymentEvent(submitButton) {
 
         var allPassengers = [];
 
-        for(var i = 0; i < forms.length; i++) {
+        for (var i = 0; i < forms.length; i++) {
             var currentForm = forms[i];
-            console.log(currentForm);
 
             var passenger = ({
 
@@ -178,10 +179,8 @@ function addPaymentEvent(submitButton) {
         }
 
         var cookie = getCookieValue("idCode");
-        var allPassengersJson = {"cookie":cookie,"passengers":allPassengers};
+        var allPassengersJson = {"cookie": cookie, "passengers": allPassengers};
         var data = JSON.stringify(allPassengersJson);
-
-        console.log(data);
 
         if (confirm('Would you like to pay now')) {
 
@@ -206,22 +205,38 @@ function addPaymentEvent(submitButton) {
     });
 }
 
-function login(loginAccountDetails){
+$('#validPassengers').on('click', function (e) {
 
-    console.log(loginAccountDetails);
+    e.preventDefault();
 
-    document.cookie = `idCode=${loginAccountDetails.cookie}`;
+    var loginState = localStorage.getItem('loginState');
 
-    console.log(document.cookie);
+        var numberOfPassengers = $('.numberOfPassengers').val();
+        var checkPassengerDiv = $('.passengers > form').length;
 
-    var email = loginAccountDetails.email;
+        var check = validationPassengersField();
 
-    document.querySelector(".login-modal").classList.toggle("show-modal");
-    localStorage.setItem("loginState", "true");
-    localStorage.setItem("loginEmail", email);
-    $(".logout").show();
-    $('#validPassengers').remove();
+        if (numberOfPassengers === 0) {
+            alert('Please add a passenger');
+        } else if (checkPassengerDiv === 0) {
+            alert("Please valid the number of passengers");
+        } else if (check) {
+            alert("Please enter the passenger details");
+        } else {
+            if(loginState === "true"){
+                addButtonSubmitToForm();
+            }else{
+                document.querySelector(".signUp-modal").classList.toggle("show-modal");
+            }
+        }
+});
 
-    $('.welcome').html("Welcome " + email);
+function validationPassengersField() {
+
+    var result = $(".passengers input[required]").filter(function () {
+        return $.trim($(this).val()).length === 0
+    }).length === 0;
+
+    return !result;
 
 }

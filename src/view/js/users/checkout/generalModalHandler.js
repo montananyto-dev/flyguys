@@ -1,21 +1,22 @@
-$('#login-modal').on('click', function (e) {
-    e.preventDefault();
-    document.querySelector(".login-modal").classList.toggle("show-modal");
+// $('#login-modal').on('click', function (e) {
+//     e.preventDefault();
+//     document.querySelector(".login-modal").classList.toggle("show-modal");
+//
+// });
 
-});
 
-$('#signUp').on('click', function (e) {
+//when clicking button "Or sign up option"
+$('#signUp').on('click',function(e){
     e.preventDefault();
     document.querySelector(".login-modal").classList.toggle("show-modal");
     document.querySelector(".signUp-modal").classList.toggle("show-modal");
-
 });
 
-$('#login').on('click', function (e) {
+//when clicking button "Or login option"
+$('#login').on('click',function(e){
     e.preventDefault();
     document.querySelector(".signUp-modal").classList.toggle("show-modal");
     document.querySelector(".login-modal").classList.toggle("show-modal");
-
 });
 
 $(".close-button-login").on('click', function () {

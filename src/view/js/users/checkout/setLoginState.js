@@ -5,6 +5,8 @@ $( document ).ready(function() {
 
     if(loginState === "true"){
 
+        console.log("You are logged in");
+
         $('.welcome').html("Welcome " + email);
 
     }else{
