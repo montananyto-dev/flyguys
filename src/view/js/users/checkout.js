@@ -64,6 +64,34 @@ function submitForLogin() {
     })
 }
 
+function submitForSignup() {
+    var formData = JSON.stringify($('#signUp-form').serializeArray());
+
+    $.ajax({
+        type: "POST",
+        url: `http://localhost:8000/controller/accounts/signUp.php?cookie=${getCookieValue("idCode")}`,
+        data: formData,
+        dataType: "json",
+        contentType: "application/json",
+
+        success: function (result) {
+
+            if(result==='The account already exist, please login to your account'){
+                document.querySelector(".signUp-modal").classList.toggle("show-modal");
+                document.querySelector(".login-modal").classList.toggle("show-modal");
+            }else{
+
+                var signUpAccount = result;
+                document.querySelector(".signUp-modal").classList.toggle("show-modal");
+
+                if(!$('#finalSubmit').length){
+                    addButtonSubmitToForm();
+                }
+            }
+        }
+    })
+}
+
 $('#submit-login').on('click', function (e) {
 
     e.preventDefault();
@@ -86,37 +114,8 @@ $('#submit-signUp').on('click', function (e) {
     var passwordConfirmation = $('#passwordConfirmation-signUp').val();
 
     if(validSignupCredentials(email, password, passwordConfirmation)) {
-        var formData = JSON.stringify($('#signUp-form').serializeArray());
-
-        $.ajax({
-            type: "POST",
-            url: `http://localhost:8000/controller/accounts/signUp.php?cookie=${getCookieValue("idCode")}`,
-            data: formData,
-            dataType: "json",
-            contentType: "application/json",
-
-            success: function (result) {
-
-                if(result==='The account already exist, please login to your account'){
-                    document.querySelector(".signUp-modal").classList.toggle("show-modal");
-                    document.querySelector(".login-modal").classList.toggle("show-modal");
-                }else{
-
-                    var signUpAccount = result;
-                    document.querySelector(".signUp-modal").classList.toggle("show-modal");
-
-                    if(!$('#finalSubmit').length){
-                        addButtonSubmitToForm();
-                    }
-                }
-            }
-        })
+        submitForSignup();
     }
-
-
-
-
-
 
 });
 
