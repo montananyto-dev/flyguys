@@ -2,7 +2,7 @@ function validLoginCredentials(email, pwd) {
     return email.length >= 5 && pwd.length > 0;
 }
 
-function validSignupCredentials(email, pwd, pwdConf) {
+function validSignUpCredentials(email, password, passwordConfirmation) {
 
     var toReturn = true;
     if (password != passwordConfirmation) {
@@ -113,7 +113,7 @@ $('#submit-signUp').on('click', function (e) {
     var password = $('#password-signUp').val();
     var passwordConfirmation = $('#passwordConfirmation-signUp').val();
 
-    if(validSignupCredentials(email, password, passwordConfirmation)) {
+    if(validSignUpCredentials(email, password, passwordConfirmation)) {
         submitForSignup();
     }
 
