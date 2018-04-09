@@ -22,7 +22,9 @@ if (getCookieValue("idCode")) {
             var json = JSON.parse(result);
 
             document.cookie = `idCode=${json.idCode}`;
+
             console.log("Got myself an idCode:" + getCookieValue("idCode"));
+
         },error(){
 
             console.log('nothing in the basket');
