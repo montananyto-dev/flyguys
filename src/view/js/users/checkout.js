@@ -1,53 +1,78 @@
+function validLoginCredentials(email, pwd) {
+    return email.length >= 5 && pwd.length > 0;
+}
 
+function validSignupCredentials(email, pwd, pwdConf) {
+
+    var toReturn = true;
+    if (password != passwordConfirmation) {
+        alert("Please ensure that the passwords are the same");
+        toReturn = false;
+    }
+
+    if (email.length < 5) {
+        alert("Please ensure that your email is valid");
+        toReturn = false;
+    }
+
+    if (password.length === 0 || passwordConfirmation === 0) {
+        alert("Please enter a password");
+        toReturn = false;
+    }
+
+    return toReturn;
+}
+
+function correctCredentials(result) {
+    if(result == 'The account does not exist, please sign up'
+        || result == 'The password does not match the email account') {
+        alert(result);
+        return false;
+    }
+    return true;
+}
+
+function submitForLogin() {
+    var formData = JSON.stringify($('#login-form').serializeArray());
+
+    $.ajax({
+        type: "POST",
+        url: `http://localhost:8000/controller/accounts/login.php?cookie=${getCookieValue("idCode")}`,
+        data: formData,
+        dataType: "json",
+        contentType: "application/json",
+
+        success: function (result) {
+
+            if(correctCredentials(result)) {
+                addButtonSubmitToForm();
+                login(result);
+                // var loginAccountDetails = result;
+                //
+                // if (email === result.email) {
+                //     // confused what is happening here
+                //     if($('#finalSubmit').length){ // === 0 ? It's just .length
+                //
+                //     }else{
+                //         addButtonSubmitToForm();
+                    // }
+
+                    // login(loginAccountDetails);
+                // }
+            }
+        }
+    })
+}
 
 $('#submit-login').on('click', function (e) {
 
     e.preventDefault();
 
-
     var email = $('#email-login').val();
     var password = $('#password-login').val();
 
-    if (email.length < 5) {
-        alert("Please ensure that your email is valid");
-    }
-    else if (password.length === 0) {
-        alert("Please enter a password");
-    } else {
-        var formData = JSON.stringify($('#login-form').serializeArray());
-
-        $.ajax({
-
-            type: "POST",
-            url: `http://localhost:8000/controller/accounts/login.php?cookie=${getCookieValue("idCode")}`,
-            data: formData,
-            dataType: "json",
-            contentType: "application/json",
-
-            success: function (result) {
-
-                if (result === 'The account does not exist, please sign up') {
-                    alert(result);
-
-                } else if (result === 'The password does not match the email account') {
-                    alert(result);
-                } else {
-                   var loginAccountDetails = result;
-
-                    if (email === result.email) {
-
-                        // confused what is happening here
-                        if($('#finalSubmit').length){ // === 0 ? It's just .length
-
-                        }else{
-                            addButtonSubmitToForm();
-                        }
-
-                        login(loginAccountDetails);
-                    }
-                }
-            }
-        })
+    if(validLoginCredentials(email, password)) {
+        submitForLogin(email);
     }
 
 });
@@ -60,47 +85,38 @@ $('#submit-signUp').on('click', function (e) {
     var password = $('#password-signUp').val();
     var passwordConfirmation = $('#passwordConfirmation-signUp').val();
 
-    if (password != passwordConfirmation) {
-        alert("Please ensure that the passwords are the same");
-        return;
-    }
+    if(validSignupCredentials(email, password, passwordConfirmation)) {
+        var formData = JSON.stringify($('#signUp-form').serializeArray());
 
-    if (email.length < 5) {
-        alert("Please ensure that your email is valid");
-        return;
-    }
+        $.ajax({
+            type: "POST",
+            url: `http://localhost:8000/controller/accounts/signUp.php?cookie=${getCookieValue("idCode")}`,
+            data: formData,
+            dataType: "json",
+            contentType: "application/json",
 
-    if (password.length === 0 || passwordConfirmation === 0) {
-        alert("Please enter a password");
-        return;
-    }
+            success: function (result) {
 
+                if(result==='The account already exist, please login to your account'){
+                    document.querySelector(".signUp-modal").classList.toggle("show-modal");
+                    document.querySelector(".login-modal").classList.toggle("show-modal");
+                }else{
 
-    var formData = JSON.stringify($('#signUp-form').serializeArray());
+                    var signUpAccount = result;
+                    document.querySelector(".signUp-modal").classList.toggle("show-modal");
 
-    $.ajax({
-        type: "POST",
-        url: `http://localhost:8000/controller/accounts/signUp.php?cookie=${getCookieValue("idCode")}`,
-        data: formData,
-        dataType: "json",
-        contentType: "application/json",
-
-        success: function (result) {
-
-            if(result==='The account already exist, please login to your account'){
-                document.querySelector(".signUp-modal").classList.toggle("show-modal");
-                document.querySelector(".login-modal").classList.toggle("show-modal");
-            }else{
-
-               var  signUpAccount = result;
-                document.querySelector(".signUp-modal").classList.toggle("show-modal");
-
-                if(!$('#finalSubmit').length){
-                    addButtonSubmitToForm();
+                    if(!$('#finalSubmit').length){
+                        addButtonSubmitToForm();
+                    }
                 }
             }
-        }
-    })
+        })
+    }
+
+
+
+
+
 
 });
 
